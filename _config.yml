@@ -1,1 +1,19 @@
 theme: jekyll-theme-midnight
+
+# Site settings
+title: b l o g
+#email: notsureiwannaputthishere...?@gmail.com
+description: > 
+  B L G
+baseurl: "/blog" # the subpath of your site, e.g. /blog
+url: "https://samboyer.co.uk" # the base hostname & protocol for your site, e.g. http://example.com
+twitter_username: samboyer276
+github_username:  samboyer
+
+# Build settings
+#markdown: kramdown
+#gems:
+#  - jekyll-feed
+#exclude:
+#  - Gemfile
+#- Gemfile.lock
