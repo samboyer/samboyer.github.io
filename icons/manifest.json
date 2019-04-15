@@ -1,0 +1,19 @@
+{
+    "name": "Sam Boyer",
+    "short_name": "Sam Boyer",
+
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png?v=BGA59M7v8v",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png?v=BGA59M7v8v",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#8fe8b2",
+    "background_color": "#8fe8b2"
+}
