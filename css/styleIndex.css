@@ -17,7 +17,6 @@ p{
 h1, h2, h3{
   margin: 0;
   font-weight: 400;
-  color: #ffffff;
   font-family: 'Josefin Slab';
   font-style: italic;
 }
@@ -32,6 +31,9 @@ h2{
 h3{
   font-size: 2em;
   display: inline-block;
+  padding-top: 10px;
+  line-height: 1.0;
+  color: #ffffff;
 }
 
 /*TOP*/
@@ -152,7 +154,7 @@ h2 i{
 }
 .section{
   margin: 0;
-  padding: 25px 2.5%;
+  padding: 15vh 2.5% 0;
 }
 .section p{
   padding: 0 25px;
@@ -161,11 +163,10 @@ h2 i{
   white-space: pre-wrap;
 }
 .sectionHeader{
-  background-color: #86cc95;
-  padding: 2px 7.5% 2px 1%;
-  margin-bottom: 10px;
-  display: inline-block;
-  border-radius: 0px 15px;
+  padding: 5px 15% 0px 0px;
+  margin-bottom: 15px;
+  display: inline-block;  
+  border-bottom: solid 3px #ad45ab;
 }
 .largeText{
   font-size: 2.5em;
