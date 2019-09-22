@@ -36,35 +36,30 @@ h3{
 
 /*TOP*/
 .top{
-  background: #a0efb1;
-  background: radial-gradient(circle, #a0efb1 0%, rgba(95,255,192,1) 60%, rgb(63, 238, 251) 100%);
-  background-size: 100% 210%;
-  background-position: center top 105%;
   overflow: hidden;
   position: relative;
-}
-.headerCon{
+
   width: 100%;
   padding: 10px 0;
-  background-color: rgba(30,40,30,0.6);
+  background-color: #317967;
   border-bottom: solid 2px #8bc995;
-  opacity: 0.9999; /*for the glitter*/
 }
+
 .headerText{
-  margin: 0.1em 10%;
+  margin: 20vh 10% 10vh;
   color: #ffffff;
   background: -webkit-linear-gradient(top, #f2fff9 0%,#f2f5ff 50%,#fff2fe 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.headerCon h2{
+.top h2{
   font-size: 1.5em;
   display: block;
   text-align: center;
   margin: 10px;
   transition: font-size 300ms;
 }
-.headerCon h2 span{
+.top h2 span{
   margin: 0 1.5%;
   margin: 0 1.5%;
 }
