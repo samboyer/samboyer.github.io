@@ -16,14 +16,13 @@ p{
 }
 h1, h2, h3{
   margin: 0;
-  font-weight: 300;
+  font-weight: 400;
   color: #ffffff;
   font-family: 'Josefin Slab';
   font-style: italic;
 }
 h1{
   font-size: 6em;
-  font-weight: 400;
   font-style: normal;
 }
 h2{
@@ -52,7 +51,7 @@ h3{
   opacity: 0.9999; /*for the glitter*/
 }
 .headerText{
-  text-align: center;
+  margin: 0.1em 10%;
   color: #ffffff;
   background: -webkit-linear-gradient(top, #f2fff9 0%,#f2f5ff 50%,#fff2fe 100%);
   -webkit-background-clip: text;
