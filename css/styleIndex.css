@@ -38,26 +38,37 @@ h3{
 .top{
   overflow: hidden;
   position: relative;
-
+  color: #f2fff9;
   width: 100%;
-  padding: 10px 0;
-  background-color: #317967;
-  border-bottom: solid 2px #8bc995;
+  background-color: #1e3c66;
+  border-bottom: solid 10px #ad45ab;
+  background: linear-gradient(to bottom, #591466 0%,#1e3c66 53%,#286655 99%);
+  height: 100vh;
 }
 
 .headerText{
-  margin: 20vh 10% 10vh;
-  color: #ffffff;
-  background: -webkit-linear-gradient(top, #f2fff9 0%,#f2f5ff 50%,#fff2fe 100%);
+  margin: 30vh 10% 20vh;
+  display: inline-block;
+  height: 5.5em;
+  padding-right: 6em;
+  border-bottom:solid 3px #fff5;
+}
+.headerText h1{
+  background: -webkit-linear-gradient(top, #7fffc7 0%,#94f7ea 43%,#a78fef 95%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  transition: font-size 300ms;
 }
+
 .top h2{
   font-size: 1.5em;
   display: block;
   text-align: center;
-  margin: 10px;
+  margin: 10px 0 1em;
   transition: font-size 300ms;
+  position: absolute;
+  bottom: 10vh;
+  width: 100%;
 }
 .top h2 span{
   margin: 0 1.5%;
@@ -102,27 +113,25 @@ h3{
   top: 0;
   z-index: 10000;
   width: 100%;
-  border-top: solid 2px #86cc95;
+  border-top: solid 2px #ad45ab;
 }
 .navbar{
   text-align: center;
-  background-color: #86cc95;
-  padding: 5px 20px;
+  background-color: #ad45ab;
+  padding: 0 20px 5px;
   color: #ffffff;
   margin: 0 auto;
-  border-bottom: 1px solid #ffffff;
   display: inline-block;
-  width: 70%;
   transition: width 300ms;
 }
 .navbar a{
   color: #ffffff !important;
   margin: 0 10px;
   text-decoration: none;
-  transition: color 200ms ease-out;
+  transition: color 100ms ease-out;
 }
 .navbar a:hover{
-  color: #7373ff !important;
+  color: #42fcc0  !important;
 }
 .anchor{
   content: "";
@@ -413,20 +422,22 @@ h2 i{
 }
 
 /*mobile rules*/
-@media screen and (min-width:1024px){
-  /*...?*/
-}
-
-@media screen and (max-width:1024px) and (min-width:640px){
+@media screen and (max-width:900px){
   .pageBody{
     min-width: 0px;
   }
-  .headerCon h2{
+  .top h2{
     font-size: 1.3em;
   }
 }
 
 @media screen and (max-width:640px){
+  .headerText h1{
+    font-size:4em;
+  }
+  .headerText{
+    height:3.8em;
+  }
   #logo{
     width: 55%;
   }
@@ -442,7 +453,7 @@ h2 i{
     width: 97.5%;
     margin: 10px auto;
   }
-  .headerCon h2{
+  .top h2{
     font-size: 1.1em;
   }
 }
@@ -502,10 +513,11 @@ h2 i{
   left: 50%;
   background-color: #fff;
   overflow: hidden;
-  color: tansparent;
-  opacity: 0.0;
+  opacity: 0.5;
   animation: glitter 6s linear 0s infinite normal;
   -webkit-animation: glitter 6s linear 0s infinite normal;
+  box-shadow:0 0 4px 0.5px #fff2;
+  width:1px;
 }
 
 @-webkit-keyframes glitter {
@@ -514,10 +526,10 @@ h2 i{
   opacity: 0;
   }
   25% {
-  opacity: 0.7;
+  opacity: 0.3;
   }
-  50% {
-  opacity: 0.8;
+  75% {
+  opacity: 0.4;
   }
   100% {
   -webkit-transform: translateY(-100px);

@@ -19,18 +19,18 @@
 		"addressRegion": "United Kingdom"
 	  }
 	}
-	</script>	
-	
+	</script>
+
 	<!-- Twitter Card data -->
 	<meta name="twitter:card" value="summary">
-	
+
 	<!-- Open Graph data -->
 	<meta property="og:title" content="Sam Boyer" />
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://samboyer.co.uk/" />
 	<meta property="og:image" content="https://samboyer.co.uk/img/fb-feature.jpg" />
 	<meta property="og:description" content="sam's website, featuring various items of mild interest." />
-	
+
 	<meta name="google-site-verification" content="_GnuPK8X38hi5TkO4QsvAuLMMgR951F3PriWayEXp0E" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -39,7 +39,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:300,400&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Josefin+Slab:400,400i&display=swap" rel="stylesheet">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	
+
 	<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png?v=BGA59M7v8v">
 	<link rel="icon" type="image/png" href="icons/favicon-32x32.png?v=BGA59M7v8v" sizes="32x32">
 	<link rel="icon" type="image/png" href="icons/favicon-16x16.png?v=BGA59M7v8v" sizes="16x16">
@@ -55,15 +55,20 @@
 $(function() {
   var body = $('#glitterCont'),
       original = $('.glitterPiece'),
-      amnt =  200,
-      minDur = 5,
-      maxDur = 11,
-      maxSize = 2;
+      amnt =  50,
+      minDur = 4,
+      maxDur = 10,
+      minSize = 3,
+      maxSize = 25,
+      minOpa = 0.2;
 
     var createStar = function() {
-      var dur = Math.random() * (maxDur-minDur) + minDur,
+      var rng = Math.random(),
+          dur  = (1-rng) * (maxDur-minDur) + minDur,
+          size = Math.ceil(rng * (maxSize - minSize)) + minSize,
+          opa  = rng * (1 - minOpa) + minOpa,
           ofst = -Math.random() * maxDur,
-          size = Math.ceil(Math.random() * maxSize)+1;
+          col  = Math.floor(Math.random() * 255);
 
       original.clone().removeAttr('id').css({
           top: (Math.random() * 100) + '%',
@@ -73,7 +78,8 @@ $(function() {
           webkitAnimationDuration: dur + 's',
           mozAnimationDuration: dur + 's',
           height:size+'px',
-          width:size+'px'
+          backgroundColor: 'hsla('+col+',100%,80%,'+opa+')',
+
         }).appendTo(body);
   };
 
@@ -128,21 +134,21 @@ $(function() {
 			$('#overlay .popup').addClass("fadeInDown");
 			setTimeout(function () {
 				$('#overlay').addClass("overlayOpen");
-			}, 20);		
+			}, 20);
 		}
 		function closePopup(){
 			$('#overlay').removeClass('overlayOpen');
-			
+
 			$('#overlay .popup').removeClass("fadeInDown");
 			$('#overlay .popup').addClass("fadeOutUp");
-			
+
 			$('#overlay').one('transitionend', function(e) {
 			  $('#overlay').removeClass('overlayDisplay');
 			});
-			
+
 			$('#overlay iframe').attr('src', 'about:blank'); //because it looks strange when another page is loaded
 		}
-		
+
 		function showVideoPopup(videoId){
 			var url = "https://www.youtube.com/embed/"+videoId+"?rel=0&color=white&controls=1&autoplay=1"
 			$('#videoOverlay').addClass("overlayDisplay");
@@ -151,18 +157,18 @@ $(function() {
 			$('#videoOverlay .videoPopup').addClass("fadeInDown");
 			setTimeout(function () {
 				$('#videoOverlay').addClass("overlayOpen");
-			}, 20);		
+			}, 20);
 		}
 		function closeVideoPopup(){
 			$('#videoOverlay').removeClass('overlayOpen');
-			
+
 			$('#videoOverlay .videoPopup').removeClass("fadeInDown");
 			$('#videoOverlay .videoPopup').addClass("fadeOutUp");
-			
+
 			$('.screenOverlay').one('transitionend', function(e) {
 			  $('#videoOverlay').removeClass('overlayDisplay');
 			});
-			
+
 			$('#videoOverlay iframe').attr('src', 'about:blank'); //because it looks strange when another page is loaded
 		}
 		function clearVideoPopup() {
@@ -242,11 +248,10 @@ $(function() {
 	<div id="top-anchor"></div>
 	<div class="top">
         <div id="glitterCont"><div class="glitterPiece"></div></div>
-            <span class = "animated fadeIn" class="displayBlock">
-                <h1 class="headerText">Sam Boyer</h1>
+            <span class = "headerText animated fadeIn" class="displayBlock">
+                <h1>Sam Boyer</h1>
             </span>
-            <h2>Programmer <span>|</span> Game Developer <span>|</span> Video Producer <span>|</span> 	other stuff</h2>
-        </div>
+            <h2>Programming <span>|</span> Game Development <span>|</span> Video Production <span>|</span> ...other stuff</h2>
 	</div>
 	<div id="sticky-anchor"></div>
 	<div id="sticky">
@@ -258,21 +263,14 @@ $(function() {
 			<span>|</span>
 			<a href="#videos" target="_self">Videos</a>
 			<span>|</span>
-			<a href="#about" target="_self">About Me</a>
+			<a href="#about" target="_self">About</a>
 			<span>|</span>
 			<a href="#contact" target="_self">Contact</a>
 			</nav>
 		</div>
 	</div>
     <div class="pageBody">
-        <div class="section">
-            <p>Hello there!
-			<p>Thanks for checking out my site. It's a little showcase of the various things I've made/am making.
-			<p>New things get added every now and then, so feel free to check back sometime.
-			<p><small>(Try hovering over/tapping some of the images!)</small></p>
-            <hr />
-        </div>
-		
+
 		<div class="section">
 			<div id="projects-anchor" class="anchor"></div>
 			<div class="sectionHeader">
@@ -293,10 +291,10 @@ $(function() {
 					<img src="img/games/ldsimulator/feature.jpg" onmouseover="this.src='img/games/ldsimulator/feature.gif';" onmouseout="this.src='img/games/ldsimulator/feature.jpg';" alt="LDSimulator Gameplay" />
 					<div class="projectInfo">
 						<h3>Ludum Dare Simulator 2019</h3>
-                        <p>Play 7 minigames to build the best game with limited energy and disk space. Made for Ludum Dare 42, achieved <b>3<sup>rd</sup> place Overall!!</b></p>
+                        <p>Play 7 minigames to build the best game with limited energy and disk space. Made for Ludum Dare 42, achieved <b>3<sup>rd</sup> place Overall!</b></p>
 					</div>
 					<a target="noopener" href="https://ldjam.com/events/ludum-dare/42/ludum-dare-simulator-2019" class="projectMore">Jam Page</a>
-				</div>	
+				</div>
 
                 <div class="projectFeature">
 					<img src="img/games/turtleracers/feature.jpg" onmouseover="this.src='img/games/turtleracers/feature.gif';" onmouseout="this.src='img/games/turtleracers/feature.jpg';" alt="Turtle Racers Gameplay" />
@@ -305,8 +303,8 @@ $(function() {
 						<p>A LAN multiplayer turtle graphics racing game built in 11 hours. Made for Ludum Dare 41, scored 3.6/5 overall!</p>
 					</div>
 					<a target="noopener" href="https://ldjam.com/events/ludum-dare/41/turtle-racers-commanding-your-way-to-victory" class="projectMore">Jam Page</a>
-				</div>	
-				
+				</div>
+
                 <div class="projectFeature">
 					<img src="img/projects/jukebox/feature.jpg" alt="Jukebox-YT logo" />
 					<div class="projectInfo">
@@ -316,7 +314,7 @@ $(function() {
 					<a target="noopener" href="https://addons.mozilla.org/en-GB/firefox/addon/jukebox-yt" class="projectMore">Firefox Addons Page</a>
 
 				</div>
-                	
+
                 <div class="yearHeader yearHeaderHidden">2017</div>
 
                 <div class="projectFeature">
@@ -326,7 +324,7 @@ $(function() {
 						<p>An endless arcade sauce-em-up. Made for Ludum Dare 40, positioned 79<sup>th</sup>/1850 entries!</p>
 					</div>
 					<a target="noopener" href="https://ldjam.com/events/ludum-dare/40/ketchup-quest-endless-arcade-fighting-to-protect-your-saucy-stash" class="projectMore">Jam Page</a>
-				</div>	
+				</div>
 
                 <div class="projectFeature">
 				    <img src="img/games/voxels/feature.jpg" onmouseover="this.src='img/games/voxels/feature.gif';" onmouseout="this.src='img/games/voxels/feature.jpg';" alt="VoxelEngine Test Animation" / />
@@ -341,7 +339,7 @@ $(function() {
                     <img src="img/projects/simplespectrum/feature.jpg" onmouseover="this.src='img/projects/simplespectrum/feature.gif';" onmouseout="this.src='img/projects/simplespectrum/feature.jpg';" alt="SimpleSpectrum Logo" />
 					<div class="projectInfo">
                         <h3>SimpleSpectrum for Unity</h3>
-						
+
 						<p>A simple package for Unity that generates a great-looking visualiser in realtime. Free on the Asset Store, used by 3000+ developers!</p>
 					</div>
 					<a target="_self" href="javascript:void" onClick="showPopup('popup-projects-spectrum.html')" class="projectMore">More Info</a>
@@ -354,7 +352,7 @@ $(function() {
 						<p>Fairly self-explanatory. (very very nearly) All the stuff you see before you has been hand-crafted by yours truly ;)</p>
 					</div>
 					<a target="_self" href="javascript:void" onClick="showPopup('index.html?'+Math.random())" class="projectMore">Descend...</a>
-				</div>	
+				</div>
 
                 <div class="projectFeature">
 					<img src="img/projects/hangai/feature.jpg" alt="HangAI Title" />
@@ -401,13 +399,11 @@ $(function() {
 						<h3>More coming soon~</h3>
 						<p></p>
 					</div>
-				</div>	
-			
+				</div>
+
 			</div>
-			
-			<hr />
         </div>
-				
+
 		<div class="section">
 			<div id="videos-anchor" class="anchor"></div>
 			<div class="sectionHeader">
@@ -417,43 +413,30 @@ $(function() {
 			<p>Most of the videos I've made are gaming/commentary ones, but I like to throw in the occasional better-edited project. In total, I've had over 3.8 million views and 17 thousand subscribers :o
 			<p>I also do bits and pieces of 3D animations with Blender, usually making video intros and audio visualisers.
 			<p>Here's a showcase of my personal favourites:</p>
-			
+
 			<div class="fullWidth">
 				<div class="videoShowcase">
 						<img src="img/video/ketchupquesttrailer.jpg" onclick="showVideoPopup('ZxMTdH2rcVU')" alt="Video: Ketchup Quest Trailer" />
 						<img src="img/video/dogephone.jpg" onclick="showVideoPopup('WxZ-9TNS9RI')" alt="Video: Dogephone" />
-                        <img src="img/video/cern.jpg" onclick="showVideoPopup('rLtPqh4fmRc')" alt="Video: CERN School Trip" />						
+                        <img src="img/video/cern.jpg" onclick="showVideoPopup('rLtPqh4fmRc')" alt="Video: CERN School Trip" />
                         <img src="img/video/daynightcycle.jpg" onclick="showVideoPopup('https://www.youtube.com/watch?v=tylDkbxu818')" alt="Video: Unity Day/Night Cycle" />
                         <img src="img/video/allfallsdownvis.jpg" onclick="showVideoPopup('ilsXk67y2Qw')" alt="Video: Audio Spectrum Tutorial" />
                         <img src="img/video/cubicventure.jpg" onclick="showVideoPopup('5mbSOZW4460')" alt="Video: A Cubic Venture" />
 						<img src="img/video/lbp2.jpg" onclick="showVideoPopup('7Jgzj9JSmnc')" alt="Video: LBP2 Let's Play" />
 				</div>
 			</div>
-			
-			<br />
-
-			<!--<div class="channelYT">
-				<a href="https://www.youtube.com/channel/UCLRGVbA5qfMpalPV5rXDa9A">
-				<img src="img/ytchannellogo.jpg" alt="YouTube channel logo" />
-				<h3>Sam.Boyer</h3>
-				</a>
-				<p>This is my main channel, where all my 'important' stuff goes.
-				<p>It started out as a gaming channel, but is currently the landing site for whatever I feel like making.</p>
-			</div>-->
-			<hr />
         </div>
-		
-		
+
 		<div class="section">
 			<div id="about-anchor" class="anchor"></div>
 			<div class="sectionHeader">
 				<h2>About Me <i class="fa fa-user" aria-hidden="true"></i></h2>
 			</div>
-            <p>I'm an 18 year old computer science student from the UK, currently studying at the University of Oxford. I love making all sorts of technical and creative things with computers, such as games, software, videos, websites, logos etc... <small>(...I'm  just indecisive about my speciality)</small></p>
+            <p>I'm a computer science student from the UK, currently studying at the University of Oxford. I love making all sorts of technical and creative things with computers, such as games, software, videos, websites, logos etc... <small>(...I'm  just indecisive about my speciality)</small></p>
             <p>My go-to languages are C# and Python but can work with all sorts. I've used Unity for game development since 2016 and participated in a few game jams since. I also do bits and pieces of cybersecurity, winning a CyberDiscovery UK Elite event in 2018 and enjoying CTF games like Hack The Box.</p>
 
 		</div>
-		
+
 		<div class="section">
 			<div id="contact-anchor" class="anchor"></div>
 			<div class="sectionHeader">
@@ -463,7 +446,7 @@ $(function() {
 			<span class="largeText">Get In Touch: sam.boyer276yt@<span class="displayNone">[email address hidden, sry bots &lt;3]</span>gmail.com</span>
         </div>
       </div>
-	
+
 	<div class="footer">
 		<div class="socialLinks">
 			<div class="socialLink socialLinkTwitter">
@@ -485,16 +468,16 @@ $(function() {
 			</div>
 		</div>
 		<div class="footerInfo">
-			<p>© Sam Boyer 2018</p>
+			<p>© Sam Boyer 2019</p>
 		</div>
 		<small>
 			<div class="breakWord">Ðogecoin (it's the future): DMqQnpP9A8ZXapxtFEkdiDbtqduu2eTMoU</div>
 			<div>(/._.)/*\(._.\)</div>
 		</small>
-		
+
 	</div>
-	
-	
+
+
 	<div class="screenOverlay" id="overlay" onclick="closePopup()">
 		<div class="popup animated">
 			<i class="spinner fa fa-cog fa-spin fa-3x fa-fw"></i>
@@ -502,7 +485,7 @@ $(function() {
 			<iframe src="about:blank" >Loading...</iframe>
 			<div onclick="closePopup()" class="popupClose"><i class="fa fa-times-circle" aria-hidden="true"></i></div>
 		</div>
-	</div>	
+	</div>
 	<div class="screenOverlay" onclick="closeVideoPopup()" id="videoOverlay">
 		<div class="videoPopup animated">
 			<i class="spinner fa fa-cog fa-spin fa-3x fa-fw"></i>
