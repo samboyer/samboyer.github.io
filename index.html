@@ -29,7 +29,7 @@
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://samboyer.co.uk/" />
 	<meta property="og:image" content="https://samboyer.co.uk/img/fb-feature.jpg" />
-	<meta property="og:description" content="sam's website, featuring various items of mild interest." /> 
+	<meta property="og:description" content="sam's website, featuring various items of mild interest." />
 	
 	<meta name="google-site-verification" content="_GnuPK8X38hi5TkO4QsvAuLMMgR951F3PriWayEXp0E" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -59,12 +59,12 @@ $(function() {
       minDur = 5,
       maxDur = 11,
       maxSize = 2;
-    
+
     var createStar = function() {
       var dur = Math.random() * (maxDur-minDur) + minDur,
           ofst = -Math.random() * maxDur,
           size = Math.ceil(Math.random() * maxSize)+1;
-      
+
       original.clone().removeAttr('id').css({
           top: (Math.random() * 100) + '%',
           left: (Math.random() * 100) + '%',
@@ -76,14 +76,13 @@ $(function() {
           width:size+'px'
         }).appendTo(body);
   };
- 
-  for(var i = 0; i < amnt; i++) {    
+
+  for(var i = 0; i < amnt; i++) {
     createStar();
   }
 });
     </script>
-    
-    
+
 	<script>//NAVBAR
 		function sticky_relocate() {
 			var window_top = $(window).scrollTop();
@@ -169,7 +168,7 @@ $(function() {
 		function clearVideoPopup() {
 			$('#videoOverlay iframe').attr('src', 'about:blank');
 		}
-        
+
         //PRELOAD
         function preloadImages(){
 			var addresses=['/img/games/rhythm/feature.gif', 'img/games/ketchupquest/feature.gif', 'img/projects/thiswebsite-square.gif', 'img/projects/simplespectrum/feature.gif', 'img/games/minesweeper/feature.gif', 'img/games/voxels/feature.gif', ];
@@ -177,16 +176,16 @@ $(function() {
 				$.get(addresses[i]);
 			}
 		}
-        
+
         function sortItems(value, instant){
-            
+
             var yearHeaders = document.getElementsByClassName("yearHeader");
             if(value=="coolness"){
                 for(var i=0;i<yearHeaders.length;i++){
                     yearHeaders[i].classList.add("yearHeaderHidden");
-                } 
+                }
             }
-            
+
             if(instant){
                 setOrder(value);
             }
@@ -202,43 +201,43 @@ $(function() {
                     for(var i=0;i<elements.length;i++){
                         elements[i].classList.remove("cardHide");
                     }
-                    
+
                     if(value!="coolness"){
                         for(var i=0;i<yearHeaders.length;i++){
                             yearHeaders[i].classList.remove("yearHeaderHidden");
                         }
                     }
-                }, 600);  
-                
+                }, 600);
+
                 //delay the actual ordering function
-                setTimeout(function(){setOrder(value);}, 300);               
+                setTimeout(function(){setOrder(value);}, 300);
             }
         }
-        
+
         function setOrder(order){
-            var coolnessOrder = [11,7,4,10,8,5,2,3,0,1,9]            
+            var coolnessOrder = [11,7,4,10,8,5,2,3,0,1,9]
 
             var elements = document.getElementsByClassName("projectFeature");
-            
+
             if(order=="coolness"){
                 for(var i=0;i<elements.length;i++){
                     if(elements[i].id=="projectComingSoon"){
                         elements[i].style.order=9999;
                     }else{
-                        elements[i].style.order=-coolnessOrder[i];  
+                        elements[i].style.order=-coolnessOrder[i];
                     }
-                }   
+                }
             }else{
                 for(var i=0;i<elements.length;i++){
                     elements[i].style.order=null; //setting numbers sometimes messes with the sorting
                 }
             }
         }
-        
+
 	</script>
 
   </head>
-    
+
   <body onload="clearVideoPopup(); preloadImages(); sortItems('coolness', true); document.getElementById('radioCoolness').checked=true;">
 	<div id="top-anchor"></div>
 	<div class="top">
@@ -246,7 +245,7 @@ $(function() {
         <div id="logo">
             <img src="img/logo.svg" class="animated fadeIn" id="logoImg" alt=""/>
             <img src="img/logo.svg" class="animated fadeIn" id="logoBlur" alt=""/>
-        </div>       
+        </div>
         <div class="headerCon">
             <span class = "animated fadeIn" class="displayBlock">
                 <h1 class="headerText">Sam Boyer</h1>
@@ -282,19 +281,19 @@ $(function() {
 		<div class="section">
 			<div id="projects-anchor" class="anchor"></div>
 			<div class="sectionHeader">
-				<h2>Projects <i class="fa fa-code" aria-hidden="true"></i></h2> 
+				<h2>Projects <i class="fa fa-code" aria-hidden="true"></i></h2>
 			</div>
             <div class="projectControls">
                 Sort By:
-                <input type="radio" name="sort" value="coolness" onclick="sortItems(this.value, false);" id="radioCoolness" checked><label for="radioCoolness">Coolness</label> 
-                <input type="radio" name="sort" onclick="sortItems(this.value, false);" value="date" id="radioDate"><label for="radioDate">Date Created</label> 
+                <input type="radio" name="sort" value="coolness" onclick="sortItems(this.value, false);" id="radioCoolness" checked><label for="radioCoolness">Coolness</label>
+                <input type="radio" name="sort" onclick="sortItems(this.value, false);" value="date" id="radioDate"><label for="radioDate">Date Created</label>
             </div>
-            
+
 			<div class="projectFeatureCont">
 			<!-- ordered raw by date descending-->
-                
+
                 <div class="yearHeader yearHeaderHidden">2018</div>
-                
+
                 <div class="projectFeature">
 					<img src="img/games/ldsimulator/feature.jpg" onmouseover="this.src='img/games/ldsimulator/feature.gif';" onmouseout="this.src='img/games/ldsimulator/feature.jpg';" alt="LDSimulator Gameplay" />
 					<div class="projectInfo">
@@ -303,7 +302,7 @@ $(function() {
 					</div>
 					<a target="noopener" href="https://ldjam.com/events/ludum-dare/42/ludum-dare-simulator-2019" class="projectMore">Jam Page</a>
 				</div>	
-                
+
                 <div class="projectFeature">
 					<img src="img/games/turtleracers/feature.jpg" onmouseover="this.src='img/games/turtleracers/feature.gif';" onmouseout="this.src='img/games/turtleracers/feature.jpg';" alt="Turtle Racers Gameplay" />
 					<div class="projectInfo">
@@ -320,10 +319,10 @@ $(function() {
 						<p>A YouTube player WebExtension that lets you collect and group videos into dynamic playlists and play with rating-weighted shuffling!</p>
 					</div>
 					<a target="noopener" href="https://addons.mozilla.org/en-GB/firefox/addon/jukebox-yt" class="projectMore">Firefox Addons Page</a>
-                    
+
 				</div>
                 	
-                <div class="yearHeader yearHeaderHidden">2017</div>                
+                <div class="yearHeader yearHeaderHidden">2017</div>
 
                 <div class="projectFeature">
 					<img src="img/games/ketchupquest/feature.jpg" onmouseover="this.src='img/games/ketchupquest/feature.gif';" onmouseout="this.src='img/games/ketchupquest/feature.jpg';" alt="Ketchup Quest Gameplay" />
@@ -333,7 +332,7 @@ $(function() {
 					</div>
 					<a target="noopener" href="https://ldjam.com/events/ludum-dare/40/ketchup-quest-endless-arcade-fighting-to-protect-your-saucy-stash" class="projectMore">Jam Page</a>
 				</div>	
-                
+
                 <div class="projectFeature">
 				    <img src="img/games/voxels/feature.jpg" onmouseover="this.src='img/games/voxels/feature.gif';" onmouseout="this.src='img/games/voxels/feature.jpg';" alt="VoxelEngine Test Animation" / />
 					<div class="projectInfo">
@@ -342,7 +341,7 @@ $(function() {
 					</div>
 					<a target="_self" href="javascript:void" onclick="showVideoPopup('_XJIPGDB46I')" class="projectMore">More 'Info'</a>
                 </div>
-                
+
                 <div class="projectFeature">
                     <img src="img/projects/simplespectrum/feature.jpg" onmouseover="this.src='img/projects/simplespectrum/feature.gif';" onmouseout="this.src='img/projects/simplespectrum/feature.jpg';" alt="SimpleSpectrum Logo" />
 					<div class="projectInfo">
@@ -352,7 +351,7 @@ $(function() {
 					</div>
 					<a target="_self" href="javascript:void" onClick="showPopup('popup-projects-spectrum.html')" class="projectMore">More Info</a>
 				</div>
-                
+
                 <div class="projectFeature">
 					<img src="img/projects/thiswebsite-square.jpg" onmouseover="this.src='img/projects/thiswebsite-square.gif';" onmouseout="this.src='img/projects/thiswebsite-square.jpg';" alt="Screenshot of this website" />
 					<div class="projectInfo">
@@ -361,7 +360,7 @@ $(function() {
 					</div>
 					<a target="_self" href="javascript:void" onClick="showPopup('index.html?'+Math.random())" class="projectMore">Descend...</a>
 				</div>	
-                
+
                 <div class="projectFeature">
 					<img src="img/projects/hangai/feature.jpg" alt="HangAI Title" />
 					<div class="projectInfo">
@@ -369,8 +368,8 @@ $(function() {
 						<p>A simple Console app that uses dictionary filters and frequency analysis to solve a hangman game.</p>
 					</div>
 					<a target="_self" href="javascript:void" onClick="showPopup('popup-projects-hangai.html')" class="projectMore">More Info</a>
-				</div>                        
-                
+				</div>
+
                 <div class="projectFeature">
 					<img src="img/games/rhythm/feature.jpg" onmouseover="this.src='img/games/rhythm/feature.gif';" onmouseout="this.src='img/games/rhythm/feature.jpg';" alt="Rhythm Logo" />
 					<div class="projectInfo">
@@ -378,10 +377,10 @@ $(function() {
 						<p>A mobile rhythm game, a-la Guitar Hero &amp; Geometry Dash. Not sure if it'll ever get finished, but it plays well!</p>
 					</div>
 					<a target="_self" href="javascript:void" class="projectMore">Play <span class="strike">Now</span> Soon</a>
-				</div>                
-                
-                <div class="yearHeader yearHeaderHidden">2016</div>                
-                
+				</div>
+
+                <div class="yearHeader yearHeaderHidden">2016</div>
+
                 <div class="projectFeature">
 					<img src="img/projects/erebus/feature-square.jpg" alt="CMD Relay Logo" />
 					<div class="projectInfo">
@@ -390,7 +389,7 @@ $(function() {
 					</div>
 					<a target="_self" href="javascript:void" onClick="showPopup('popup-projects-erebus.html')" class="projectMore">More Info</a>
 				</div>
-                
+
                 <div class="projectFeature">
 					<img src="img/games/minesweeper/feature.jpg" onmouseover="this.src='img/games/minesweeper/feature.gif';" onmouseout="this.src='img/games/minesweeper/feature.jpg';" alt="Minesweeper Clone" />
 					<div class="projectInfo">
@@ -399,8 +398,8 @@ $(function() {
 					</div>
 					<a target="_blank" href="games/minesweeper" class="projectMore">Play Now</a>
 				</div>
-                
-                
+
+
                 <div class="projectFeature" id="projectComingSoon">
 					<img src="img/comingsoon-square.jpg" alt="Coming Soon" />
 					<div class="projectInfo">
@@ -417,11 +416,11 @@ $(function() {
 		<div class="section">
 			<div id="videos-anchor" class="anchor"></div>
 			<div class="sectionHeader">
-				<h2>Videos <i class="fa fa-youtube-play" aria-hidden="true"></i></h2> 
+				<h2>Videos <i class="fa fa-youtube-play" aria-hidden="true"></i></h2>
 			</div>
             <p>I've been into Video Production and Editing for years, a hobby which I started to use properly in 2013 when I created my first YouTube channel.
-			<p>Most of the videos I've made are gaming/commentary ones, but I like to throw in the occasional better-edited project. In total, I've had over 3.8 million views and 17 thousand subscribers :o 
-			<p>I also do bits and pieces of 3D animations with Blender, usually making video intros and audio visualisers. 
+			<p>Most of the videos I've made are gaming/commentary ones, but I like to throw in the occasional better-edited project. In total, I've had over 3.8 million views and 17 thousand subscribers :o
+			<p>I also do bits and pieces of 3D animations with Blender, usually making video intros and audio visualisers.
 			<p>Here's a showcase of my personal favourites:</p>
 			
 			<div class="fullWidth">
@@ -453,23 +452,23 @@ $(function() {
 		<div class="section">
 			<div id="about-anchor" class="anchor"></div>
 			<div class="sectionHeader">
-				<h2>About Me <i class="fa fa-user" aria-hidden="true"></i></h2> 
+				<h2>About Me <i class="fa fa-user" aria-hidden="true"></i></h2>
 			</div>
             <p>I'm an 18 year old computer science student from the UK, currently studying at the University of Oxford. I love making all sorts of technical and creative things with computers, such as games, software, videos, websites, logos etc... <small>(...I'm  just indecisive about my speciality)</small></p>
             <p>My go-to languages are C# and Python but can work with all sorts. I've used Unity for game development since 2016 and participated in a few game jams since. I also do bits and pieces of cybersecurity, winning a CyberDiscovery UK Elite event in 2018 and enjoying CTF games like Hack The Box.</p>
-            
+
 		</div>
 		
 		<div class="section">
 			<div id="contact-anchor" class="anchor"></div>
 			<div class="sectionHeader">
-				<h2>Contact Me <i class="fa fa-envelope" aria-hidden="true"></i></h2> 
+				<h2>Contact Me <i class="fa fa-envelope" aria-hidden="true"></i></h2>
 			</div>
             <p>If you have any questions, suggestions or just want to say 'hi', feel free to pester me however you see fit*!<br /><small> (*within reason)</small></p>
 			<span class="largeText">Get In Touch: sam.boyer276yt@<span class="displayNone">[email address hidden, sry bots &lt;3]</span>gmail.com</span>
         </div>
       </div>
-	  
+	
 	<div class="footer">
 		<div class="socialLinks">
 			<div class="socialLink socialLinkTwitter">
