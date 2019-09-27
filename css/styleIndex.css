@@ -179,8 +179,7 @@ transform: rotateZ(13deg);
 
 /*PAGE*/
 .pageBody{
-  width: 80%;
-  max-width: 1600px;
+  max-width: 1100px;
   margin: 0 auto;
   padding-bottom: 50px;
 }
@@ -189,10 +188,10 @@ h2 i{
 }
 .section{
   margin: 0;
-  padding: 15vh 2.5% 0;
+  padding: 10vh 15px 5vh;
 }
 .section p{
-  padding: 0 25px;
+  padding: 0 15px;
 }
 .pre{
   white-space: pre-wrap;
@@ -201,7 +200,7 @@ h2 i{
   padding: 5px 15% 0px 0px;
   margin-bottom: 15px;
   display: inline-block;  
-  border-bottom: solid 3px #ad45ab;
+  border-bottom: solid 3px #eb72ea;
 }
 .largeText{
   font-size: 2.5em;
@@ -281,7 +280,7 @@ h2 i{
 
 /*VIDEOS*/	
 .videoShowcase{
-  background: #86cc95;
+  background: #69da92;
   height: auto;
   overflow-x: scroll;
   width: auto;
@@ -329,7 +328,7 @@ h2 i{
   width: 80%;
   padding: 50px 10%;
   background-color: #543f53;
-  color: #ffffff;
+  color: #fafefa;
 }
 .footerInfo{
   display: inline-block;
@@ -459,9 +458,9 @@ h2 i{
 
 /*mobile rules*/
 @media screen and (max-width:900px){
-  .pageBody{
+  /* .pageBody{
     min-width: 0px;
-  }
+  } */
   .top h2{
     font-size: 1.3em;
   }
@@ -480,10 +479,10 @@ h2 i{
   .navbar{
     width: 100%;
   }
-  .pageBody{
+  /* .pageBody{
     width: 100%;
     min-width: 0px;
-  }
+  } */
   .projectFeature{
     max-width: 400px;
     width: 97.5%;
@@ -533,7 +532,7 @@ h2 i{
   transition: border-bottom-width 250ms cubic-bezier(.17,.84,.44,1);
   height: 40px;
   box-sizing: border-box;
-  border-bottom: 0px solid #f5fdf7;
+  border-bottom: 0px solid #fafefa;
 }
 .yearHeaderHidden{
   border-bottom-width: 40px;
