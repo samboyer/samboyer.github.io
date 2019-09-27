@@ -213,30 +213,32 @@ $(function() {
                             yearHeaders[i].classList.remove("yearHeaderHidden");
                         }
                     }
-                }, 600);
+                }, 300);
 
                 //delay the actual ordering function
-                setTimeout(function(){setOrder(value);}, 300);
+                setTimeout(function(){setOrder(value);}, 250);
             }
         }
 
         function setOrder(order){
-            var coolnessOrder = [11,7,4,10,8,5,2,3,0,1,9]
+            var coolnessOrder = [12,8,6,11,9,7,4,5,2,3,10]
 
             var elements = document.getElementsByClassName("projectFeature");
 
             if(order=="coolness"){
                 for(var i=0;i<elements.length;i++){
                     if(elements[i].id=="projectComingSoon"){
-                        elements[i].style.order=9999;
+                        elements[i].style.order=-1;
                     }else{
                         elements[i].style.order=-coolnessOrder[i];
                     }
                 }
+				$('.yearHeader').hide();
             }else{
                 for(var i=0;i<elements.length;i++){
                     elements[i].style.order=null; //setting numbers sometimes messes with the sorting
                 }
+				$('.yearHeader').show();
             }
         }
 
@@ -248,7 +250,7 @@ $(function() {
 	<div id="top-anchor"></div>
 	<div class="top">
         <div id="glitterCont"><div class="glitterPiece"></div></div>
-            <span class = "headerText animated fadeIn" class="displayBlock">
+            <span class = "headerText" class="displayBlock">
                 <h1>Sam Boyer</h1>
             </span>
             <h2>Programming <span>|</span> Game Development <span>|</span> Video Production <span>|</span> ...other stuff</h2>

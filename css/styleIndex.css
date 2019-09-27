@@ -202,7 +202,7 @@ h2 i{
   position: relative;
   vertical-align: top;
   border-radius: 0 15px;
-  box-shadow: 0 0 20px rgba(0,30,10,0.15);
+  box-shadow: 1px 1px 10px #0003;
   width: 22vw;
   max-width: 400px;
   min-width: 300px;
@@ -478,12 +478,12 @@ h2 i{
 
 /*card sorting stuff*/
 .projectFeature{
-  transition: transform 300ms cubic-bezier(0,0,0.5,1.5);
+  transition: transform 250ms cubic-bezier(.17,.84,.44,1);
   transform: scale(1);
 }
 
 .cardHide{
-  transition: transform 300ms cubic-bezier(0.5,-0.5,1,1);
+  transition: transform 250ms cubic-bezier(.17,.84,.44,1);
   transform: scale(0);
 }
 .projectControls{
@@ -495,11 +495,13 @@ h2 i{
   font-size: 2em;
   margin-top: 20px;
   overflow: hidden;
-  transition: height 500ms;
+  transition: border-bottom-width 250ms cubic-bezier(.17,.84,.44,1);
   height: 40px;
+  box-sizing: border-box;
+  border-bottom: 0px solid #f5fdf7;
 }
 .yearHeaderHidden{
-  height: 0px;
+  border-bottom-width: 40px;
 }
 
 /*glitter*/
