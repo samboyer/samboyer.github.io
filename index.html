@@ -55,20 +55,21 @@
 $(function() {
   var body = $('#glitterCont'),
       original = $('.glitterPiece'),
-      amnt =  50,
-      minDur = 4,
-      maxDur = 10,
-      minSize = 3,
-      maxSize = 25,
-      minOpa = 0.2;
+      amnt =  100,
+      minDur = 6,
+      maxDur = 15,
+      minSize = 2,
+      maxSize = 3,
+      minOpa = 0.3,
+	  maxOpa = 0.7;
 
     var createStar = function() {
       var rng = Math.random(),
           dur  = (1-rng) * (maxDur-minDur) + minDur,
-          size = Math.ceil(rng * (maxSize - minSize)) + minSize,
-          opa  = rng * (1 - minOpa) + minOpa,
-          ofst = -Math.random() * maxDur,
-          col  = Math.floor(Math.random() * 255);
+          size = Math.round(rng * (maxSize - minSize)) + minSize,
+          opa  = rng * (maxOpa - minOpa) + minOpa,
+          ofst = -Math.random() * maxDur;
+          //col  = Math.floor(Math.random() * 255);
 
       original.clone().removeAttr('id').css({
           top: (Math.random() * 100) + '%',
@@ -78,7 +79,10 @@ $(function() {
           webkitAnimationDuration: dur + 's',
           mozAnimationDuration: dur + 's',
           height:size+'px',
-          backgroundColor: 'hsla('+col+',100%,80%,'+opa+')',
+		  width:(size-2)+'px',
+		//   backgroundColor: 'rgba(255,255,255,'+opa+')',
+		  filter: 'opacity('+opa+')',
+          //backgroundColor: 'hsla('+col+',100%,80%,'+opa+')',
 
         }).appendTo(body);
   };

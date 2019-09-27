@@ -519,8 +519,11 @@ h2 i{
   opacity: 0.5;
   animation: glitter 6s linear 0s infinite normal;
   -webkit-animation: glitter 6s linear 0s infinite normal;
-  box-shadow:0 0 4px 0.5px #fff2;
-  width:1px;
+  border-right:solid 1px #0f0;
+  border-left: solid 1px #f0f;
+  width:0px;
+  height:2px;
+  filter:opacity(0);
 }
 
 @-webkit-keyframes glitter {
@@ -529,10 +532,10 @@ h2 i{
   opacity: 0;
   }
   25% {
-  opacity: 0.3;
+  opacity: 0.8;
   }
   75% {
-  opacity: 0.4;
+  opacity: 1.0;
   }
   100% {
   -webkit-transform: translateY(-100px);
