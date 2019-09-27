@@ -303,26 +303,6 @@ h2 i{
   -ms-filter: brightness(80%);	
 }
 
-.channelYT{
-  display: block;
-  margin: 10px auto;
-  background-color: #86cc95;
-  padding: 15px;
-  vertical-align: text-top;
-  color: #ffffff;
-  max-width: 1000px;
-}
-.channelYT img{
-  width: 100px;
-  border-radius: 10px;
-}
-.channelYT a{
-  text-decoration: inherit;
-}
-.channelYT h3{
-  padding-left: 10px;
-}
-
 /*FOOTER*/
 .footer{
   width: 80%;
