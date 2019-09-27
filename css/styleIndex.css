@@ -46,21 +46,40 @@ h3{
   border-bottom: solid 10px #ad45ab;
   background: linear-gradient(to bottom, #591466 0%,#1e3c66 53%,#286655 99%);
   height: 100vh;
+  min-height: 300px;
+  box-sizing: border-box;
 }
 
 .headerText{
-  margin: 30vh 10% 20vh;
+  margin: 25vh 10% 20vh;
   display: inline-block;
-  height: 5.5em;
+  height: 5.8rem;
   padding-right: 6em;
-  border-bottom:solid 3px #fff5;
+  border-bottom:solid 3px #fff1;
+  transition: font-size 300ms;
+  animation: h1In 500ms ease-out 0s normal;
+  -webkit-animation: h1In 500ms ease-out 0s 1 normal;
+  transform: translateY(0px);
+  font-weight:300;
 }
 .headerText h1{
   background: -webkit-linear-gradient(top, #7fffc7 0%,#94f7ea 43%,#a78fef 95%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  transition: font-size 300ms;
+  text-shadow: none;
 }
+
+@-webkit-keyframes h1In {
+  0% {
+  -webkit-transform: translateY(-20px);
+  opacity: 0;
+  }
+  100% {
+  -webkit-transform: translateY(0px);
+  opacity: 1;
+  }
+}
+
 
 .top h2{
   font-size: 1.5em;
@@ -69,38 +88,29 @@ h3{
   margin: 10px 0 1em;
   transition: font-size 300ms;
   position: absolute;
-  bottom: 10vh;
+  bottom: 5vh;
   width: 100%;
+  animation: h2In 1000ms ease-out 0s 1 normal;
+  -webkit-animation: h2In 1000ms ease-out 0s 1 normal;
 }
 .top h2 span{
   margin: 0 1.5%;
   margin: 0 1.5%;
 }
-#logo{
-  padding: 100px 0;
-  margin: 0 auto;
-  position: relative;
-  width: 30%;
-  transition: width 300ms;
+
+@-webkit-keyframes h2In {
+  0% {
+  -webkit-transform: translateY(20px);
+  opacity: 0;
 }
-#logoImg{
-  width: 100%;
-  position: absolute;
+  60% {
+    -webkit-transform: translateY(20px);
+    opacity: 0;
 }
-#logoBlur{
-  animation-delay: 0.5s;
-  -webkit-animation-delay: 0.5s;
-  -webkit-filter: blur(10px) brightness(1.1) opacity(1);
-  filter: blur(10px) brightness(1.1) opacity(0.5);
-  width: 100%;
-  position: relative;
-  top: 0;
-  left: 0;
-  transition: 200ms;
+  100% {
+  -webkit-transform: translateY(0px);
+  opacity: 1;
 }
-#logoBlur:active{
-  -webkit-filter: blur(10px) brightness(1.1) opacity(0);
-  filter: blur(10px) brightness(1.1) opacity(0);
 }
 
 /*NAVBAR & ANCHORS*/
@@ -293,7 +303,7 @@ h2 i{
 .footer{
   width: 80%;
   padding: 50px 10%;
-  background-color: #435548;
+  background-color: #543f53;
   color: #ffffff;
 }
 .footerInfo{
