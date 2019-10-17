@@ -249,7 +249,7 @@ $(function() {
 
   </head>
 
-  <body onload="clearVideoPopup(); preloadImages(); sortItems('coolness', true); document.getElementById('radioCoolness').checked=true;">
+  <body onload="clearVideoPopup(); preloadImages();">
 	<div id="top-anchor"></div>
 	<div class="top">
 		<div class="headerNoiseLayer"></div>
@@ -267,6 +267,8 @@ $(function() {
 			<nav>
 			<a href="#top" target="_self">Top</a>
 			<span>|</span>
+			<a href="#games" target="_self">Games</a>
+			<span>|</span>
 			<a href="#projects" target="_self">Projects</a>
 			<span>|</span>
 			<a href="#videos" target="_self">Videos</a>
@@ -280,21 +282,13 @@ $(function() {
     <div class="pageBody">
 
 		<div class="section">
-			<div id="projects-anchor" class="anchor"></div>
+			<div id="games-anchor" class="anchor"></div>
 			<div class="sectionHeader">
-				<h2>Projects <i class="fa fa-code" aria-hidden="true"></i></h2>
+				<h2>Games <i class="fa fa-gamepad" aria-hidden="true"></i></h2>
 			</div>
-            <div class="projectControls">
-                Sort By:
-                <input type="radio" name="sort" value="coolness" onclick="sortItems(this.value, false);" id="radioCoolness" checked><label for="radioCoolness">Coolness</label>
-                <input type="radio" name="sort" onclick="sortItems(this.value, false);" value="date" id="radioDate"><label for="radioDate">Date Created</label>
-            </div>
 
 			<div class="projectFeatureCont">
-			<!-- ordered raw by date descending-->
-
-                <div class="yearHeader yearHeaderHidden">2018</div>
-
+                <span class="yearHeader">2018</div>
                 <div class="projectFeature">
 					<img src="img/games/ldsimulator/feature.jpg" onmouseover="this.src='img/games/ldsimulator/feature.gif';" onmouseout="this.src='img/games/ldsimulator/feature.jpg';" alt="LDSimulator Gameplay" />
 					<div class="projectInfo">
@@ -313,17 +307,7 @@ $(function() {
 					<a target="noopener" href="https://ldjam.com/events/ludum-dare/41/turtle-racers-commanding-your-way-to-victory" class="projectMore">Jam Page</a>
 				</div>
 
-                <div class="projectFeature">
-					<img src="img/projects/jukebox/feature.jpg" alt="Jukebox-YT logo" />
-					<div class="projectInfo">
-						<h3>Jukebox-YT</h3>
-						<p>A YouTube player WebExtension that lets you collect and group videos into dynamic playlists and play with rating-weighted shuffling!</p>
-					</div>
-					<a target="noopener" href="https://addons.mozilla.org/en-GB/firefox/addon/jukebox-yt" class="projectMore">Firefox Addons Page</a>
-
-				</div>
-
-                <div class="yearHeader yearHeaderHidden">2017</div>
+                <span class="yearHeader">2017</div>
 
                 <div class="projectFeature">
 					<img src="img/games/ketchupquest/feature.jpg" onmouseover="this.src='img/games/ketchupquest/feature.gif';" onmouseout="this.src='img/games/ketchupquest/feature.jpg';" alt="Ketchup Quest Gameplay" />
@@ -342,6 +326,76 @@ $(function() {
 					</div>
 					<a target="_self" href="javascript:void" onclick="showVideoPopup('_XJIPGDB46I')" class="projectMore">More 'Info'</a>
                 </div>
+
+                <div class="projectFeature">
+					<img src="img/games/rhythm/feature.jpg" onmouseover="this.src='img/games/rhythm/feature.gif';" onmouseout="this.src='img/games/rhythm/feature.jpg';" alt="Rhythm Logo" />
+					<div class="projectInfo">
+						<h3>Rhythm (title TBC)</h3>
+						<p>A mobile rhythm game, a-la Guitar Hero &amp; Geometry Dash. Not sure if it'll ever get finished, but it plays well!</p>
+					</div>
+					<a target="_self" href="javascript:void" class="projectMore">Play <span class="strike">Now</span> Soon</a>
+				</div>
+
+                <span class="yearHeader">2016</div>
+
+                <div class="projectFeature">
+					<img src="img/games/minesweeper/feature.jpg" onmouseover="this.src='img/games/minesweeper/feature.gif';" onmouseout="this.src='img/games/minesweeper/feature.jpg';" alt="Minesweeper Clone" />
+					<div class="projectInfo">
+                        <h3><small><small><small>(I Can't Believe It's Not)</small></small></small> Minesweeper</h3>
+						<p>Everyone's favourite defusal game, revitalised. Featuring online co-op, save states and custom difficulties!</p>
+					</div>
+					<a target="_blank" href="games/minesweeper" class="projectMore">Play Now</a>
+				</div>
+
+
+                <div class="projectFeature" id="projectComingSoon">
+					<img src="img/comingsoon-square.jpg" alt="Coming Soon" />
+					<div class="projectInfo">
+						<h3>More coming soon~</h3>
+						<p></p>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		
+		<div class="section">
+			<div id="projects-anchor" class="anchor"></div>
+			<div class="sectionHeader">
+				<h2>Projects <small>(aka not games)</small><i class="fa fa-code" aria-hidden="true"></i></h2>
+			</div>
+
+			<div class="projectFeatureCont">
+				<span class="yearHeader">2018</div>
+				
+                <div class="projectFeature">
+					<img src="img/comingsoon-square.jpg" alt="ParliaMate logo" />
+					<div class="projectInfo">
+						<h3>ParliaMate</h3>
+						<p>A simple app to learn more about Parliament, bills that matter to you and your MP. Built for OxfordHack 2018 (and won!)</p>
+					</div>
+					<a target="noopener" href="https://devpost.com/software/parliamate" class="projectMore">Project Page</a>
+				</div>
+
+                <div class="projectFeature">
+					<img src="img/comingsoon-square.jpg" alt="QuizNet logo" />
+					<div class="projectInfo">
+						<h3>QuizNet</h3>
+						<p>A networked homework distribution system for schools. Create engaging quizzes, then upload and assign to classes.</p>
+					</div>
+					<a target="noopener" href="" class="projectMore">More Info (maybe)</a>
+				</div>
+
+                <div class="projectFeature">
+					<img src="img/projects/jukebox/feature.jpg" alt="Jukebox-YT logo" />
+					<div class="projectInfo">
+						<h3>Jukebox-YT</h3>
+						<p>A YouTube player WebExtension that lets you collect and group videos into dynamic playlists and play with rating-weighted shuffling!</p>
+					</div>
+					<a target="noopener" href="https://addons.mozilla.org/en-GB/firefox/addon/jukebox-yt" class="projectMore">Firefox Addons Page</a>
+				</div>
+
+                <span class="yearHeader">2017</div>
 
                 <div class="projectFeature">
                     <img src="img/projects/simplespectrum/feature.jpg" onmouseover="this.src='img/projects/simplespectrum/feature.gif';" onmouseout="this.src='img/projects/simplespectrum/feature.jpg';" alt="SimpleSpectrum Logo" />
@@ -371,16 +425,7 @@ $(function() {
 					<a target="_self" href="javascript:void" onClick="showPopup('popup-projects-hangai.html')" class="projectMore">More Info</a>
 				</div>
 
-                <div class="projectFeature">
-					<img src="img/games/rhythm/feature.jpg" onmouseover="this.src='img/games/rhythm/feature.gif';" onmouseout="this.src='img/games/rhythm/feature.jpg';" alt="Rhythm Logo" />
-					<div class="projectInfo">
-						<h3>Rhythm (title TBC)</h3>
-						<p>A mobile rhythm game, a-la Guitar Hero &amp; Geometry Dash. Not sure if it'll ever get finished, but it plays well!</p>
-					</div>
-					<a target="_self" href="javascript:void" class="projectMore">Play <span class="strike">Now</span> Soon</a>
-				</div>
-
-                <div class="yearHeader yearHeaderHidden">2016</div>
+                <span class="yearHeader">2016</div>
 
                 <div class="projectFeature">
 					<img src="img/projects/erebus/feature-square.jpg" alt="CMD Relay Logo" />
@@ -390,16 +435,6 @@ $(function() {
 					</div>
 					<a target="_self" href="javascript:void" onClick="showPopup('popup-projects-erebus.html')" class="projectMore">More Info</a>
 				</div>
-
-                <div class="projectFeature">
-					<img src="img/games/minesweeper/feature.jpg" onmouseover="this.src='img/games/minesweeper/feature.gif';" onmouseout="this.src='img/games/minesweeper/feature.jpg';" alt="Minesweeper Clone" />
-					<div class="projectInfo">
-                        <h3><small><small><small>(I Can't Believe It's Not)</small></small></small> Minesweeper</h3>
-						<p>Everyone's favourite defusal game, revitalised. Featuring online co-op, save states and custom difficulties!</p>
-					</div>
-					<a target="_blank" href="games/minesweeper" class="projectMore">Play Now</a>
-				</div>
-
 
                 <div class="projectFeature" id="projectComingSoon">
 					<img src="img/comingsoon-square.jpg" alt="Coming Soon" />
