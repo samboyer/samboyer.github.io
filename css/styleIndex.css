@@ -6,6 +6,9 @@ body{
   background-color: #fafefa;
   color: #405447;
 }
+html{
+  background-color:#ad45ab;
+}
 hr{
   margin: 40px 20%;
   border: 0;
@@ -65,9 +68,9 @@ p>small{
   top:0;
   left:0;
   background-image: url(../img/noise.jpg);
-  background-size:1024px;
+  background-size:1800px;
   image-rendering:crisp-edges;
-  opacity:0.01;
+  opacity:0.007;
 }
 .noiseLayer2{
   background-size:256px;
