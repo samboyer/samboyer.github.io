@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Sam Boyer</title>
+	<meta charset="utf-8">
+	<title>Sam Boyer</title>
 
-    <meta name="description" content="sam's website, featuring various items of mild interest.">
+	<meta name="description" content="sam's website, featuring various items of mild interest.">
 	<meta name="robots" content="index, follow">
 
 	<script type="application/ld+json">
@@ -29,11 +29,11 @@
 	<meta property="og:description" content="sam's website, featuring various items of mild interest." />
 
 	<meta name="google-site-verification" content="_GnuPK8X38hi5TkO4QsvAuLMMgR951F3PriWayEXp0E" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<base target="_blank">
 
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,300|Roboto:100&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,300|Roboto:100&display=swap" rel="stylesheet">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=rMJdlwzae7">
@@ -45,52 +45,52 @@
 	<meta name="msapplication-TileColor" content="#9f00a7">
 	<meta name="theme-color" content="#ffffff">
 
-    <link rel="stylesheet" href="css/font-awesome.min.css" async>
-    <link rel="stylesheet" href="css/styleIndex.css" async>
+	<link rel="stylesheet" href="css/font-awesome.min.css" async>
+	<link rel="stylesheet" href="css/styleIndex.css" async>
 
-    <script> //GLITTER!
+	<script> //GLITTER!
 $(function() {
   var body = $('#glitterCont'),
-      original = $('.glitterPiece'),
-      amnt =  100,
-      minDur = 6,
-      maxDur = 15,
-      minSize = 2,
-      maxSize = 3,
-      minOpa = 0.3,
+	  original = $('.glitterPiece'),
+	  amnt =  100,
+	  minDur = 6,
+	  maxDur = 15,
+	  minSize = 2,
+	  maxSize = 3,
+	  minOpa = 0.3,
 	  maxOpa = 0.7;
 
-    var createStar = function() {
-      var rng = Math.random(),
-          dur  = (1-rng) * (maxDur-minDur) + minDur,
-          size = Math.round(rng * (maxSize - minSize)) + minSize,
-          opa  = rng * (maxOpa - minOpa) + minOpa,
-          ofst = -Math.random() * maxDur;
-          //col  = Math.floor(Math.random() * 255);
+	var createStar = function() {
+	  var rng = Math.random(),
+		  dur  = (1-rng) * (maxDur-minDur) + minDur,
+		  size = Math.round(rng * (maxSize - minSize)) + minSize,
+		  opa  = rng * (maxOpa - minOpa) + minOpa,
+		  ofst = -Math.random() * maxDur;
+		  //col  = Math.floor(Math.random() * 255);
 
-      original.clone().removeAttr('id').css({
-          top: (Math.random() * 100) + '%',
-          left: (Math.random() * 100) + '%',
-          webkitAnimationDelay: ofst + 's',
-          mozAnimationDelay: ofst + 's',
-          webkitAnimationDuration: dur + 's',
-          mozAnimationDuration: dur + 's',
-          height:size+'px',
+	  original.clone().removeAttr('id').css({
+		  top: (Math.random() * 100) + '%',
+		  left: (Math.random() * 100) + '%',
+		  webkitAnimationDelay: ofst + 's',
+		  mozAnimationDelay: ofst + 's',
+		  webkitAnimationDuration: dur + 's',
+		  mozAnimationDuration: dur + 's',
+		  height:size+'px',
 		  width:(size-2)+'px',
 		  backgroundColor: 'rgba(255,255,255,'+opa+')',
 		  borderRightColor: 'rgba(0,255,0,'+opa+')',
 		  borderLeftColor: 'rgba(255,0,255,'+opa+')',
 		  //filter: 'opacity('+opa+')',
-          //backgroundColor: 'hsla('+col+',100%,80%,'+opa+')',
+		  //backgroundColor: 'hsla('+col+',100%,80%,'+opa+')',
 
-        }).appendTo(body);
+		}).appendTo(body);
   };
 
   for(var i = 0; i < amnt; i++) {
-    createStar();
+	createStar();
   }
 });
-    </script>
+	</script>
 
 	<script>//NAVBAR
 		function sticky_relocate() {
@@ -99,11 +99,11 @@ $(function() {
 			if (window_top > div_top) {
 				$('#sticky').addClass('stick');
 				$('#sticky-anchor').height($('#sticky').outerHeight());
-                $('#glitterCont').css('display','none');
+				$('#glitterCont').css('display','none');
 			} else {
 				$('#sticky').removeClass('stick');
 				$('#sticky-anchor').height(0);
-                $('#glitterCont').css('display','');
+				$('#glitterCont').css('display','');
 			}
 		}
 
@@ -178,72 +178,72 @@ $(function() {
 			$('#videoOverlay iframe').attr('src', 'about:blank');
 		}
 
-        //PRELOAD
-        function preloadImages(){
+		//PRELOAD
+		function preloadImages(){
 			var addresses=['/img/games/rhythm/feature.gif', 'img/games/ketchupquest/feature.gif', 'img/projects/thiswebsite-square.gif', 'img/projects/simplespectrum/feature.gif', 'img/games/minesweeper/feature.gif', 'img/games/voxels/feature.gif', ];
 			for(i=0; i<addresses.length; i+=1){
 				$.get(addresses[i]);
 			}
 		}
 
-        function sortItems(value, instant){
+		function sortItems(value, instant){
 
-            var yearHeaders = document.getElementsByClassName("yearHeader");
-            if(value=="coolness"){
-                for(var i=0;i<yearHeaders.length;i++){
-                    yearHeaders[i].classList.add("yearHeaderHidden");
-                }
-            }
+			var yearHeaders = document.getElementsByClassName("yearHeader");
+			if(value=="coolness"){
+				for(var i=0;i<yearHeaders.length;i++){
+					yearHeaders[i].classList.add("yearHeaderHidden");
+				}
+			}
 
-            if(instant){
-                setOrder(value);
-            }
-            else{
-                //start hide animation
-                var elements = document.getElementsByClassName("projectFeature");
-                for(var i=0;i<elements.length;i++){
-                    elements[i].classList.add("cardHide");
-                }
-                //start show animation
-                setTimeout(function(){
-                    var elements = document.getElementsByClassName("projectFeature");
-                    for(var i=0;i<elements.length;i++){
-                        elements[i].classList.remove("cardHide");
-                    }
+			if(instant){
+				setOrder(value);
+			}
+			else{
+				//start hide animation
+				var elements = document.getElementsByClassName("projectFeature");
+				for(var i=0;i<elements.length;i++){
+					elements[i].classList.add("cardHide");
+				}
+				//start show animation
+				setTimeout(function(){
+					var elements = document.getElementsByClassName("projectFeature");
+					for(var i=0;i<elements.length;i++){
+						elements[i].classList.remove("cardHide");
+					}
 
-                    if(value!="coolness"){
-                        for(var i=0;i<yearHeaders.length;i++){
-                            yearHeaders[i].classList.remove("yearHeaderHidden");
-                        }
-                    }
-                }, 300);
+					if(value!="coolness"){
+						for(var i=0;i<yearHeaders.length;i++){
+							yearHeaders[i].classList.remove("yearHeaderHidden");
+						}
+					}
+				}, 300);
 
-                //delay the actual ordering function
-                setTimeout(function(){setOrder(value);}, 250);
-            }
-        }
+				//delay the actual ordering function
+				setTimeout(function(){setOrder(value);}, 250);
+			}
+		}
 
-        function setOrder(order){
-            var coolnessOrder = [12,8,6,11,9,7,4,5,2,3,10]
+		function setOrder(order){
+			var coolnessOrder = [12,8,6,11,9,7,4,5,2,3,10]
 
-            var elements = document.getElementsByClassName("projectFeature");
+			var elements = document.getElementsByClassName("projectFeature");
 
-            if(order=="coolness"){
-                for(var i=0;i<elements.length;i++){
-                    if(elements[i].id=="projectComingSoon"){
-                        elements[i].style.order=-1;
-                    }else{
-                        elements[i].style.order=-coolnessOrder[i];
-                    }
-                }
+			if(order=="coolness"){
+				for(var i=0;i<elements.length;i++){
+					if(elements[i].id=="projectComingSoon"){
+						elements[i].style.order=-1;
+					}else{
+						elements[i].style.order=-coolnessOrder[i];
+					}
+				}
 				$('.yearHeader').hide();
-            }else{
-                for(var i=0;i<elements.length;i++){
-                    elements[i].style.order=null; //setting numbers sometimes messes with the sorting
-                }
+			}else{
+				for(var i=0;i<elements.length;i++){
+					elements[i].style.order=null; //setting numbers sometimes messes with the sorting
+				}
 				$('.yearHeader').show();
-            }
-        }
+			}
+		}
 
 	</script>
 
@@ -254,12 +254,12 @@ $(function() {
 	<div class="top">
 		<div class="headerNoiseLayer"></div>
 		<!-- <div class="headerNoiseLayer noiseLayer2"></div> -->
-        <div id="glitterCont"><div class="glitterPiece"></div></div>
-            <span class = "headerText" class="displayBlock">
-                <h1>Sam Boyer</h1>
-            </span>
+		<div id="glitterCont"><div class="glitterPiece"></div></div>
+			<span class = "headerText" class="displayBlock">
+				<h1>Sam Boyer</h1>
+			</span>
 			<img src="img/logo.svg" class="logoImg" alt="">
-            <h2>Programming <span>|</span> Game Development <span>|</span> Video Production <span>|</span> ...other stuff</h2>
+			<h2>Programming <span>|</span> Game Development <span>|</span> Video Production <span>|</span> ...other stuff</h2>
 	</div>
 	<div id="sticky-anchor"></div>
 	<div id="sticky">
@@ -279,8 +279,8 @@ $(function() {
 			</nav>
 		</div>
 	</div>
-    <div class="pageBody">
-
+	<div class="pageBody">
+		
 		<div class="section">
 			<div id="games-anchor" class="anchor"></div>
 			<div class="sectionHeader">
@@ -288,17 +288,17 @@ $(function() {
 			</div>
 
 			<div class="projectFeatureCont">
-                <span class="yearHeader">2018</div>
-                <div class="projectFeature">
+				<span class="yearHeader">2018</div>
+				<div class="projectFeature">
 					<img src="img/games/ldsimulator/feature.jpg" onmouseover="this.src='img/games/ldsimulator/feature.gif';" onmouseout="this.src='img/games/ldsimulator/feature.jpg';" alt="LDSimulator Gameplay" />
 					<div class="projectInfo">
 						<h3>Ludum Dare Simulator 2019</h3>
-                        <p>Play 7 minigames to build the best game with limited energy and disk space. Made for Ludum Dare 42, achieved <b>3<sup>rd</sup> place Overall!</b></p>
+						<p>Play 7 minigames to build the best game with limited energy and disk space. Made for Ludum Dare 42, achieved <b>3<sup>rd</sup> place Overall!</b></p>
 					</div>
 					<a target="noopener" href="https://ldjam.com/events/ludum-dare/42/ludum-dare-simulator-2019" class="projectMore">Jam Page</a>
 				</div>
 
-                <div class="projectFeature">
+				<div class="projectFeature">
 					<img src="img/games/turtleracers/feature.jpg" onmouseover="this.src='img/games/turtleracers/feature.gif';" onmouseout="this.src='img/games/turtleracers/feature.jpg';" alt="Turtle Racers Gameplay" />
 					<div class="projectInfo">
 						<h3>Turtle Racers</h3>
@@ -307,9 +307,9 @@ $(function() {
 					<a target="noopener" href="https://ldjam.com/events/ludum-dare/41/turtle-racers-commanding-your-way-to-victory" class="projectMore">Jam Page</a>
 				</div>
 
-                <span class="yearHeader">2017</div>
+				<span class="yearHeader">2017</div>
 
-                <div class="projectFeature">
+				<div class="projectFeature">
 					<img src="img/games/ketchupquest/feature.jpg" onmouseover="this.src='img/games/ketchupquest/feature.gif';" onmouseout="this.src='img/games/ketchupquest/feature.jpg';" alt="Ketchup Quest Gameplay" />
 					<div class="projectInfo">
 						<h3>Ketchup Quest</h3>
@@ -318,16 +318,16 @@ $(function() {
 					<a target="noopener" href="https://ldjam.com/events/ludum-dare/40/ketchup-quest-endless-arcade-fighting-to-protect-your-saucy-stash" class="projectMore">Jam Page</a>
 				</div>
 
-                <div class="projectFeature">
-				    <img src="img/games/voxels/feature.jpg" onmouseover="this.src='img/games/voxels/feature.gif';" onmouseout="this.src='img/games/voxels/feature.jpg';" alt="VoxelEngine Test Animation" / />
+				<div class="projectFeature">
+					<img src="img/games/voxels/feature.jpg" onmouseover="this.src='img/games/voxels/feature.gif';" onmouseout="this.src='img/games/voxels/feature.jpg';" alt="VoxelEngine Test Animation" / />
 					<div class="projectInfo">
 						<h3>The Voxel Game <small>(still with no name)</small></h3>
 						<p>Explore, collect, design and build in a procedural, <small>(nearly)</small> infinite world.</p>
 					</div>
 					<a target="_self" href="javascript:void" onclick="showVideoPopup('_XJIPGDB46I')" class="projectMore">More 'Info'</a>
-                </div>
+				</div>
 
-                <div class="projectFeature">
+				<div class="projectFeature">
 					<img src="img/games/rhythm/feature.jpg" onmouseover="this.src='img/games/rhythm/feature.gif';" onmouseout="this.src='img/games/rhythm/feature.jpg';" alt="Rhythm Logo" />
 					<div class="projectInfo">
 						<h3>Rhythm (title TBC)</h3>
@@ -336,19 +336,19 @@ $(function() {
 					<a target="_self" href="javascript:void" class="projectMore">Play <span class="strike">Now</span> Soon</a>
 				</div>
 
-                <span class="yearHeader">2016</div>
+				<span class="yearHeader">2016</div>
 
-                <div class="projectFeature">
+				<div class="projectFeature">
 					<img src="img/games/minesweeper/feature.jpg" onmouseover="this.src='img/games/minesweeper/feature.gif';" onmouseout="this.src='img/games/minesweeper/feature.jpg';" alt="Minesweeper Clone" />
 					<div class="projectInfo">
-                        <h3><small><small><small>(I Can't Believe It's Not)</small></small></small> Minesweeper</h3>
+						<h3><small><small><small>(I Can't Believe It's Not)</small></small></small> Minesweeper</h3>
 						<p>Everyone's favourite defusal game, revitalised. Featuring online co-op, save states and custom difficulties!</p>
 					</div>
 					<a target="_blank" href="games/minesweeper" class="projectMore">Play Now</a>
 				</div>
 
 
-                <div class="projectFeature" id="projectComingSoon">
+				<div class="projectFeature" id="projectComingSoon">
 					<img src="img/comingsoon-square.jpg" alt="Coming Soon" />
 					<div class="projectInfo">
 						<h3>More coming soon~</h3>
@@ -368,7 +368,7 @@ $(function() {
 			<div class="projectFeatureCont">
 				<span class="yearHeader">2018</div>
 				
-                <div class="projectFeature">
+				<div class="projectFeature">
 					<img src="img/comingsoon-square.jpg" alt="ParliaMate logo" />
 					<div class="projectInfo">
 						<h3>ParliaMate</h3>
@@ -377,7 +377,7 @@ $(function() {
 					<a target="noopener" href="https://devpost.com/software/parliamate" class="projectMore">Project Page</a>
 				</div>
 
-                <div class="projectFeature">
+				<div class="projectFeature">
 					<img src="img/comingsoon-square.jpg" alt="QuizNet logo" />
 					<div class="projectInfo">
 						<h3>QuizNet</h3>
@@ -386,7 +386,7 @@ $(function() {
 					<a target="noopener" href="" class="projectMore">More Info (maybe)</a>
 				</div>
 
-                <div class="projectFeature">
+				<div class="projectFeature">
 					<img src="img/projects/jukebox/feature.jpg" alt="Jukebox-YT logo" />
 					<div class="projectInfo">
 						<h3>Jukebox-YT</h3>
@@ -395,19 +395,19 @@ $(function() {
 					<a target="noopener" href="https://addons.mozilla.org/en-GB/firefox/addon/jukebox-yt" class="projectMore">Firefox Addons Page</a>
 				</div>
 
-                <span class="yearHeader">2017</div>
+				<span class="yearHeader">2017</div>
 
-                <div class="projectFeature">
-                    <img src="img/projects/simplespectrum/feature.jpg" onmouseover="this.src='img/projects/simplespectrum/feature.gif';" onmouseout="this.src='img/projects/simplespectrum/feature.jpg';" alt="SimpleSpectrum Logo" />
+				<div class="projectFeature">
+					<img src="img/projects/simplespectrum/feature.jpg" onmouseover="this.src='img/projects/simplespectrum/feature.gif';" onmouseout="this.src='img/projects/simplespectrum/feature.jpg';" alt="SimpleSpectrum Logo" />
 					<div class="projectInfo">
-                        <h3>SimpleSpectrum for Unity</h3>
+						<h3>SimpleSpectrum for Unity</h3>
 
 						<p>A simple package for Unity that generates a great-looking visualiser in realtime. Free on the Asset Store, used by 3000+ developers!</p>
 					</div>
 					<a target="_self" href="javascript:void" onClick="showPopup('popup-projects-spectrum.html')" class="projectMore">More Info</a>
 				</div>
 
-                <div class="projectFeature">
+				<div class="projectFeature">
 					<img src="img/projects/thiswebsite-square.jpg" onmouseover="this.src='img/projects/thiswebsite-square.gif';" onmouseout="this.src='img/projects/thiswebsite-square.jpg';" alt="Screenshot of this website" />
 					<div class="projectInfo">
 						<h3>...This Site</h3>
@@ -416,7 +416,7 @@ $(function() {
 					<a target="_self" href="javascript:void" onClick="showPopup('index.html?'+Math.random())" class="projectMore">Descend...</a>
 				</div>
 
-                <div class="projectFeature">
+				<div class="projectFeature">
 					<img src="img/projects/hangai/feature.jpg" alt="HangAI Title" />
 					<div class="projectInfo">
 						<h3>HangAI - Hangman solver</h3>
@@ -425,9 +425,9 @@ $(function() {
 					<a target="_self" href="javascript:void" onClick="showPopup('popup-projects-hangai.html')" class="projectMore">More Info</a>
 				</div>
 
-                <span class="yearHeader">2016</div>
+				<span class="yearHeader">2016</div>
 
-                <div class="projectFeature">
+				<div class="projectFeature">
 					<img src="img/projects/erebus/feature-square.jpg" alt="CMD Relay Logo" />
 					<div class="projectInfo">
 						<h3>CMD Relay</h3>
@@ -436,7 +436,7 @@ $(function() {
 					<a target="_self" href="javascript:void" onClick="showPopup('popup-projects-erebus.html')" class="projectMore">More Info</a>
 				</div>
 
-                <div class="projectFeature" id="projectComingSoon">
+				<div class="projectFeature" id="projectComingSoon">
 					<img src="img/comingsoon-square.jpg" alt="Coming Soon" />
 					<div class="projectInfo">
 						<h3>More coming soon~</h3>
@@ -445,14 +445,14 @@ $(function() {
 				</div>
 
 			</div>
-        </div>
+		</div>
 
 		<div class="section">
 			<div id="videos-anchor" class="anchor"></div>
 			<div class="sectionHeader">
 				<h2>Videos <i class="fa fa-youtube-play" aria-hidden="true"></i></h2>
 			</div>
-            <p>I've been into Video Production and Editing for years, a hobby which I started utilising in 2013 when I created my first YouTube channel. It's had over 4 million views and 17 thousand subscribers, and content has spanned from gameplay commentaries to programming tutorials.
+			<p>I've been into Video Production and Editing for years, a hobby which I started utilising in 2013 when I created my first YouTube channel. It's had over 4 million views and 17 thousand subscribers, and content has spanned from gameplay commentaries to programming tutorials.
 			<p>I also occasionally make 3D animations with Blender, usually for video intros and audio visualisers.
 			<p>Here's a showcase of my personal favourites:</p>
 
@@ -462,20 +462,20 @@ $(function() {
 						<img src="img/video/ldsim.jpg" onclick="showVideoPopup('SjFnyeXqhSU')" alt="Video: Ludum Dare Simuator Postmortem" />
 						<img src="img/video/cern.jpg" onclick="showVideoPopup('rLtPqh4fmRc')" alt="Video: CERN School Trip" />
 						<img src="img/video/dogephone.jpg" onclick="showVideoPopup('WxZ-9TNS9RI')" alt="Video: Dogephone" />
-                        <img src="img/video/daynightcycle.jpg" onclick="showVideoPopup('https://www.youtube.com/watch?v=tylDkbxu818')" alt="Video: Unity Day/Night Cycle" />
-                        <img src="img/video/allfallsdownvis.jpg" onclick="showVideoPopup('ilsXk67y2Qw')" alt="Video: Audio Spectrum Tutorial" />
-                        <img src="img/video/cubicventure.jpg" onclick="showVideoPopup('5mbSOZW4460')" alt="Video: A Cubic Venture" />
+						<img src="img/video/daynightcycle.jpg" onclick="showVideoPopup('https://www.youtube.com/watch?v=tylDkbxu818')" alt="Video: Unity Day/Night Cycle" />
+						<img src="img/video/allfallsdownvis.jpg" onclick="showVideoPopup('ilsXk67y2Qw')" alt="Video: Audio Spectrum Tutorial" />
+						<img src="img/video/cubicventure.jpg" onclick="showVideoPopup('5mbSOZW4460')" alt="Video: A Cubic Venture" />
 				</div>
 			</div>
-        </div>
+		</div>
 
 		<div class="section">
 			<div id="about-anchor" class="anchor"></div>
 			<div class="sectionHeader">
 				<h2>About Me <i class="fa fa-user" aria-hidden="true"></i></h2>
 			</div>
-            <p>I'm a computer science student from the UK, currently studying at the University of Oxford. I love making all sorts of technical and creative things with computers, such as games, software, videos, websites, logos etc... <small>(...I'm  just indecisive about my speciality)</small></p>
-            <p>My go-to languages are C#, JS, and Python, but can work with all sorts. I've used Unity for game development since 2016 and participated in a few game jams since. I've done a bit of cybersec too, winning a CyberDiscovery UK event in 2018 and enjoying various CTF games.</p>
+			<p>I'm a computer science student from the UK, currently studying at the University of Oxford. I love making all sorts of technical and creative things with computers, such as games, software, videos, websites, logos etc... <small>(...I'm  just indecisive about my speciality)</small></p>
+			<p>My go-to languages are C#, JS, and Python, but can work with all sorts. I've used Unity for game development since 2016 and participated in a few game jams since. I've done a bit of cybersec too, winning a CyberDiscovery UK event in 2018 and enjoying various CTF games.</p>
 
 		</div>
 
@@ -484,10 +484,10 @@ $(function() {
 			<div class="sectionHeader">
 				<h2>Contact Me <i class="fa fa-envelope" aria-hidden="true"></i></h2>
 			</div>
-            <p>If you have any questions, suggestions or just want to say 'hi', feel free to pester me however you see fit*!<br /><small> (*within reason)</small></p>
+			<p>If you have any questions, suggestions or just want to say 'hi', feel free to pester me however you see fit*!<br /><small> (*within reason)</small></p>
 			<span class="largeText">Get In Touch: sam.boyer276yt@<span class="displayNone">[email address hidden, sry bots &lt;3]</span>gmail.com</span>
-        </div>
-      </div>
+		</div>
+	  </div>
 
 	<div class="footer">
 		<div class="socialLinks">
@@ -503,7 +503,7 @@ $(function() {
 			<div class="socialLink socialLinkLinkedin">
 			<a href="https://www.linkedin.com/in/samuelboyeruk/" title="LinkedIn"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
 			</div>
-            <div class="socialLink socialLinkLD">
+			<div class="socialLink socialLinkLD">
 			<a href="https://ldjam.com/users/samboyer276" title="Ludum Dare"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 315 315">
 <path id="dp_path001" transform="matrix(1,0,0,1,1071.35,-448.244)" fill="white" fill-rule="evenodd" d="M -864.849,604.127 L -855.899,604.127 C -837.032,604.127 -836.82,638.401 -855.899,638.401 L -864.849,638.401 Z M -1034.95,547.807 L -1034.95,634.657 C -1034.95,675.721 -1004.14,696.353 -973.34,696.353 L -925.893,696.353 L -925.893,638.816 L -970.605,638.816 C -975.201,638.816 -979.796,635.101 -979.796,627.677 L -979.796,547.559 Z M -919.764,547.075 L -919.764,696.093 L -856.961,696.093 C -761.127,696.093 -761.127,547.075 -856.961,547.075 Z M -1066.15,512.407 C -1066.15,481.023 -1040.71,455.58 -1009.32,455.58 L -820.708,455.58 C -789.324,455.58 -763.881,481.023 -763.881,512.407 L -763.881,701.023 C -763.881,732.407 -789.324,757.849 -820.708,757.849 L -1009.32,757.849 C -1040.71,757.849 -1066.15,732.407 -1066.15,701.023 Z "/></svg></a>
