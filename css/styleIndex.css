@@ -33,8 +33,15 @@ h3{
   font-size: 2em;
   display: inline-block;
   padding-top: 10px;
-  line-height: 1.0;
+  line-height: 0.9;
+  padding-bottom:10px;
   color: #f2fff9;
+}
+h1>small, h2>small, h3>small{
+  font-size:0.5em;
+}
+p>small{
+  font-size:0.7em;
 }
 
 /*TOP*/
@@ -72,18 +79,19 @@ h3{
   display: inline-block;
   height: 5.8rem;
   padding-right: 6em;
-  border-bottom:solid 3px #fff1;
+  border-bottom:solid 3px rgba(255,255,255,0.1);
   transition: font-size 300ms;
   animation: h1In 500ms ease-out 0s normal;
   -webkit-animation: h1In 500ms ease-out 0s 1 normal;
   transform: translateY(0px);
-  font-weight:300;
 }
 .headerText h1{
   background: -webkit-linear-gradient(top, #7fffc7 0%,#94f7ea 43%,#a78fef 95%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: none;
+  font-weight:100;
+  font-family: 'Roboto', 'Roboto Slab', Arial, sans-serif;
 }
 
 @-webkit-keyframes h1In {
