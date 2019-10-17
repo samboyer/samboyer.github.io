@@ -548,7 +548,7 @@ h2 i{
   border-left: solid 1px #f0f;
   width:0px;
   height:2px;
-  filter:opacity(0);
+  will-change: transform, opacity;
 }
 
 @-webkit-keyframes glitter {
@@ -557,7 +557,7 @@ h2 i{
   opacity: 0;
   }
   25% {
-  opacity: 0.8;
+  opacity: 1.0;
   }
   75% {
   opacity: 1.0;

@@ -77,8 +77,10 @@ $(function() {
           mozAnimationDuration: dur + 's',
           height:size+'px',
 		  width:(size-2)+'px',
-		//   backgroundColor: 'rgba(255,255,255,'+opa+')',
-		  filter: 'opacity('+opa+')',
+		  backgroundColor: 'rgba(255,255,255,'+opa+')',
+		  borderRightColor: 'rgba(0,255,0,'+opa+')',
+		  borderLeftColor: 'rgba(255,0,255,'+opa+')',
+		  //filter: 'opacity('+opa+')',
           //backgroundColor: 'hsla('+col+',100%,80%,'+opa+')',
 
         }).appendTo(body);
