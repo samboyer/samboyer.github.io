@@ -98,11 +98,11 @@ $(function() {
 			var div_top = $('#sticky-anchor').offset().top;
 			if (window_top > div_top) {
 				$('#sticky').addClass('stick');
-				$('#sticky-anchor').height($('#sticky').outerHeight());
+				// $('#sticky-anchor').height($('#sticky').outerHeight());
 				$('#glitterCont').css('display','none');
 			} else {
 				$('#sticky').removeClass('stick');
-				$('#sticky-anchor').height(0);
+				// $('#sticky-anchor').height(0);
 				$('#glitterCont').css('display','');
 			}
 		}
@@ -197,10 +197,10 @@ $(function() {
 		<!-- <div class="headerNoiseLayer noiseLayer2"></div> -->
 		<div id="glitterCont"><div class="glitterPiece"></div></div>
 			<span class = "headerText" class="displayBlock">
-				<h1>Sam Boyer</h1>
+				<h1>Sam Boyer&nbsp;&nbsp;</h1>
 			</span>
 			<img src="img/logo.svg" class="logoImg" alt="">
-			<h2>Programming <span>|</span> Game Development <span>|</span> Video Production <span>|</span> ...other stuff</h2>
+			<h2>Programming <span>-</span> Game Development <span>-</span> Video Production <span>-</span> ...other stuff</h2>
 	</div>
 	<div id="sticky-anchor"></div>
 	<div id="sticky">
@@ -220,8 +220,8 @@ $(function() {
 			</nav>
 		</div>
 	</div>
+	<div class="topShadow"></div>
 	<div class="pageBody">
-		
 		<div class="section">
 			<div id="games-anchor" class="anchor"></div>
 			<div class="sectionHeader">
@@ -412,6 +412,7 @@ $(function() {
 			<span class="largeText">Get In Touch: sam.boyer276yt@<span class="displayNone">[email address hidden, sry bots &lt;3]</span>gmail.com</span>
 		</div>
 	  </div>
+	  <div class="bottomShadow"></div>
 
 	<div class="footer">
 		<div class="socialLinks">
