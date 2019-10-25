@@ -186,65 +186,6 @@ $(function() {
 			}
 		}
 
-		function sortItems(value, instant){
-
-			var yearHeaders = document.getElementsByClassName("yearHeader");
-			if(value=="coolness"){
-				for(var i=0;i<yearHeaders.length;i++){
-					yearHeaders[i].classList.add("yearHeaderHidden");
-				}
-			}
-
-			if(instant){
-				setOrder(value);
-			}
-			else{
-				//start hide animation
-				var elements = document.getElementsByClassName("projectFeature");
-				for(var i=0;i<elements.length;i++){
-					elements[i].classList.add("cardHide");
-				}
-				//start show animation
-				setTimeout(function(){
-					var elements = document.getElementsByClassName("projectFeature");
-					for(var i=0;i<elements.length;i++){
-						elements[i].classList.remove("cardHide");
-					}
-
-					if(value!="coolness"){
-						for(var i=0;i<yearHeaders.length;i++){
-							yearHeaders[i].classList.remove("yearHeaderHidden");
-						}
-					}
-				}, 300);
-
-				//delay the actual ordering function
-				setTimeout(function(){setOrder(value);}, 250);
-			}
-		}
-
-		function setOrder(order){
-			var coolnessOrder = [12,8,6,11,9,7,4,5,2,3,10]
-
-			var elements = document.getElementsByClassName("projectFeature");
-
-			if(order=="coolness"){
-				for(var i=0;i<elements.length;i++){
-					if(elements[i].id=="projectComingSoon"){
-						elements[i].style.order=-1;
-					}else{
-						elements[i].style.order=-coolnessOrder[i];
-					}
-				}
-				$('.yearHeader').hide();
-			}else{
-				for(var i=0;i<elements.length;i++){
-					elements[i].style.order=null; //setting numbers sometimes messes with the sorting
-				}
-				$('.yearHeader').show();
-			}
-		}
-
 	</script>
 
   </head>
@@ -288,7 +229,7 @@ $(function() {
 			</div>
 
 			<div class="projectFeatureCont">
-				<span class="yearHeader">2018</span>
+				<h3 class="yearHeader">2018</h3>
 				<div class="projectFeature">
 					<img src="img/games/ldsimulator/feature.jpg" onmouseover="this.src='img/games/ldsimulator/feature.gif';" onmouseout="this.src='img/games/ldsimulator/feature.jpg';" alt="LDSimulator Gameplay" />
 					<div class="projectInfo">
@@ -307,7 +248,7 @@ $(function() {
 					<a target="noopener" href="https://ldjam.com/events/ludum-dare/41/turtle-racers-commanding-your-way-to-victory" class="projectMore">Jam Page</a>
 				</div>
 
-				<span class="yearHeader">2017</span>
+				<h3 class="yearHeader">2017</h3>
 
 				<div class="projectFeature">
 					<img src="img/games/ketchupquest/feature.jpg" onmouseover="this.src='img/games/ketchupquest/feature.gif';" onmouseout="this.src='img/games/ketchupquest/feature.jpg';" alt="Ketchup Quest Gameplay" />
@@ -336,24 +277,15 @@ $(function() {
 					<a target="_self" href="javascript:void" class="projectMore">Play <span class="strike">Now</span> Soon</a>
 				</div>
 
-				<span class="yearHeader">2016</span>
+				<h3 class="yearHeader">2016</h3>
 
 				<div class="projectFeature">
 					<img src="img/games/minesweeper/feature.jpg" onmouseover="this.src='img/games/minesweeper/feature.gif';" onmouseout="this.src='img/games/minesweeper/feature.jpg';" alt="Minesweeper Clone" />
 					<div class="projectInfo">
-						<h3><small><small><small>(I Can't Believe It's Not)</small></small></small> Minesweeper</h3>
+						<h3><small><small>(I Can't Believe It's Not)</small></small> Minesweeper</h3>
 						<p>Everyone's favourite defusal game, revitalised. Featuring online co-op, save states and custom difficulties!</p>
 					</div>
 					<a target="_blank" href="games/minesweeper" class="projectMore">Play Now</a>
-				</div>
-
-
-				<div class="projectFeature" id="projectComingSoon">
-					<img src="img/comingsoon-square.jpg" alt="Coming Soon" />
-					<div class="projectInfo">
-						<h3>More coming soon~</h3>
-						<p></p>
-					</div>
 				</div>
 
 			</div>
@@ -366,7 +298,7 @@ $(function() {
 			</div>
 
 			<div class="projectFeatureCont">
-				<span class="yearHeader">2018</span>
+				<h3 class="yearHeader">2018</h3>
 				
 				<div class="projectFeature">
 					<img src="img/comingsoon-square.jpg" alt="ParliaMate logo" />
@@ -395,7 +327,7 @@ $(function() {
 					<a target="noopener" href="https://addons.mozilla.org/en-GB/firefox/addon/jukebox-yt" class="projectMore">Firefox Addons Page</a>
 				</div>
 
-				<span class="yearHeader">2017</span>
+				<h3 class="yearHeader">2017</h3>
 
 				<div class="projectFeature">
 					<img src="img/projects/simplespectrum/feature.jpg" onmouseover="this.src='img/projects/simplespectrum/feature.gif';" onmouseout="this.src='img/projects/simplespectrum/feature.jpg';" alt="SimpleSpectrum Logo" />
@@ -425,7 +357,7 @@ $(function() {
 					<a target="_self" href="javascript:void" onClick="showPopup('popup-projects-hangai.html')" class="projectMore">More Info</a>
 				</div>
 
-				<span class="yearHeader">2016</span>
+				<h3 class="yearHeader">2016</h3>
 
 				<div class="projectFeature">
 					<img src="img/projects/erebus/feature-square.jpg" alt="CMD Relay Logo" />
@@ -434,14 +366,6 @@ $(function() {
 						<p>An app for Windows Phone 8.1 that allows execution of commands on remote computers through custom relay service hosts.</p>
 					</div>
 					<a target="_self" href="javascript:void" onClick="showPopup('popup-projects-erebus.html')" class="projectMore">More Info</a>
-				</div>
-
-				<div class="projectFeature" id="projectComingSoon">
-					<img src="img/comingsoon-square.jpg" alt="Coming Soon" />
-					<div class="projectInfo">
-						<h3>More coming soon~</h3>
-						<p></p>
-					</div>
 				</div>
 
 			</div>
