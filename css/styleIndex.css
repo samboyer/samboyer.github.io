@@ -81,8 +81,9 @@ p>small{
   margin: 25vh 10% 20vh;
   display: inline-block;
   height: 5.8rem;
-  padding-right: 6em;
-  border-bottom:solid 3px rgba(255,255,255,0.1);
+  /* padding-right: 6em; */
+  /* border-bottom:solid 3px rgba(255,255,255,0.1); */
+  text-decoration: underline solid rgba(255,255,255,0.1);
   transition: font-size 300ms;
   animation: h1In 500ms ease-out 0s normal;
   -webkit-animation: h1In 500ms ease-out 0s 1 normal;
