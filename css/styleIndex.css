@@ -488,6 +488,9 @@ h2 i{
   .top h2{
     font-size: 1.3em;
   }
+  .projectFeature{
+    margin: 0px 0px 20px;
+  }
 }
 
 @media screen and (max-width:640px){
