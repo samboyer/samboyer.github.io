@@ -131,48 +131,32 @@ $(function() {
 
 	<script>//custom stuff (popups, preload, sorting)
 		function showPopup(localUrl){
-			$('#overlay').addClass("overlayDisplay");
 			$('#overlay iframe').attr('src', localUrl);
-			$('#overlay .popup').removeClass("fadeOutUp");
-			$('#overlay .popup').addClass("fadeInDown");
-			setTimeout(function () {
+			setTimeout(function(){
 				$('#overlay').addClass("overlayOpen");
-			}, 20);
+			},20);
+			
 		}
 		function closePopup(){
+			$('#overlay iframe').attr('src', 'about:blank');
+			setTimeout(function(){
 			$('#overlay').removeClass('overlayOpen');
-
-			$('#overlay .popup').removeClass("fadeInDown");
-			$('#overlay .popup').addClass("fadeOutUp");
-
-			$('#overlay').one('transitionend', function(e) {
-			  $('#overlay').removeClass('overlayDisplay');
-			});
-
-			$('#overlay iframe').attr('src', 'about:blank'); //because it looks strange when another page is loaded
+			},20);
 		}
 
 		function showVideoPopup(videoId){
 			var url = "https://www.youtube.com/embed/"+videoId+"?rel=0&color=white&controls=1&autoplay=1"
-			$('#videoOverlay').addClass("overlayDisplay");
+			// $('#videoOverlay').addClass("overlayDisplay");
 			$('#videoOverlay iframe').attr('src', url);
-			$('#videoOverlay .videoPopup').removeClass("fadeOutUp");
-			$('#videoOverlay .videoPopup').addClass("fadeInDown");
-			setTimeout(function () {
+			setTimeout(function(){
 				$('#videoOverlay').addClass("overlayOpen");
-			}, 20);
+			},20);
 		}
 		function closeVideoPopup(){
+			$('#videoOverlay iframe').attr('src', 'about:blank');
+			setTimeout(function(){
 			$('#videoOverlay').removeClass('overlayOpen');
-
-			$('#videoOverlay .videoPopup').removeClass("fadeInDown");
-			$('#videoOverlay .videoPopup').addClass("fadeOutUp");
-
-			$('.screenOverlay').one('transitionend', function(e) {
-			  $('#videoOverlay').removeClass('overlayDisplay');
-			});
-
-			$('#videoOverlay iframe').attr('src', 'about:blank'); //because it looks strange when another page is loaded
+			},20);
 		}
 		function clearVideoPopup() {
 			$('#videoOverlay iframe').attr('src', 'about:blank');
