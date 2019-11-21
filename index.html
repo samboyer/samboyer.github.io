@@ -429,6 +429,7 @@ $(function() {
 
 
 	<div class="screenOverlay" id="overlay" onclick="closePopup()">
+		<div class="popupContainer">
 		<div class="popup animated">
 			<i class="spinner fa fa-cog fa-spin fa-3x fa-fw"></i>
 			<span class="sr-only">Loading...</span>
@@ -436,13 +437,16 @@ $(function() {
 			<div onclick="closePopup()" class="popupClose"><i class="fa fa-times-circle" aria-hidden="true"></i></div>
 		</div>
 	</div>
+	</div>
 	<div class="screenOverlay" onclick="closeVideoPopup()" id="videoOverlay">
+		<div class="popupContainer">
 		<div class="videoPopup animated">
 			<i class="spinner fa fa-cog fa-spin fa-3x fa-fw"></i>
 			<span class="sr-only">Loading...</span>
 			<iframe src="about:blank" frameborder="0" allowfullscreen>Loading...</iframe>
 			<div onclick="closeVideoPopup()" class="popupClose"><i class="fa fa-times-circle" aria-hidden="true"></i></div>
 		</div>
+	</div>
 	</div>
   </body>
 </html>
