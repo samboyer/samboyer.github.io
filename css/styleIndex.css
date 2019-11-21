@@ -47,6 +47,12 @@ p>small{
   font-size:0.7em;
 }
 
+.pageBody *::selection, .footer *::selection{
+  background-color: #DF9BE1;
+  color: #fff;
+  /* text-shadow: 1px 1px 0px #60ff62; */
+}
+
 /*TOP*/
 .top{
   overflow: hidden;
