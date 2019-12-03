@@ -67,6 +67,12 @@ p>small{
   box-sizing: border-box;
 }
 
+#canvasGlitter{
+  position:absolute;
+  width:100%;
+  height:100%;
+}
+
 .headerNoiseLayer{
   position: absolute;
   width:100%;
@@ -291,18 +297,21 @@ h2 i{
 }
 
 .projectInfo{
-  display: inline-block;
-  padding: 20px 15px 0;
+  display: inline-flex;
+  padding: 15px 15px 9px 15px;
+  flex-direction: column;
+  overflow-y: auto;
 }
 .projectFeature p{
   margin: 0;
   padding: 0;
+  flex-grow: 1;
 }
 .projectMore{
   text-decoration: none !important;
-  position: absolute;
+  /* position: absolute;
   bottom: 8px;
-  right: 8px;
+  right: 8px; */
   font-size: 18px;
   color: #fff;
   background-color: #eb72ea;
@@ -312,7 +321,8 @@ h2 i{
   transition:box-shadow 100ms;
   text-shadow: 2px 0 0 rgba(0,255,0,0.3), -2px 0 0 rgba(255,0,255,0.3);
   font-weight:400;
-  display:table;
+  display:inline-block;
+  align-self: flex-end;
 }
 .projectMore:hover{
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.15);
@@ -326,7 +336,7 @@ h2 i{
 
 @media screen and (min-width:640px){
   .projectFeature:nth-of-type(2n) .projectMore{
-    left:8px;
+    align-self:flex-start;
   }
 
   .projectFeature:nth-of-type(2n) img{
@@ -407,6 +417,7 @@ h2 i{
   display: inline-block;
   height: 64px;
   position: relative;
+  text-decoration: none;
 }
 .socialLinkLD svg path{
   fill: #EDFFFB;
@@ -426,7 +437,7 @@ h2 i{
 }
 .socialLinkLD svg{
   height: 0.92em;
-  bottom: -6px;
+  bottom: -1px;
   position: absolute;
   right: -30px;
 }
@@ -485,7 +496,7 @@ h2 i{
   width: 100vw;
   background: #000000;	
   position: relative;
-  z-index: -2;
+  /* z-index: -2; */
   margin: 5%;
 }
 .spinner{
