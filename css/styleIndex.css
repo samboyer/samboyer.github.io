@@ -585,41 +585,24 @@ h2 i{
 }
 
 
-/*glitter*/
-#glitterCont {
-  overflow: hidden;
+.fa-spin {
+  -webkit-animation: fa-spin 2s infinite linear;
+  animation: fa-spin 2s infinite linear;
 }
-
-.glitterPiece {
-  display: block;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  background-color: #fff;
-  overflow: hidden;
-  opacity: 0.5;
-  animation: glitter 6s linear 0s infinite normal;
-  -webkit-animation: glitter 6s linear 0s infinite normal;
-  border-right:solid 1px #0f0;
-  border-left: solid 1px #f0f;
-  width:0px;
-  height:2px;
-  will-change: transform, opacity;
-}
-
-@-webkit-keyframes glitter {
+@-webkit-keyframes fa-spin {
   0% {
-  -webkit-transform: translateY(100px);
-  opacity: 0;
-  }
-  25% {
-  opacity: 1.0;
-  }
-  75% {
-  opacity: 1.0;
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   100% {
-  -webkit-transform: translateY(-100px);
-  opacity: 0;
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
   }
+}
+.fa-3x {
+  font-size: 3em;
+}
+.fa-fw {
+  width: 1.28571429em;
+  text-align: center;
 }

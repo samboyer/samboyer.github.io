@@ -48,50 +48,6 @@
 	<link rel="stylesheet" href="icomoon.css" async>
 	<link rel="stylesheet" href="css/styleIndex.css" async>
 
-	<script> //GLITTER!
-$(function() {
-  var body = $('#glitterCont'),
-	  original = $('.glitterPiece'),
-	  amnt =  100,
-	  minDur = 6,
-	  maxDur = 15,
-	  minSize = 2,
-	  maxSize = 3,
-	  minOpa = 0.3,
-	  maxOpa = 0.7;
-
-	var createStar = function() {
-	  var rng = Math.random(),
-		  dur  = (1-rng) * (maxDur-minDur) + minDur,
-		  size = Math.round(rng * (maxSize - minSize)) + minSize,
-		  opa  = rng * (maxOpa - minOpa) + minOpa,
-		  ofst = -Math.random() * maxDur;
-		  //col  = Math.floor(Math.random() * 255);
-
-	  original.clone().removeAttr('id').css({
-		  top: (Math.random() * 100) + '%',
-		  left: (Math.random() * 100) + '%',
-		  webkitAnimationDelay: ofst + 's',
-		  mozAnimationDelay: ofst + 's',
-		  webkitAnimationDuration: dur + 's',
-		  mozAnimationDuration: dur + 's',
-		  height:size+'px',
-		  width:(size-2)+'px',
-		  backgroundColor: 'rgba(255,255,255,'+opa+')',
-		  borderRightColor: 'rgba(0,255,0,'+opa+')',
-		  borderLeftColor: 'rgba(255,0,255,'+opa+')',
-		  //filter: 'opacity('+opa+')',
-		  //backgroundColor: 'hsla('+col+',100%,80%,'+opa+')',
-
-		}).appendTo(body);
-  };
-
-  for(var i = 0; i < amnt; i++) {
-	createStar();
-  }
-});
-	</script>
-
 	<script>//NAVBAR
 		function sticky_relocate() {
 			var window_top = $(window).scrollTop();
@@ -166,13 +122,12 @@ $(function() {
 
   </head>
 
-  <body onload="clearVideoPopup(); preloadImages();">
+  <body onload="clearVideoPopup();">
 	<div id="top-anchor"></div>
 	<div class="top">
-		<div class="headerNoiseLayer"></div>
-		<!-- <div class="headerNoiseLayer noiseLayer2"></div> -->
-		<div id="glitterCont"><div class="glitterPiece"></div></div>
-			<span class = "headerText" class="displayBlock">
+		<canvas id="canvasGlitter"></canvas>
+		<script src="/js/glitterwebgl.js" async></script> 
+		<span class = "headerText" class="displayBlock">
 				<h1>Sam Boyer&nbsp;&nbsp;</h1>
 			</span>
 			<img src="img/logo.svg" class="logoImg" alt="">
