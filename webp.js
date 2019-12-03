@@ -25,14 +25,14 @@ console.log(dirs);
   var files=[];
   for(var dir of dirs){
     files.push(await imagemin([dir+'/*.png'], {
-      destination: 'out/'+dir,
+      destination: dir,
       plugins: [
         webp({lossless: true})
       ]
     }));
     
     files.push(await imagemin([dir+'/*.jpg'], {
-      destination: 'out/'+dir,
+      destination: dir,
       plugins: [
         webp({quality: 80})
       ]
