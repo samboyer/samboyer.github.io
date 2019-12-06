@@ -24,14 +24,14 @@ console.log(dirs);
 (async () => {
   var files=[];
   for(var dir of dirs){
-    files.push(await imagemin([dir+'/*.png'], {
+    files.push(...await imagemin([dir+'/*.png'], {
       destination: dir,
       plugins: [
         webp({lossless: true})
       ]
     }));
     
-    files.push(await imagemin([dir+'/*.jpg'], {
+    files.push(...await imagemin([dir+'/*.jpg'], {
       destination: dir,
       plugins: [
         webp({quality: 80})

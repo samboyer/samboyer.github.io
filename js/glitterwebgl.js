@@ -1,9 +1,11 @@
 const canvas = document.getElementById('canvasGlitter');
-canvas.width = canvas.clientWidth;
+canvas.width = canvas.clientWidth; //set concrete dimensions
 canvas.height = canvas.clientHeight;
-// Get 2d drawing context
+
 const gl = canvas.getContext('webgl');
 gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+
+//make full-viewport rect
 const buffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 const vertexCount = 6;
@@ -16,13 +18,13 @@ const vertexLocations = [
    1.0, -1.0,
    1.0,  1.0
 ];
-
 gl.bufferData(
   gl.ARRAY_BUFFER,
   new Float32Array(vertexLocations),
   gl.STATIC_DRAW
 );
 
+//make shader program
 const program = gl.createProgram();
 const buildShader = (type, source) => {
   const shader = gl.createShader(type);
@@ -37,7 +39,7 @@ const vertexShader = buildShader(
   `
 attribute vec2 a_position;
 void main() {
-gl_Position = vec4(a_position, 0.0, 1.0);
+gl_Position = vec4(a_position, 0.0, 1.0); //...well this is boring
 }`
 );
 
@@ -51,6 +53,7 @@ const float GLITTERSPEED = 100000.0;
 uniform sampler2D noise;
 uniform float height;
 uniform float timestamp;
+uniform float startTime;
 
 void main() {
   for(int j=1; j<=5; j+=1){
@@ -67,21 +70,20 @@ void main() {
     gl_FragColor += vec4(dist,dist,dist,0.0);
   }
   gl_FragColor*=(1.- gl_FragCoord.y/height * 0.7); //fade based on y coordinate
+
+  if(timestamp-startTime<=200.0) gl_FragColor*=(timestamp-startTime)/200.0; //initial fade in
 }`
 );
 
-var compiled = gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS);
-console.log('Shader compiled successfully: ' + compiled);
-var compilationLog = gl.getShaderInfoLog(fragmentShader);
-console.log('Shader compiler log: ' + compilationLog);
+if(!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)){console.log("Frag shader's dead");}
 
 gl.linkProgram(program);
 gl.useProgram(program);
-// Detach and delete shaders as they're no longer needed
 gl.detachShader(program, vertexShader);
 gl.detachShader(program, fragmentShader);
 gl.deleteShader(vertexShader);
 gl.deleteShader(fragmentShader);
+
 // Add attribute pointer to our vertex locations
 const positionLocation = gl.getAttribLocation(program, 'a_position');
 gl.enableVertexAttribArray(positionLocation);
@@ -95,45 +97,46 @@ gl.vertexAttribPointer(
   0
 );
 
+//get uniform pointers
 const timestampId = gl.getUniformLocation(program, 'timestamp');
 const samplerId = gl.getUniformLocation(program, 'uSampler');
 const heightId = gl.getUniformLocation(program, 'height');
+gl.uniform1f(heightId, parseInt(canvas.height));
+const startTimeId = gl.getUniformLocation(program, 'startTime');
+var started = false;
 
+//render loop
 const render = (timestamp) => {
-  // Update timestamp
   gl.uniform1f(timestampId, timestamp);
+  if(!started){gl.uniform1f(startTimeId, timestamp);started=true;}
 
-  // Draw
   gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
   window.requestAnimationFrame(render);
 };
 
-window.requestAnimationFrame(render);
-
- // Tell WebGL we want to affect texture unit 0
- gl.activeTexture(gl.TEXTURE0);
- 
+//Load noise texture (kinda important)
+gl.activeTexture(gl.TEXTURE0);
 var tex = gl.createTexture();
 gl.bindTexture(gl.TEXTURE_2D, tex);
 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-              new Uint8Array([255, 0, 0, 255])); // red
-// Tell the shader we bound the texture to texture unit 0
+              new Uint8Array([255, 0, 0, 255])); //temporary texture buffer
 gl.uniform1i(samplerId, 0);
-gl.uniform1f(heightId, parseInt(canvas.height));
 
 var img = new Image();
 img.src = "/img/noiseCol.webp";
 img.onload = function() {
     gl.bindTexture(gl.TEXTURE_2D, tex);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img); //repopulate buffer
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+
+    //start render loop
+    window.requestAnimationFrame(render);
 }
 
 window.onresize = function() {
-  console.log('aaa');
   var width = canvas.clientWidth;
   var height = canvas.clientHeight;
   if (canvas.width != width ||
@@ -141,8 +144,7 @@ window.onresize = function() {
     canvas.width = width;
     canvas.height = height;
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    // in this case just render when the window is resized.
     gl.uniform1f(heightId, parseInt(canvas.height));
-    render();
+    render(); //just in case
   }
 }
