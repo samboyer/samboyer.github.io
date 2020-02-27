@@ -57,6 +57,7 @@ uniform float startTime;
 
 void main() {
   gl_FragColor = vec4(1.0,1.0,1.0,0.0);
+  for(int j=1; j<=3; j+=1){
     float jf = float(j);
 
     float texScale=pow(2.0, 2.*jf + 6.); //noise tex scale factor
@@ -69,9 +70,9 @@ void main() {
     float dist = pow(func*func, 128.0)/(2.*jf); //fade based on size
     gl_FragColor += vec4(dist, dist, dist, dist);
   }
-  gl_FragColor*=(1.- gl_FragCoord.y/height * 0.7); //fade based on y coordinate
+  gl_FragColor.a*=pow(1.- gl_FragCoord.y/height, 0.3); //fade based on y coordinate
 
-  if(timestamp-startTime<=200.0) gl_FragColor*=(timestamp-startTime)/200.0; //initial fade in
+  if(timestamp-startTime<=200.0) gl_FragColor.a*=(timestamp-startTime)/200.0; //initial fade in
 }`
 );
 
