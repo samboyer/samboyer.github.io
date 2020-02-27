@@ -105,9 +105,10 @@ const heightId = gl.getUniformLocation(program, 'height');
 gl.uniform1f(heightId, parseInt(canvas.height));
 const startTimeId = gl.getUniformLocation(program, 'startTime');
 var started = false;
-
+gl.clearColor(1.0,1.0,1.0,0);
 //render loop
 const render = (timestamp) => {
+  gl.clear(gl.COLOR_BUFFER_BIT);
   gl.uniform1f(timestampId, timestamp);
   if(!started){gl.uniform1f(startTimeId, timestamp);started=true;}
 
