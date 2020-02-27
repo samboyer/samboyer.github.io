@@ -371,8 +371,9 @@ h2 i{
 .footer{
   width: 80%;
   padding: 50px 10%;
-  background-color: #543f53;
+  background-color: #2f606f;
   color: #fafefa;
+  box-shadow:inset 0px 0px 15px rgba(0,0,0,0.2);
 }
 .footerInfo{
   display: inline-block;
