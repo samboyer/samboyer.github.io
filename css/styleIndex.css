@@ -59,9 +59,9 @@ p>small{
   position: relative;
   color: #f2fff9;
   width: 100%;
-  background-color: #1e3c66;
+  background-color: #3d2d62;
   border-bottom: solid 10px #ad45ab;
-  background: linear-gradient(to bottom, #591466 5%,#1e3c66 50%,#146951 90%);
+  background: linear-gradient(to bottom, #2f606f 0%,#3d2d62 90%);
   height: 100vh;
   min-height: 300px;
   box-sizing: border-box;
