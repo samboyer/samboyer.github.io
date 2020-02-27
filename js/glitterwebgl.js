@@ -2,7 +2,7 @@ const canvas = document.getElementById('canvasGlitter');
 canvas.width = canvas.clientWidth; //set concrete dimensions
 canvas.height = canvas.clientHeight;
 
-const gl = canvas.getContext('webgl');
+const gl = canvas.getContext('webgl',  { premultipliedAlpha: false });
 gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
 //make full-viewport rect
@@ -56,7 +56,8 @@ uniform float timestamp;
 uniform float startTime;
 
 void main() {
-  for(int j=1; j<=5; j+=1){
+  gl_FragColor = vec4(1.0,1.0,1.0,0.0);
+  for(int j=1; j<=3; j+=1){
     float jf = float(j);
 
     float texScale=pow(2.0, 2.*jf + 6.); //noise tex scale factor
@@ -67,11 +68,11 @@ void main() {
     float p = mod(timestamp+pxVal*period*5007.29, period)/period; //loop between 0-1
     float func = (1. - 2.*p);
     float dist = pow(func*func, 128.0)/(2.*jf); //fade based on size
-    gl_FragColor += vec4(dist,dist,dist,0.0);
+    gl_FragColor += vec4(dist, dist, dist, dist);
   }
-  gl_FragColor*=(1.- gl_FragCoord.y/height * 0.7); //fade based on y coordinate
-
-  if(timestamp-startTime<=200.0) gl_FragColor*=(timestamp-startTime)/200.0; //initial fade in
+  gl_FragColor.a*=pow(1.- gl_FragCoord.y/height, 0.3); //fade based on y coordinate
+  
+  if(timestamp-startTime<=200.0) gl_FragColor.a*=(timestamp-startTime)/200.0; //initial fade in
 }`
 );
 
@@ -104,9 +105,10 @@ const heightId = gl.getUniformLocation(program, 'height');
 gl.uniform1f(heightId, parseInt(canvas.height));
 const startTimeId = gl.getUniformLocation(program, 'startTime');
 var started = false;
-
+gl.clearColor(1.0,1.0,1.0,0);
 //render loop
 const render = (timestamp) => {
+  gl.clear(gl.COLOR_BUFFER_BIT);
   gl.uniform1f(timestampId, timestamp);
   if(!started){gl.uniform1f(startTimeId, timestamp);started=true;}
 
