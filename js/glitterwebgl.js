@@ -2,7 +2,7 @@ const canvas = document.getElementById('canvasGlitter');
 canvas.width = canvas.clientWidth; //set concrete dimensions
 canvas.height = canvas.clientHeight;
 
-const gl = canvas.getContext('webgl');
+const gl = canvas.getContext('webgl',  { premultipliedAlpha: false });
 gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
 //make full-viewport rect
@@ -56,7 +56,7 @@ uniform float timestamp;
 uniform float startTime;
 
 void main() {
-  for(int j=1; j<=5; j+=1){
+  gl_FragColor = vec4(1.0,1.0,1.0,0.0);
     float jf = float(j);
 
     float texScale=pow(2.0, 2.*jf + 6.); //noise tex scale factor
@@ -67,7 +67,7 @@ void main() {
     float p = mod(timestamp+pxVal*period*5007.29, period)/period; //loop between 0-1
     float func = (1. - 2.*p);
     float dist = pow(func*func, 128.0)/(2.*jf); //fade based on size
-    gl_FragColor += vec4(dist,dist,dist,0.0);
+    gl_FragColor += vec4(dist, dist, dist, dist);
   }
   gl_FragColor*=(1.- gl_FragCoord.y/height * 0.7); //fade based on y coordinate
 
