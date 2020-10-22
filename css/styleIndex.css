@@ -29,7 +29,7 @@ h1{
 h2{
   font-size: 3em;
   display: inline-block;
-  font-style: italic;
+  /* font-style: italic; */
   text-shadow: 2px 0 0 rgba(0,255,0,0.7), -2px 0 0 rgba(255,0,255,0.7);
 }
 h3{
@@ -275,6 +275,7 @@ h2 i{
   position: relative;
   overflow:hidden;
   transition:box-shadow 150ms ease;
+  border: solid 1px #ad45ab;
 }
 .projectFeature:hover{
   box-shadow: 5px 5px 20px rgba(0,0,0,0.2);
@@ -348,8 +349,9 @@ h2 i{
   overflow-x: scroll;
   width: auto;
   white-space: nowrap;
-  border-radius: 15px;
+  border-radius: 10px;
   box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
+  border: solid 1px #ad45ab;
 }
 .videoShowcase img{
   margin: 10px;
@@ -357,14 +359,14 @@ h2 i{
   height: 315px;
   transition: all 0.15s ease;
   cursor: pointer;
-  border-radius: 15px;
+  border-radius: 10px;
 }
 .videoShowcase img:hover{
   filter: brightness(80%);
   -webkit-filter: brightness(80%);
   -moz-filter: brightness(80%);
   -o-filter: brightness(80%);
-  -ms-filter: brightness(80%);	
+  -ms-filter: brightness(80%);
 }
 
 /*FOOTER*/
