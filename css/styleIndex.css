@@ -232,7 +232,7 @@ h2 i{
 .sectionHeader{
   padding: 5px 15% 0px 0px;
   margin-bottom: 15px;
-  display: inline-block;  
+  display: inline-block;
   border-bottom: solid 3px #eb72ea;
 }
 .largeText{
@@ -341,7 +341,7 @@ h2 i{
   }
 }
 
-/*VIDEOS*/	
+/*VIDEOS*/
 .videoShowcase{
   /* background: #69da92; */
   height: auto;
@@ -461,7 +461,7 @@ h2 i{
   margin: 5%;
   width: 100%;
   border: 2px solid #ffffff;
-  background: #ffffff;	
+  background: #ffffff;
   position: relative;
   z-index: 100;
   transition:transform 500ms cubic-bezier(.22,.61,.36,1);
@@ -478,7 +478,7 @@ h2 i{
   min-height: 300px;
   height: 56.25vw;
   width: 100vw;
-  background: #000000;	
+  background: #000000;
   position: relative;
   /* z-index: -2; */
   margin: 5%;
@@ -554,7 +554,7 @@ h2 i{
   }
   .projectFeature img{
     width:100%;
-    border-bottom: solid 5px #eb72ea; 
+    border-bottom: solid 5px #eb72ea;
   }
   .projectInfo{
     padding: 0 15px 10px;
