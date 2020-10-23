@@ -552,11 +552,13 @@ h2 i{
   .projectFeature picture{
     border-right:none;
     border-left:none;
-    border-bottom: solid 5px #eb72ea;
+    height: unset;
+    box-shadow: unset;
   }
   .projectFeature img{
     width:100%;
     border-bottom: solid 5px #eb72ea;
+    height: unset;
   }
   .projectInfo{
     padding: 0 15px 10px;
