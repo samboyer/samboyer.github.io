@@ -313,9 +313,7 @@ h2 i{
 }
 .projectMore{
   text-decoration: none !important;
-  /* position: absolute;
-  bottom: 8px;
-  right: 8px; */
+  user-select: none;
   font-size: 18px;
   color: #fff;
   background-color: #ad45ab;
@@ -331,7 +329,9 @@ h2 i{
 .projectMore:hover{
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.15);
 }
-
+.projectMore.disabled{
+  opacity: 0.35;
+}
 .yearHeader{
   width: 100%;
   font-size: 2em;
