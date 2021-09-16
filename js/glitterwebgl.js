@@ -156,7 +156,7 @@ function setupGlitter(){
 var ua = window.navigator.userAgent;
 var isiOS = !!ua.match(/iPad/i) || !!ua.match(/iPhone/i);
 var isWebkit = !!ua.match(/WebKit/i);
-var isiOSSafari = iOS && webkit;
+var isiOSSafari = isiOS && isWebkit;
 if(!isiOSSafari){
   setupGlitter();
 }
