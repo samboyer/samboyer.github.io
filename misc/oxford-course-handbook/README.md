@@ -1,4 +1,4 @@
-> hey! this is a demo for an alternate presentation of the course handbook, using Markdown and Docsify. it shouldn't (yet) be used as the ground truth for this content - please refer to the original PDFs before suing the dept xo
+> hey! this is a demo for an alternate presentation of the course handbook, using Markdown, [word2md](https://word2md.com/) and [Docsify](https://docsify.js.org/#/). Please refer to the original PDFs for official guidance!
  _\- sam_
 
 ![](logo.png)
@@ -254,7 +254,7 @@ You will be notified of any changes via email.
 
 Tutorials are your main opportunity for developing a deep understanding of a subject – and for sorting out misunderstandings. On average you can expect to have two or three tutorials or classes per week. Each tutor has particular methods and particular ways of organising tutorials, and will adapt your tutorials to give you the best opportunities for learning. Many tutors will base their tutorials around problem sheets issued by lecturers to accompany their lectures. Your tutor should be the first person you ask for advice on how to study, and later on how to choose optional subjects.
 
-#### 3.2.1 Problem sheets
+### 3.2.1 Problem sheets
 
 Lecturers will usually suggest exercises that relate to the material in their lectures. Your attempts at these will often be taken as a framework for the tutorials or classes that accompany the course. In some cases you will find the sheets of suggested problems give you only a start on work in the subject; in others you will find that the sheet consists of a range of exercises intended to suit groups with different backgrounds and that your tutor suggests that you tackle only some of them.
 
@@ -446,7 +446,7 @@ If you are interested in giving talks, running practical coding sessions for kid
 
 Life can be a bit overwhelming at times for everyone, and it is crucial to seek support before it becomes All Too Much. If you are feeling unwell or unhappy, your College should be your first port of call. Each College has their own systems of support for students. Please refer to your College handbook or website for more information on who to contact and what support is available through your College. In addition, and especially for course-related matters, the academic admin team is always happy to help or just talk!
 
-##### 6.5.1 Health and Welfare
+### 6.5.1 Health and Welfare
 
 The University [Oxford Students website contains](https://www.ox.ac.uk/students/welfare/health?wssl=1) comprehensive advice on a variety of issues around student health and welfare. You have free access to the [National](https://www.nhs.uk/NHSEngland/thenhs/about/Pages/overview.aspx)[Health Service](https://www.nhs.uk/NHSEngland/thenhs/about/Pages/overview.aspx)
 
@@ -462,7 +462,7 @@ Your mental health is just as important as your physical health. Approximately [
 
 If you think you or someone you know might have a problem with their mental health, please speak to your College tutor.
 
-##### 6.5.2 Harassment
+### 6.5.2 Harassment
 
 By University legislation, it is an offence for any senior or junior member of the University to harass any other member or any person for whom the University is responsible. Sexual and racial harassment are among the forms of harassment covered by this rule, but it also covers any form of intentional or unintentional teasing, embarrassment or bullying which causes inconvenience or unhappiness, particularly if persistent.
 
@@ -470,7 +470,7 @@ The University&#39;s Oxford Students website provides help and advice for studen
 
 The Harassment Advisors for the Department of Computer Science are: Mrs L. Carveth (Room 114) Tel. 73833 leanne.carveth@cs.ox.ac.uk Professor L. Ong (Room 340) Tel. 83522 luke.ong@cs.ox.ac.uk
 
-##### 6.5.3 Complaints and Appeals
+### 6.5.3 Complaints and Appeals
 
 The University, the MPLS Division and the Department of Computer Science all hope that provision made for students at all stages of their course of study will make the need for complaints (about that provision) or appeals (against the outcomes of any form of assessment) infrequent.
 
@@ -482,7 +482,7 @@ Many sources of advice are available within colleges, within faculties/departmen
 
 General areas of concern about provision affecting students as a whole should be raised through Joint Consultative Committees or via student representation on the Department&#39;s committees.
 
-### Complaints
+#### Complaints
 
 If your concern or complaint relates to teaching or other provision made by the Department, then you should raise it with the Director of Teaching (Dr Ani Calinescu in Michaelmas and Hilary terms, Professor Standa Zivny in Trinity term)or with the Director of Graduate Studies (Dr Luke Ong in Michaelmas and Trinity Terms, and Professor Jonathan Barrett in Hilary Term) as appropriate. Within the department the officer concerned will attempt to resolve your concern/complaint informally.
 
@@ -490,7 +490,7 @@ If you are dissatisfied with the outcome, then you may take your concern further
 
 If your concern or complaint relates to teaching or other provision made by your College, you should raise it either with your tutor or with the Senior Tutor. Your College will also be able to explain how to take your complaint further if you are dissatisfied with the outcome of its consideration.
 
-### Academic appeals
+#### Academic appeals
 
 An academic appeal is defined as a formal questioning of a decision on an academic matter made by the responsible academic body.
 
