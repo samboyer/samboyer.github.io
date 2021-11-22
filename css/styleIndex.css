@@ -312,6 +312,12 @@ h2 i{
   text-shadow:2px 0 0 rgba(var(--col-abberation-right),0.3), -2px 0 0 rgba(var(--col-abberation-left),0.3)
 }
 
+.shadowEmoji {
+  color: transparent;
+  user-select: none;
+  padding: 0 1rem;
+}
+
 /*PROJECTS*/
 .projectFeatureCont{
   display: flex;
