@@ -1,3 +1,5 @@
+// Build script to make webp equivalents of all images
+
 var imagemin = require("imagemin"),
   webp = require("imagemin-webp"),
   fs = require("fs"),
@@ -30,7 +32,7 @@ console.log(dirs);
         webp({lossless: true})
       ]
     }));
-    
+
     files.push(...await imagemin([dir+'/*.jpg'], {
       destination: dir,
       plugins: [
@@ -41,5 +43,5 @@ console.log(dirs);
   for(var file of files){
     console.log(file.sourcePath);
   }
-  
+
   })();

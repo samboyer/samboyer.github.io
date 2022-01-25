@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon-samboyer';
-  src:  url('fonts/icomoon-samboyer.eot?51zvx9');
-  src:  url('fonts/icomoon-samboyer.eot?51zvx9#iefix') format('embedded-opentype'),
-    url('fonts/icomoon-samboyer.ttf?51zvx9') format('truetype'),
-    url('fonts/icomoon-samboyer.woff?51zvx9') format('woff'),
-    url('fonts/icomoon-samboyer.svg?51zvx9#icomoon-samboyer') format('svg');
+  src:  url('/fonts/icomoon-samboyer.eot?51zvx9');
+  src:  url('/fonts/icomoon-samboyer.eot?51zvx9#iefix') format('embedded-opentype'),
+    url('/fonts/icomoon-samboyer.ttf?51zvx9') format('truetype'),
+    url('/fonts/icomoon-samboyer.woff?51zvx9') format('woff'),
+    url('/fonts/icomoon-samboyer.svg?51zvx9#icomoon-samboyer') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
