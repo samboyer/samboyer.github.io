@@ -10,12 +10,9 @@
   --col-select-background: #df9be1;
   --col-subheading: #888;
 
-  --col-header-top:#2f606f;
-  --col-header-bottom:#3d2d62;
-  --col-header-text: #f2fff9;
-  --col-title-gradient-1:#7fffc7;
-  --col-title-gradient-2: #94f7ea;
-  --col-title-gradient-3: #a78fef;
+  --col-header-top:#2db0b0;
+  --col-header-bottom:#501e6c;
+  --col-header-text: #bda9c2;
 
   --col-footer-links: #edfffb;
 
@@ -62,14 +59,14 @@ h2{
   font-size: 3em;
   display: inline-block;
   /* font-style: italic; */
-  text-shadow: 2px 0 0 rgba(var(--col-abberation-right),0.7), -2px 0 0 rgba(var(--col-abberation-left),0.7);
+  /* text-shadow: 2px 0 0 rgba(var(--col-abberation-right),0.7), -2px 0 0 rgba(var(--col-abberation-left),0.7); */
 }
 h3{
   font-size: 2em;
   display: inline-block;
   padding-top: 10px;
   line-height: 0.9;
-  text-shadow: 2px 0 0 rgba(var(--col-abberation-right),0.3), -2px 0 0 rgba(var(--col-abberation-left),0.3);
+  /* text-shadow: 2px 0 0 rgba(var(--col-abberation-right),0.3), -2px 0 0 rgba(var(--col-abberation-left),0.3); */
 }
 h4{
   font-size: 1em;
@@ -384,7 +381,7 @@ h2 i{
   padding: 6px 12px;
   box-shadow: 0px 0px 7px 0px rgba(var(--col-black-triplet), 0.15);
   transition:box-shadow 100ms;
-  text-shadow: 2px 0 0 rgba(var(--col-abberation-right),0.3), -2px 0 0 rgba(var(--col-abberation-left),0.3);
+  /* text-shadow: 2px 0 0 rgba(var(--col-abberation-right),0.3), -2px 0 0 rgba(var(--col-abberation-left),0.3); */
   font-weight:400;
   display:inline-block;
   align-self: flex-end;
