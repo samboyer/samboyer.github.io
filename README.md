@@ -1,6 +1,6 @@
 ## Sam's Website
 
-[https://samboyer.co.uk](https://samboyer.co.uk)
+[https://samboyer.uk](https://samboyer.uk)
 
 ## Build Instructions
 
