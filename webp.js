@@ -1,11 +1,11 @@
 // Build script to make webp equivalents of all images
 
-var imagemin = require("imagemin"),
+const imagemin = require("imagemin"),
   webp = require("imagemin-webp"),
-  fs = require("fs"),
-  path = require('path');
+  fs = require("fs");
 
-var imageDir = 'img';
+const root = 'img';
+const exclude = ['img/favicon'];
 
 // https://www.peterbe.com/plog/nodejs-fs-walk-or-glob-or-fast-glob
 function walkDirs(directory, filepaths = []) {
@@ -20,12 +20,14 @@ function walkDirs(directory, filepaths = []) {
   return filepaths;
 }
 
-var dirs = walkDirs(imageDir);
-console.log(dirs);
+var dirs = walkDirs(root);
+// console.log(dirs);
 
 (async () => {
   var files=[];
   for(var dir of dirs){
+    if(exclude.includes(dir)) continue;
+
     files.push(...await imagemin([dir+'/*.png'], {
       destination: dir,
       plugins: [
