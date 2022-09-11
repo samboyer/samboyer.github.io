@@ -83,6 +83,9 @@ h1>small, h2>small, h3>small, h4>small{
 p>small{
   font-size:0.7em;
 }
+li{
+  margin: 20px 0;
+}
 
 .pageBody *::selection, .footer *::selection{
   background-color: var(--col-select-background);
