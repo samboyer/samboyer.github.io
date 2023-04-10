@@ -2,8 +2,10 @@
 
 [https://samboyer.uk](https://samboyer.uk)
 
+PRs welcome 👀
+
 ## Build Instructions
 
-(There's actually things to do now)
-
-WebP conversion is automated using imagemin and imagemin-webp from npm. Run webp.js for fancy conversion.
+```bash
+node webp.js # imagemin[-webp] conversion
+```
