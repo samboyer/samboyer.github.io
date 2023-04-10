@@ -50,6 +50,8 @@ function setupGlitter(){
   precision highp float;
   const float SCROLLSPEED = -0.01;
   const float GLITTERSPEED = 100000.0;
+  const float FADE_IN_DUR = 300.0;
+  const float LARGE_FADE_FACTOR = 1.0;
 
   uniform sampler2D noise;
   uniform float height;
@@ -57,23 +59,34 @@ function setupGlitter(){
   uniform float startTime;
 
   void main() {
-    gl_FragColor = vec4(1.0,1.0,1.0,0.0);
+    float opacity = 0.0;
     for(int j=1; j<=3; j+=1){
       float jf = float(j);
 
       float texScale=pow(2.0, 2.*jf + 6.); //noise tex scale factor
-      vec4 col = texture2D(noise, (gl_FragCoord.xy + vec2(jf*7.47625, timestamp*SCROLLSPEED*jf ))/texScale);
-      float pxVal = ((col.r-0.5)/ 256.0 + col.g-0.5)/256.0 + col.b; //0-1, 24 bit
+      vec4 col = texture2D(
+        noise,
+        (gl_FragCoord.xy + vec2(
+          jf*7.47625,
+          timestamp*SCROLLSPEED*jf)
+        )/texScale
+      );
+
+      // Flatten RGB pixel into one number (so we get 24 bits of randomness:))
+      float pxVal = ((col.r - 0.5) / 256.0 + col.g - 0.5)/256.0 + col.b;
 
       float period = GLITTERSPEED * jf;
-      float p = mod(timestamp+pxVal*period*5007.29, period)/period; //loop between 0-1
-      float func = (1. - 2.*p);
-      float dist = pow(func*func, 128.0)/(2.*jf); //fade based on size
-      gl_FragColor += vec4(dist, dist, dist, dist);
+      float p = mod(timestamp + pxVal * period * 5007.29, period)/period; //loop between 0-1
+      float func = (1.0 - 2.0 * p);
+      float dist = pow(func * func, 128.0) / (jf * LARGE_FADE_FACTOR); //fade based on size
+      opacity += dist;
     }
-    gl_FragColor.a*=pow(1.- gl_FragCoord.y/height, 0.3); //fade based on y coordinate
+    opacity *= pow(1.0 - gl_FragCoord.y / height, 0.3); //fade based on y coordinate
 
-    if(timestamp-startTime<=200.0) gl_FragColor.a*=(timestamp-startTime)/200.0; //initial fade in
+    if (timestamp - startTime <= FADE_IN_DUR) {
+      opacity *= (timestamp - startTime) / FADE_IN_DUR; //initial fade in
+    }
+    gl_FragColor = vec4(0.0, 0.0, 0.0, opacity);
   }`
   );
 
@@ -153,8 +166,4 @@ function setupGlitter(){
   }
 }
 
-const ua = window.navigator.userAgent;
-const isiOS = !!ua.match(/iPad/i) || !!ua.match(/iPhone/i);
-if(!isiOS){
-  setupGlitter();
-}
+setupGlitter();
