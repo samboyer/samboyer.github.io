@@ -34,7 +34,6 @@
 	<base target="_blank">
 
 	<link href="fonts/googlefonts.css" rel="stylesheet">
-	<script src="js/jquery.min.js"></script>
 
 	<link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png">
@@ -56,72 +55,48 @@
 
 	<script>//NAVBAR
 		function sticky_relocate() {
-			var window_top = $(window).scrollTop();
-			var div_top = $('#sticky-anchor').offset().top;
-			if (window_top > div_top) {
-				$('#sticky').addClass('stick');
-				// $('#sticky-anchor').height($('#sticky').outerHeight());
-				$('#glitterCont').css('display','none');
+			// if #sticky-anchor goes off-screen, make the navbar sticky &
+			// disable the glitter.
+			if(document.getElementById('sticky-anchor').getBoundingClientRect().bottom <0){
+				document.getElementById('sticky').classList.add('stick');
+				document.getElementById('canvasGlitter').style ='display:none';
 			} else {
-				$('#sticky').removeClass('stick');
-				// $('#sticky-anchor').height(0);
-				$('#glitterCont').css('display','');
+				document.getElementById('sticky').classList.remove('stick');
+				document.getElementById('canvasGlitter').style ='';
 			}
 		}
-
-		$(function() {
-			$(window).scroll(sticky_relocate);
-			sticky_relocate();
-		});
-
-		$(function(){
-			$('a[href*="#"]:not([href="#"])').click(function() {
-				if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'#') || location.hostname == this.hostname) {
-					var target = $(this.hash + '-anchor');
-					target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-						if (target.length) {
-							var hash = this.hash; // 'this' will not be in scope in callback
-							$('html,body').animate({ scrollTop: target.offset().top }, 500, function() {
-							location.hash = hash;
-						});
-						return false;
-					}
-				}
-			});
-		});
+		window.onscroll = sticky_relocate;
 	</script>
 
 	<script>//custom stuff (popups, preload, sorting)
 		function showPopup(localUrl){
-			$('#overlay iframe').attr('src', localUrl);
+			document.getElementById('overlayIframe').src = url;
 			setTimeout(function(){
-				$('#overlay').addClass("overlayOpen");
+				document.getElementById('overlay').classList.add('overlayOpen');
 			},20);
-
 		}
 		function closePopup(){
-			$('#overlay iframe').attr('src', 'about:blank');
+			document.getElementById('overlayIframe').src = 'about:blank';
 			setTimeout(function(){
-			$('#overlay').removeClass('overlayOpen');
+				document.getElementById('overlay').classList.remove('overlayOpen');
 			},20);
 		}
 
 		function showVideoPopup(videoId){
 			var url = "https://www.youtube.com/embed/"+videoId+"?rel=0&color=white&controls=1&autoplay=1"
-			// $('#videoOverlay').addClass("overlayDisplay");
-			$('#videoOverlay iframe').attr('src', url);
+			document.getElementById('videoOverlayIframe').src = url;
 			setTimeout(function(){
-				$('#videoOverlay').addClass("overlayOpen");
+				document.getElementById('videoOverlay').classList.add('overlayOpen');
 			},20);
 		}
 		function closeVideoPopup(){
-			$('#videoOverlay iframe').attr('src', 'about:blank');
+			document.getElementById('videoOverlayIframe').src = 'about:blank';
 			setTimeout(function(){
-			$('#videoOverlay').removeClass('overlayOpen');
+				document.getElementById('videoOverlay').classList.remove('overlayOpen');
 			},20);
 		}
 		function clearVideoPopup() {
-			$('#videoOverlay iframe').attr('src', 'about:blank');
+			document.getElementById('videoOverlayIframe').src = 'about:blank';
 		}
 
 	</script>
@@ -129,13 +104,13 @@
   </head>
 
   <body onload="clearVideoPopup();">
-	<div id="top-anchor"></div>
+	<div id="top"></div>
 	<div class="top">
 		<div class="headerClip">
 			<canvas id="canvasGlitter"></canvas>
 			<img src="img/logo.svg" class="logoImg" alt="">
 		</div>
-		<script src="/js/glitterwebgl.js" async></script>
+		<!-- <script src="/js/glitterwebgl.js" async></script> -->
 		<span class = "headerText" class="displayBlock">
 				<h1>Sam Boyer&nbsp;&nbsp;</h1>
 			</span>
@@ -164,7 +139,7 @@
 	<!-- <div class="topShadow"></div> -->
 	<div class="pageBody">
 		<div class="section">
-			<div id="projects-anchor" class="anchor"></div>
+			<div id="projects" class="anchor"></div>
 			<div class="sectionHeader">
 				<h2>Projects <i class="fa fa-code" aria-hidden="true"></i></h2>
 			</div>
@@ -327,7 +302,7 @@
 		</div>
 
 		<div class="section">
-			<div id="games-anchor" class="anchor"></div>
+			<div id="games" class="anchor"></div>
 			<div class="sectionHeader">
 				<h2>Games <i class="fa fa-gamepad" aria-hidden="true"></i></h2>
 			</div>
@@ -427,7 +402,7 @@
 		</div>
 
 		<div class="section">
-			<div id="publications-anchor" class="anchor"></div>
+			<div id="publications" class="anchor"></div>
 			<div class="sectionHeader">
 				<h2>'Publications' <i class="fa fa-newspaper-o" aria-hidden="true"></i></h2>
 			</div>
@@ -463,7 +438,7 @@
 
 
 		<div class="section">
-			<div id="videos-anchor" class="anchor"></div>
+			<div id="videos" class="anchor"></div>
 			<div class="sectionHeader">
 				<h2>Videos <i class="fa fa-youtube-play" aria-hidden="true"></i></h2>
 			</div>
@@ -508,7 +483,7 @@
 		</div>
 
 		<div class="section">
-			<div id="about-anchor" class="anchor"></div>
+			<div id="about" class="anchor"></div>
 			<div class="sectionHeader">
 				<h2>About Me <i class="fa fa-user" aria-hidden="true"></i></h2>
 			</div>
@@ -520,7 +495,7 @@
 		</div>
 
 		<div class="section">
-			<div id="contact-anchor" class="anchor"></div>
+			<div id="contact" class="anchor"></div>
 			<div class="sectionHeader">
 				<h2>Contact <i class="fa fa-envelope" aria-hidden="true"></i></h2>
 			</div>
@@ -560,7 +535,8 @@
 			</div>
 		</div>
 		<div class="footerInfo">
-			<p>© Sam Boyer 2022</p>
+			<p id="page_weight_info"></p>
+			<p>© Sam Boyer 2023</p>
 		</div>
 		<small>
 			<div>(/._.)/*\(._.\)</div>
@@ -573,7 +549,7 @@
 		<div class="popupContainer">
 		<div class="popup animated">
 			<i class="spinner fa fa-cog fa-spin fa-3x fa-fw"></i>
-			<iframe title="More Info Popup" src="about:blank" >Loading...</iframe>
+			<iframe id="overlayIframe" title="More Info Popup" src="about:blank" >Loading...</iframe>
 			<div onclick="closePopup()" class="popupClose"><i class="fa fa-times-circle" aria-hidden="true"></i></div>
 		</div>
 	</div>
@@ -582,10 +558,31 @@
 		<div class="popupContainer">
 		<div class="videoPopup animated">
 			<i class="spinner fa fa-cog fa-spin fa-3x fa-fw"></i>
-			<iframe title="Video Player Popup" src="about:blank" frameborder="0" allowfullscreen>Loading...</iframe>
+			<iframe id="videoOverlayIframe" title="Video Player Popup" src="about:blank" frameborder="0" allowfullscreen>Loading...</iframe>
 			<div onclick="closeVideoPopup()" class="popupClose"><i class="fa fa-times-circle" aria-hidden="true"></i></div>
 		</div>
 	</div>
 	</div>
   </body>
+  <script>
+	sticky_relocate();
+
+	// thanks to Joseph Silber! https://stackoverflow.com/questions/7717527/smooth-scrolling-when-clicking-an-anchor-link#7717572
+	document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+		anchor.addEventListener('click', function (e) {
+			e.preventDefault();
+			document.querySelector(this.getAttribute('href')).scrollIntoView({
+				behavior: 'smooth'
+			});
+		});
+	});
+
+	var total_transfer_size = 0;
+	const observer = new PerformanceObserver((list) => {
+		total_transfer_size += list.getEntries().map(entry => entry.encodedBodySize).reduce((sum, a) => sum+a,0);
+		document.getElementById('page_weight_info').innerText = `delivered to you in ${Math.round(total_transfer_size/1024)}KB 🎉`;
+	});
+
+	observer.observe({ type: "resource", buffered: true });
+  </script>
 </html>

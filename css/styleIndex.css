@@ -1,4 +1,4 @@
-/* VARIABLES */
+  /* VARIABLES */
 /* (so i can nitpick more easily) */
 :root {
   /* COLOURS */
@@ -12,7 +12,7 @@
 
   --col-header-top:#2db0b0;
   --col-header-bottom:#501e6c;
-  --col-header-text: #bda9c2;
+  --col-header-text: #999999;
 
   --col-footer-links: #edfffb;
 
@@ -98,9 +98,9 @@ li{
   position: relative;
   color: var(--col-header-text);
   width: 100%;
-  background-color: var(--col-header-bottom);
+  /* background-color: var(--col-header-bottom); */
   border-bottom: solid 10px var(--col-primary);
-  background: linear-gradient(to bottom, var(--col-header-top) 0%,var(--col-header-bottom) 90%);
+  /* background: linear-gradient(to bottom, var(--col-header-top) 0%,var(--col-header-bottom) 90%); */
   height: 100vh;
   min-height: 300px;
   box-sizing: border-box;
@@ -111,6 +111,7 @@ li{
   width:100%;
   height:100%;
   clip: rect(0 auto auto 0);
+  box-shadow:  -50px 50px -40px #ccc inset;
 }
 
 .logoImg{
@@ -121,6 +122,7 @@ li{
   width: 55vw;
   transform: rotateZ(13deg);
   user-select: none;
+  filter: invert(1);
 }
 
 #canvasGlitter{
@@ -324,7 +326,7 @@ h2 i{
 .projectFeature{
   display: flex;
   vertical-align: top;
-  border-radius: 10px;
+  /* border-radius: 10px; */
   box-shadow: 1px 1px 10px rgba(var(--col-black-triplet),0.2);
   width: 100%;
   height:250px;
