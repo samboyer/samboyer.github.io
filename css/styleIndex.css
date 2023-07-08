@@ -2,17 +2,17 @@
 /* (so i can nitpick more easily) */
 :root {
   /* COLOURS */
-  --col-primary: #ad45ab;
-  --col-primary-light: #ad45ab;
+  --col-primary: #45ad8b;
+  --col-primary-light: #45ad64;
   --col-secondary-light: #42fcc0;
   --col-background: #fafefa;
   --col-text: #666666;
   --col-select-background: #df9be1;
   --col-subheading: #888;
 
-  --col-header-top:#2db0b0;
+  --col-header-top:hsl(155, 50%, 70%);
   --col-header-bottom:#501e6c;
-  --col-header-text: #999999;
+  --col-header-text: #eee;
 
   --col-footer-links: #edfffb;
 
@@ -99,9 +99,9 @@ li{
   position: relative;
   color: var(--col-header-text);
   width: 100%;
-  /* background-color: var(--col-header-bottom); */
+  background-color: var(--col-header-bottom);
   border-bottom: solid 10px var(--col-primary);
-  /* background: linear-gradient(to bottom, var(--col-header-top) 0%,var(--col-header-bottom) 90%); */
+  background: linear-gradient(to bottom, var(--col-header-top) 0%,var(--col-header-bottom) 90%);
   height: 100vh;
   min-height: 300px;
   box-sizing: border-box;
@@ -112,7 +112,7 @@ li{
   width:100%;
   height:100%;
   clip: rect(0 auto auto 0);
-  box-shadow:  -50px 50px -40px #ccc inset;
+  box-shadow: 0 -50px 50px -40px #fff7 inset;
 }
 
 .logoImg{
@@ -139,8 +139,8 @@ li{
   display: inline-block;
   height: 5.8rem;
   /* padding-right: 6em; */
-  /* border-bottom:solid 3px rgba(var(--col-white-triplet),0.1); */
-  text-decoration: underline solid rgba(var(--col-white-triplet),0.1);
+  border-bottom:solid 2px rgba(var(--col-white-triplet),0.1);
+  /* text-decoration: underline solid rgba(var(--col-white-triplet),0.1); */
   transition: font-size 300ms;
   animation: h1In 500ms ease-out 0s normal;
   -webkit-animation: h1In 500ms ease-out 0s 1 normal;
@@ -448,7 +448,7 @@ h2 i{
   padding: 50px 10%;
   background-color: var(--col-header-top);
   color: var(--col-background);
-  box-shadow:inset 0px 0px 15px rgba(var(--col-black-triplet),0.2);
+  box-shadow:0px 0px 15px 10px rgba(var(--col-black-triplet),0.1);
 }
 .footerInfo{
   display: inline-block;

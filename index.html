@@ -52,15 +52,18 @@
 	<link rel="preload" href="/fonts/icomoon-samboyer.ttf?51zvx9" as="font" type="font/ttf" crossorigin>
 
 	<script>//NAVBAR
+		var glitterInView = true;
 		function sticky_relocate() {
 			// if #sticky-anchor goes off-screen, make the navbar sticky &
 			// disable the glitter.
 			if(document.getElementById('sticky-anchor').getBoundingClientRect().bottom <0){
 				document.getElementById('sticky').classList.add('stick');
-				document.getElementById('canvasGlitter').style ='display:none';
+				// document.getElementById('canvasGlitter').style ='display:none';
+				glitterInView = false;
 			} else {
 				document.getElementById('sticky').classList.remove('stick');
-				document.getElementById('canvasGlitter').style ='';
+				// document.getElementById('canvasGlitter').style ='';
+				glitterInView = true;
 			}
 		}
 		window.onscroll = sticky_relocate;
@@ -108,14 +111,14 @@
 			<canvas id="canvasGlitter"></canvas>
 			<img loading="lazy" src="img/logo.svg" class="logoImg" alt="">
 		</div>
-		<!-- <script src="/js/glitterwebgl.js" async></script> -->
+		<script src="/js/glitterwebgl.js" async></script>
 		<span class = "headerText" class="displayBlock">
 				<h1>Sam Boyer&nbsp;&nbsp;</h1>
 			</span>
 			<h2>Web Development <span>-</span> Gamedev <span>-</span> Music Production <span>-</span> other stuff
 				<br>
 				<br>
-				~ now serving extremely small web content ~
+				~ now serving extremely small webpages ~
 			</h2>
 	</div>
 	<div id="sticky-anchor"></div>
