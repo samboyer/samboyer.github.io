@@ -58,10 +58,12 @@
 			// disable the glitter.
 			if(document.getElementById('sticky-anchor').getBoundingClientRect().bottom <0){
 				document.getElementById('sticky').classList.add('stick');
+				document.getElementById('page_weight_info').classList.add('stick');
 				// document.getElementById('canvasGlitter').style ='display:none';
 				glitterInView = false;
 			} else {
 				document.getElementById('sticky').classList.remove('stick');
+				document.getElementById('page_weight_info').classList.remove('stick');
 				// document.getElementById('canvasGlitter').style ='';
 				glitterInView = true;
 			}
@@ -118,7 +120,7 @@
 			<h2>Web Development <span>-</span> Gamedev <span>-</span> Music Production <span>-</span> other stuff
 				<br>
 				<br>
-				~ now serving extremely small webpages ~
+				~ now serving relatively small webpages ~
 			</h2>
 	</div>
 	<div id="sticky-anchor"></div>
@@ -540,7 +542,6 @@
 			</div>
 		</div>
 		<div class="footerInfo">
-			<p id="page_weight_info"></p>
 			<p>© Sam Boyer 2023</p>
 		</div>
 		<small>
@@ -568,6 +569,7 @@
 		</div>
 	</div>
 	</div>
+	<div id="page_weight_info"></div>
   </body>
   <script>
 	sticky_relocate();
@@ -585,7 +587,7 @@
 	var total_transfer_size = 0;
 	const observer = new PerformanceObserver((list) => {
 		total_transfer_size += list.getEntries().map(entry => entry.encodedBodySize).reduce((sum, a) => sum+a,0);
-		document.getElementById('page_weight_info').innerText = `delivered to you in ${Math.round(total_transfer_size/1024)}KB 🎉`;
+		document.getElementById('page_weight_info').innerText = `⚡️${Math.round(total_transfer_size/1024)}KB`;
 	});
 
 	observer.observe({ type: "resource", buffered: true });

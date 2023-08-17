@@ -1,20 +1,23 @@
   /* VARIABLES */
-/* (so i can nitpick more easily) */
+
+
+
 :root {
   /* COLOURS */
-  --col-primary: #45ad8b;
-  --col-primary-light: #45ad64;
-  --col-secondary-light: #42fcc0;
+  --col-primary: #b86cc7;
+  --col-primary-light: #9145ad;
+  --col-secondary-light: #a842fc;
   --col-background: #fafefa;
   --col-text: #666666;
   --col-select-background: #df9be1;
   --col-subheading: #888;
 
-  --col-header-top:hsl(155, 50%, 70%);
-  --col-header-bottom:#501e6c;
+  --col-header-top: hsl(227.3, 74.3%, 13.7%);
+  --col-header-bottom: #9d4bb4;
   --col-header-text: #eee;
 
-  --col-footer-links: #edfffb;
+  --col-footer-background: #8a719f;
+  --col-footer-links: #f2edff;
 
   --col-abberation-left:  255, 0, 255;
   --col-abberation-right: 0, 255, 0;
@@ -244,7 +247,7 @@ li{
 .navbar{
   text-align: center;
   background-color: var(--col-primary);
-  padding: 0 20px 5px;
+  padding: 2px 20px 5px;
   margin: 0 auto;
   display: inline-block;
   transition: width 300ms;
@@ -446,7 +449,7 @@ h2 i{
 .footer{
   width: 80%;
   padding: 50px 10%;
-  background-color: var(--col-header-top);
+  background-color: var(--col-footer-background);
   color: var(--col-background);
   box-shadow:0px 0px 15px 10px rgba(var(--col-black-triplet),0.1);
 }
@@ -588,6 +591,26 @@ h2 i{
   font-size: 24px;
   cursor: pointer;
   color: var(--col-white);
+}
+
+
+#page_weight_info{
+  margin-top: 0 !important;
+  position: fixed;
+  top: 0px;
+  right: 0;
+  z-index: 10000;
+  padding: 4px 10px 0px 5px;
+  color: var(--col-background);
+  font-family: monospace;
+  transition: background-color 100ms;
+  height: 27px;
+  box-sizing: border-box;
+  font-size: 0.9em;
+}
+
+#page_weight_info.stick{
+  background-color: var(--col-primary);
 }
 
 /*mobile rules*/
