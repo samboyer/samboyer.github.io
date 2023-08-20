@@ -12,8 +12,11 @@
   --col-select-background: #df9be1;
   --col-subheading: #888;
 
+  --col-timeline-border: var(--col-primary);
+  --timeline-border-width: 1px;
+
   --col-header-top: hsl(227.3, 74.3%, 13.7%);
-  --col-header-bottom: #9d4bb4;
+  --col-header-bottom: #a978b7;
   --col-header-text: #eee;
 
   --col-footer-background: #8a719f;
@@ -66,7 +69,7 @@ h2{
   /* text-shadow: 2px 0 0 rgba(var(--col-abberation-right),0.7), -2px 0 0 rgba(var(--col-abberation-left),0.7); */
 }
 h3{
-  font-size: 2em;
+  font-size: 1.4rem;
   display: inline-block;
   padding-top: 10px;
   line-height: 0.9;
@@ -159,6 +162,7 @@ li{
   text-shadow: 0px 0px 10px #fff2;
   font-weight:100;
   font-style: italic;
+  cursor: pointer;
 }
 .headerText h1:hover{
   animation-duration: 1s;
@@ -282,7 +286,7 @@ h2 i{
   margin: 0;
   padding: 10rem 15px 5vh;
 }
-.section p{
+.section>p{
   padding: 0 15px;
 }
 .pre{
@@ -355,10 +359,10 @@ h2 i{
   height: 250px;
 }
 
-.projectFeature picture, .videoShowcase picture {
+.projectFeature picture, .videoShowcase picture, .timelineCard picture {
   background: #80447f;
 }
-.projectFeature img, .videoShowcase img {
+.projectFeature img, .videoShowcase img, .timelineCard img {
   mix-blend-mode: screen;
 }
 
@@ -377,19 +381,17 @@ h2 i{
   flex-grow: 1;
 }
 .projectMore{
-  text-decoration: none !important;
+  text-decoration: none;
   user-select: none;
-  font-size: 18px;
   color: var(--col-white);
   background-color: var(--col-primary);
   border-radius: 5px;
   padding: 6px 12px;
   box-shadow: 0px 0px 7px 0px rgba(var(--col-black-triplet), 0.15);
   transition:box-shadow 100ms;
-  /* text-shadow: 2px 0 0 rgba(var(--col-abberation-right),0.3), -2px 0 0 rgba(var(--col-abberation-left),0.3); */
-  font-weight:400;
-  display:inline-block;
-  align-self: flex-end;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
 }
 .projectMore:hover{
   box-shadow: 0px 0px 4px 0px rgba(var(--col-black-triplet), 0.15);
@@ -715,4 +717,189 @@ h2 i{
 .fa-fw {
   width: 1.28571429em;
   text-align: center;
+}
+
+
+/* TIMELINE */
+/* thanks to alvarotrigo (https://codepen.io/alvarotrigo/pen/BawBzjM?editors=1100) */
+.timelineContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.timeline {
+  max-width: 900px;
+}
+
+.timelineCardContainer {
+  position: relative;
+  /* max-width: 400px; */
+}
+
+/* setting padding based on even or odd */
+.timelineCardContainer:nth-of-type(odd) {
+  padding: 30px 0 30px 30px;
+}
+.timelineCardContainer:nth-of-type(even) {
+  padding: 30px 30px 30px 0;
+}
+/* Global ::before */
+.timelineCardContainer::before {
+  content: "";
+  position: absolute;
+  width: 50%;
+  border: solid var(--col-timeline-border);
+}
+
+/* Setting the border of top, bottom, left */
+.timelineCardContainer:nth-of-type(odd)::before {
+  left: 0px;
+  top: calc(-1* var(--timeline-border-width));
+  bottom: calc(-1* var(--timeline-border-width));
+  border-width: var(--timeline-border-width) 0 var(--timeline-border-width) var(--timeline-border-width);
+  border-radius: 50px 0 0 50px;
+}
+
+/* Setting the border of top, bottom, right */
+.timelineCardContainer:nth-of-type(even)::before {
+  right: 0;
+  top: 0;
+  bottom: 0;
+  border-width: var(--timeline-border-width) var(--timeline-border-width) var(--timeline-border-width) 0;
+  border-radius: 0 50px 50px 0;
+}
+
+/* Removing the border if it is the first card */
+.timelineCardContainer:first-child::before {
+  border-top: 0;
+  border-top-left-radius: 0;
+}
+
+/* Removing the border if it is the last card  and it's odd */
+.timelineCardContainer:last-child:nth-of-type(odd)::before {
+  border-bottom: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Removing the border if it is the last card  and it's even */
+.timelineCardContainer:last-child:nth-of-type(even)::before {
+  border-bottom: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* TIMELINE CARD  */
+.timelineCard {
+  display: flex;
+  /* flex-direction: column; */
+  transition: box-shadow 150ms ease;
+  border: solid 1px var(--col-primary-light);
+  box-shadow: 1px 1px 10px rgba(var(--col-black-triplet),0.2);
+  /* padding: 10px; */
+  position: relative;
+  z-index:2; /* for shadow overlap with year */
+  height:200px;
+}
+.timelineCard:hover {
+  box-shadow: 5px 5px 20px rgba(var(--col-black-triplet),0.2);
+}
+.timelineCard>div{
+  padding:10px;
+}
+.timelineCard picture{
+  height:200px;
+  display: inline-block;
+  border-left: 2px solid var(--col-primary-light);
+  box-shadow:0px 0px 7px 0px rgba(var(--col-black-triplet), 0.2);
+}
+.timelineCard picture img{
+  height:200px;
+}
+
+.timelineCardSmall{
+  transition: box-shadow 150ms ease;
+  border: solid 1px var(--col-primary-light);
+  box-shadow: 1px 1px 10px rgba(var(--col-black-triplet),0.2);
+  padding: 10px;
+  position: relative;
+  z-index:2; /* for shadow overlap with year */
+  max-width:600px
+}
+.timelineCardContainer:nth-of-type(even){
+  display: flex;
+  justify-content: end;
+}
+.timelineCardSmall a{
+  text-decoration: none;
+  color:var(--col-primary)
+}
+.timelineCardSmall a:hover{
+  text-decoration: underline;
+}
+.timelineCardSmall h3{
+  line-height: 1.2;
+}
+.timelineCardSmall p{
+  margin: 10px 20px;
+  color: var(--col-light-grey);
+  font-style: italic;
+  font-size: 1rem;
+}
+
+
+.timelineCardContainer:nth-of-type(even) picture{
+  order:-1;
+  border-left:none;
+  border-right: 2px solid var(--col-primary-light);
+}
+
+.timelineCardContainer h3,  .timelineCardContainer h4{
+  position: relative;
+  display: block;
+}
+
+/* Timeline dot  */
+.timelineCardContainer h3::before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top:20px;
+  background: white;
+  border-radius: 999px;
+  border: var(--timeline-border-width) solid var(--col-timeline-border);
+}
+
+/* text right if the card is even  */
+.timelineCardContainer:nth-of-type(even) .timelineCard h3, .timelineCardContainer:nth-of-type(even) .timelineCard h4{
+  text-align: right;
+}
+.timelineCardContainer:nth-of-type(even) .projectMore{
+  left:unset;
+  right:10px;
+}
+
+/* setting dot to the left if the card is odd */
+.timelineCardContainer:nth-of-type(odd) h3::before {
+  left: calc(-47.5px + var(--timeline-border-width));
+}
+
+/* setting dot to the right if the card is odd */
+.timelineCardContainer:nth-of-type(even) h3::before {
+  right: calc(-47.5px + var(--timeline-border-width));
+}
+
+.timelineYear{
+  display: flex;
+  justify-content: center;
+}
+.timelineYear div{
+  display:block;
+  color: var(--col-light-grey);
+  font-size: 1.2em;
+  font-style: italic;
+  background-color:var(--col-background);
+  margin:-20px;
+  z-index:1;
+  padding:10px 10px;
+  height:1ch;
 }
