@@ -555,6 +555,9 @@ h2 i{
 .displayBlock{
   display: block;
 }
+.icon{
+    font-style:normal;
+}
 
 
 .fa-spin {
