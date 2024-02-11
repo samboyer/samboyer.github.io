@@ -53,26 +53,54 @@ function setupGlitter(){
   const float LARGE_FADE_FACTOR = 1.0;
   const float NUM_OCTAVES = 3.0;
 
+  const vec2 DISP_UV_SCALE = vec2(200000, 10000);
+  const float DISP_SCROLL_SPEED = 0.00002;
+  const float DISP_THRESHOLD = 0.01;
+  const float INVERT_COL_THRESHOLD = 0.5;
+  const vec2 DISP_DIR = vec2(200, 200);
+
   uniform sampler2D noise;
   uniform float height;
   uniform float timestamp;
   uniform float startTime;
 
+  // Do a texture lookup and return as a 1D float.
+  float texture2DFloat(sampler2D tex, vec2 uv) {
+    vec4 col = texture2D(tex, uv);
+    return (col.r / 256.0 + col.g)/256.0 + col.b;
+  }
+
   void main() {
     float opacity = 0.0;
-    for(float octave=1.; octave<=NUM_OCTAVES; octave+=1.){
 
-      float texScale=pow(2., 2.*octave + 7.); //noise tex scale factor
-      vec4 col = texture2D(
-        noise,
-        (gl_FragCoord.xy + vec2(
-          octave*7.47625,
-          timestamp*SCROLLSPEED*octave)
+    // calculate displacement map, and other glitchy effects
+    float disp = mod(texture2DFloat(noise, gl_FragCoord.xy/DISP_UV_SCALE)+timestamp*DISP_SCROLL_SPEED, 1.0);
+    float should_displace = disp < DISP_THRESHOLD ? 1.0 : 0.0;
+    vec4 kind_of_displace = texture2D(noise, gl_FragCoord.xy/DISP_UV_SCALE);
+
+    gl_FragColor = vec4(kind_of_displace.rgb * should_displace,1.0);
+    // return;
+
+    float invert_r = kind_of_displace.r < INVERT_COL_THRESHOLD ? should_displace : 0.0;
+    float invert_g = kind_of_displace.g < INVERT_COL_THRESHOLD ? should_displace : 0.0;
+    float invert_b = kind_of_displace.b < INVERT_COL_THRESHOLD ? should_displace : 0.0;
+    float invert_a = kind_of_displace.a < INVERT_COL_THRESHOLD && should_displace>0.0? 5.0 : 1.0;
+    vec2 post_disp_uv = gl_FragCoord.xy + DISP_DIR * should_displace;
+
+    float scroll_x = disp < DISP_THRESHOLD && kind_of_displace.r<0.5 ? SCROLLSPEED/(kind_of_displace.r*2.0-0.5): 0.0;
+    float scroll_y = disp < DISP_THRESHOLD ? (kind_of_displace.r>0.5 ? SCROLLSPEED/(kind_of_displace.g*2.0-1.5) : 0.0) : SCROLLSPEED;
+    float scale_adjust = disp < DISP_THRESHOLD ? (kind_of_displace.b-0.5)*7.0 : 0.0;
+
+    // apply looping particle texture
+    for(float octave=1.; octave<=NUM_OCTAVES; octave+=1.){
+      float texScale=pow(2., 2.*octave + 7.+scale_adjust); //noise tex scale factor
+
+      float pxVal = texture2DFloat(noise,
+        (post_disp_uv + vec2(
+          octave*7.47625+timestamp*scroll_x,
+          timestamp*scroll_y*octave)
         )/texScale
       );
-
-      // Flatten RGB pixel into one number (so we get 24 bits of randomness:))
-      float pxVal = ((col.r - 0.5) / 256.0 + col.g - 0.5)/256.0 + col.b;
 
       float period = GLITTERSPEED * octave;
       float p = mod(timestamp + pxVal * period * 5007.29, period)/period; //loop between 0-1
@@ -85,7 +113,8 @@ function setupGlitter(){
     if (timestamp - startTime <= FADE_IN_DUR) {
       opacity *= (timestamp - startTime) / FADE_IN_DUR; //initial fade in
     }
-    gl_FragColor = vec4(0.0, 0.0, 0.0, opacity);
+
+    gl_FragColor = vec4(invert_r, invert_g,invert_b, opacity*invert_a);
   }`
   );
 
