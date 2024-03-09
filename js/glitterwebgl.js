@@ -53,26 +53,69 @@ function setupGlitter(){
   const float LARGE_FADE_FACTOR = 1.0;
   const float NUM_OCTAVES = 3.0;
 
+  const vec2 DISP_UV_SCALE = vec2(200000, 10000);
+  const float DISP_SCROLL_SPEED = 0.00002;
+  const float DISP_THRESHOLD = 0.01;
+  const float INVERT_COL_THRESHOLD = 0.5;
+  const vec2 DISP_DIR = vec2(200, 200);
+
   uniform sampler2D noise;
   uniform float height;
   uniform float timestamp;
   uniform float startTime;
 
+  uniform float cursor_x;
+  uniform float cursor_y;
+  uniform float cursor_strength;
+  uniform float cursor_radius;
+
+  // Do a texture lookup and return as a 1D float.
+  float texture2DFloat(sampler2D tex, vec2 uv) {
+    vec4 col = texture2D(tex, uv);
+    return (col.r / 256.0 + col.g)/256.0 + col.b;
+  }
+
   void main() {
     float opacity = 0.0;
-    for(float octave=1.; octave<=NUM_OCTAVES; octave+=1.){
+    vec2 uv = gl_FragCoord.xy;
 
-      float texScale=pow(2., 2.*octave + 7.); //noise tex scale factor
-      vec4 col = texture2D(
-        noise,
-        (gl_FragCoord.xy + vec2(
-          octave*7.47625,
-          timestamp*SCROLLSPEED*octave)
+    vec2 uv_to_cursor = gl_FragCoord.xy - vec2(cursor_x, cursor_y);
+    float dist_to_cursor = pow(pow(uv_to_cursor.x, 2.0) + pow(uv_to_cursor.y, 2.0),0.5);
+    float dist_from_edge = max((cursor_radius-dist_to_cursor)/cursor_radius, 0.0);
+    float push_influence = pow(dist_from_edge,0.8)*cursor_strength;
+    uv += normalize(uv_to_cursor) * push_influence;
+    //gl_FragColor = vec4(push_influence, push_influence, push_influence, 1.0);
+    //return;
+
+
+    // calculate displacement map, and other glitchy effects
+    float disp = mod(texture2DFloat(noise, gl_FragCoord.xy/DISP_UV_SCALE)+timestamp*DISP_SCROLL_SPEED, 1.0);
+    float should_displace = disp < DISP_THRESHOLD ? 1.0 : 0.0;
+    vec4 kind_of_displace = texture2D(noise, gl_FragCoord.xy/DISP_UV_SCALE);
+
+    gl_FragColor = vec4(kind_of_displace.rgb * should_displace,1.0);
+    // return;
+
+    float invert_r = kind_of_displace.r < INVERT_COL_THRESHOLD ? should_displace : 0.0;
+    float invert_g = kind_of_displace.g < INVERT_COL_THRESHOLD ? should_displace : 0.0;
+    float invert_b = kind_of_displace.b < INVERT_COL_THRESHOLD ? should_displace : 0.0;
+    opacity += kind_of_displace.a < INVERT_COL_THRESHOLD && should_displace>0.0? 0.1 : 0.0;
+    uv += + DISP_DIR * should_displace;
+
+    float scroll_x = disp < DISP_THRESHOLD && kind_of_displace.r<0.5 ? SCROLLSPEED/(kind_of_displace.r*2.0-0.5): 0.0;
+    float scroll_y = disp < DISP_THRESHOLD ? (kind_of_displace.r>0.5 ? SCROLLSPEED/(kind_of_displace.g*2.0-1.5) : 0.0) : SCROLLSPEED;
+    float scale_adjust = disp < DISP_THRESHOLD ? (kind_of_displace.b-0.5)*7.0 : 0.0;
+
+    // apply looping particle texture
+    for(float octave=1.; octave<=NUM_OCTAVES; octave+=1.){
+      float texScale=pow(2., 2.*octave + 7.+scale_adjust); //noise tex scale factor
+
+      float pxVal = texture2DFloat(noise,
+        (uv + vec2(
+          octave*7.47625+timestamp*scroll_x,
+          timestamp*scroll_y*octave)
         )/texScale
       );
-
-      // Flatten RGB pixel into one number (so we get 24 bits of randomness:))
-      float pxVal = ((col.r - 0.5) / 256.0 + col.g - 0.5)/256.0 + col.b;
 
       float period = GLITTERSPEED * octave;
       float p = mod(timestamp + pxVal * period * 5007.29, period)/period; //loop between 0-1
@@ -85,7 +128,8 @@ function setupGlitter(){
     if (timestamp - startTime <= FADE_IN_DUR) {
       opacity *= (timestamp - startTime) / FADE_IN_DUR; //initial fade in
     }
-    gl_FragColor = vec4(0.0, 0.0, 0.0, opacity);
+
+    gl_FragColor = vec4(invert_r, invert_g,invert_b, opacity);
   }`
   );
 
@@ -113,6 +157,10 @@ function setupGlitter(){
 
   //get uniform pointers
   const timestampId = gl.getUniformLocation(program, 'timestamp');
+  const cursor_x_id = gl.getUniformLocation(program, 'cursor_x');
+  const cursor_y_id = gl.getUniformLocation(program, 'cursor_y');
+  const cursor_strength_id = gl.getUniformLocation(program, 'cursor_strength');
+  const cursor_radius_id = gl.getUniformLocation(program, 'cursor_radius');
   // const samplerId = gl.getUniformLocation(program, 'uSampler');
   const heightId = gl.getUniformLocation(program, 'height');
   gl.uniform1f(heightId, parseInt(canvas.height));
@@ -120,21 +168,39 @@ function setupGlitter(){
   var started = false;
   gl.clearColor(1.0,1.0,1.0,0);
   
+
+
   //render loop
+
+  var old_x, old_y;
+  var new_x, new_y;
+  var cursor_scale_width = 0.0;
+
   const render = (timestamp) => {
     if(glitterInView){
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.uniform1f(timestampId, timestamp);
       if(!started){gl.uniform1f(startTimeId, timestamp);started=true;}
+
+      if (new_x!==undefined){
+        const dist_moved = Math.pow(Math.pow(new_x-old_x,2)+Math.pow(new_y-old_y,2),0.5);
+        cursor_scale_width = (cursor_scale_width+dist_moved)*0.85;
+        gl.uniform1f(cursor_strength_id,cursor_scale_width*-0.1);
+        gl.uniform1f(cursor_radius_id,cursor_scale_width*2);
+        old_x = new_x;
+        old_y = new_y;
+      }
+
       gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
-      window.requestAnimationFrame(render);
+    //   window.requestAnimationFrame(render);
+      setTimeout(_ => window.requestAnimationFrame(render),25);
     }
     else{
       setTimeout(_ => window.requestAnimationFrame(render),100);
     }
   };
 
-  // Make random noise texture 
+  // Make random noise texture
   gl.activeTexture(gl.TEXTURE0)
   const texture = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -180,6 +246,17 @@ function setupGlitter(){
       gl.uniform1f(heightId, parseInt(canvas.height));
       render(); //just in case
     }
+  }
+
+
+  document.onmousemove = function(e){
+    var rect = canvas.getBoundingClientRect();
+    new_x = e.clientX - rect.left;
+    new_y = canvas.height-(e.clientY - rect.top);
+    if (old_x==undefined){old_x=new_x;old_y=new_y;}
+
+    gl.uniform1f(cursor_x_id, new_x);
+    gl.uniform1f(cursor_y_id, new_y);
   }
 }
 
