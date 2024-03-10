@@ -71,44 +71,60 @@ the HTTP ‘Authorization’ header.</li>
 href="https://developer.spotify.com/documentation/web-api/reference/get-playlists-tracks">Get
 Playlist Items</a>’ endpoint, which lives at
 <code>https://api.spotify.com/v1/playlists/{playlist_id}/tracks</code>.
-Unfortunately there’s no option to sort by most recently added, and we
-don’t get all the playlist contents in one request - they’re split into
-pages - so we’ll need a loop to fetch all the pages.</p>
+The ‘playlist ID’ mentioned in that URL is just the bit of code that
+comes after ‘playlist/’ in a playlist URL,
+e.g. ‘https://open.spotify.com/playlist/<strong>5EIjIqnxsxQrlms9XSWhEs</strong>?si=…’.</p>
+<p>Unfortunately there’s no option to order the returned items by most
+recently added, and we don’t get all the playlist contents in one
+request - they’re split into pages - so we’ll need a loop to fetch all
+the pages.</p>
 <p>Here’s the first incarnation of our script:</p>
 <div class="sourceCode" id="cb1"><pre
 class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env python3</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ^ignore this for now - it&#39;s important in step 6</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>CLIENT_SECRET <span class="op">=</span> <span class="bu">open</span>(<span class="st">&quot;SPOTIFY_CLIENT_SECRET&quot;</span>).read().strip()</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Getting API token from client secret...&quot;</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>API_KEY <span class="op">=</span> requests.post(</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;https://accounts.spotify.com/api/token&quot;</span>,</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>{</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;grant_type&quot;</span>: <span class="st">&quot;client_credentials&quot;</span>,</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;client_id&quot;</span>: CLIENT_ID,</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;client_secret&quot;</span>: CLIENT_SECRET,</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    },</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>).json()[<span class="st">&quot;access_token&quot;</span>]</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Fetch the playlist items</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>all_tracks <span class="op">=</span> []</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># List of data fields to get from the endpoint</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>api_fields <span class="op">=</span> <span class="st">&quot;items(track(id,artists(name),name, preview_url), added_at), next&quot;</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>playlist_url <span class="op">=</span> <span class="ss">f&quot;https://api.spotify.com/v1/playlists/</span><span class="sc">{</span>PLAYLIST_ID<span class="sc">}</span><span class="ss">/tracks?</span><span class="sc">{</span>urlencode({<span class="st">&#39;fields&#39;</span>:api_fields,<span class="st">&#39;limit&#39;</span>:<span class="dv">100</span>})<span class="sc">}</span><span class="ss">&quot;</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>more <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> playlist_url:</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;Fecthing </span><span class="sc">{</span>playlist_url<span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> requests.get(</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        playlist_url, headers<span class="op">=</span>{<span class="st">&quot;Authorization&quot;</span>: <span class="ss">f&quot;Bearer </span><span class="sc">{</span>API_KEY<span class="sc">}</span><span class="ss">&quot;</span>}</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    ).json()</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    all_tracks.extend(data[<span class="st">&quot;items&quot;</span>])</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    playlist_url <span class="op">=</span> data[<span class="st">&quot;next&quot;</span>]</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>all_tracks.sort(key<span class="op">=</span><span class="kw">lambda</span> x: x[<span class="st">&quot;added_at&quot;</span>], reverse<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>tracks_to_use <span class="op">=</span> all_tracks[:<span class="dv">5</span>]</span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ⬆ Ignore this for now - it&#39;s important in step 6.</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># (⬇ surprise tools that will help us later)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> ftplib</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> urllib.parse <span class="im">import</span> urlencode</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>CLIENT_ID <span class="op">=</span> <span class="st">&quot;PASTE_YOUR_CLIENT_ID_HERE&quot;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># ⬇ Be careful not to commit this! ⬇</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>CLIENT_SECRET <span class="op">=</span> <span class="st">&quot;PASTE_YOUR_CLIENT_SECRET_HERE&quot;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Getting API token from client secret...&quot;</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>API_KEY <span class="op">=</span> requests.post(</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;https://accounts.spotify.com/api/token&quot;</span>,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>{</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;grant_type&quot;</span>: <span class="st">&quot;client_credentials&quot;</span>,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;client_id&quot;</span>: CLIENT_ID,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;client_secret&quot;</span>: CLIENT_SECRET,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>).json()[<span class="st">&quot;access_token&quot;</span>]</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Fetch the playlist items - paste your playlist ID below.</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>PLAYLIST_ID <span class="op">=</span> <span class="st">&quot;5EIjIqnxsxQrlms9XSWhEs&quot;</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>all_tracks <span class="op">=</span> []</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co"># List of data fields to get from the endpoint</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>api_fields <span class="op">=</span> <span class="st">&quot;items(track(id,artists(name),name, preview_url), added_at), next&quot;</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>playlist_url <span class="op">=</span> <span class="ss">f&quot;https://api.spotify.com/v1/playlists/</span><span class="sc">{</span>PLAYLIST_ID<span class="sc">}</span><span class="ss">/tracks?</span><span class="sc">{</span>urlencode({<span class="st">&#39;fields&#39;</span>:api_fields,<span class="st">&#39;limit&#39;</span>:<span class="dv">100</span>})<span class="sc">}</span><span class="ss">&quot;</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>more <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> playlist_url:</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;Fetching </span><span class="sc">{</span>playlist_url<span class="sc">}</span><span class="ss">&quot;</span>)</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> requests.get(</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>        playlist_url, headers<span class="op">=</span>{<span class="st">&quot;Authorization&quot;</span>: <span class="ss">f&quot;Bearer </span><span class="sc">{</span>API_KEY<span class="sc">}</span><span class="ss">&quot;</span>}</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    ).json()</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    all_tracks.extend(data[<span class="st">&quot;items&quot;</span>])</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    playlist_url <span class="op">=</span> data[<span class="st">&quot;next&quot;</span>]</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>all_tracks.sort(key<span class="op">=</span><span class="kw">lambda</span> x: x[<span class="st">&quot;added_at&quot;</span>], reverse<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>tracks_to_use <span class="op">=</span> all_tracks[:<span class="dv">5</span>]</span></code></pre></div>
 <p>This selects the 5 most recently added entries to the playlist and
 puts them in <code>tracks_to_use</code>. Actually I’m going to prevent
 it from picking the same artist twice, to avoid the selection looking
@@ -135,88 +151,90 @@ href="https://odesli.co/">Odesli</a> (formerly Songlink). You can paste
 a URL from any major platform and they’ll give you a lovely page linking
 to the same song on all the others. Even better for us, they (currently)
 have a free API that we can use in our script!</p>
+<p>For the music platform links, you can get a few icons from my repo <a
+href="https://github.com/samboyer/spotify-static-widget/tree/main/assets">here</a>.
+(For other platforms, you’ll have to find your own icons :))</p>
+<p>At the top of your .py file:</p>
 <div class="sourceCode" id="cb3"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#top of file</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># You can choose your own platforms from the list in songlink_data[&quot;linksByPlatform&quot;]</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>PLATFORMS_TO_LINK_TO <span class="op">=</span> [</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;spotify&quot;</span>,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;youtube&quot;</span>,</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;itunes&quot;</span>,</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;deezer&quot;</span>,</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;soundcloud&quot;</span>,</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>PLATFORM_TO_DISPLAY_NAME <span class="op">=</span> {</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;spotify&quot;</span>: <span class="st">&quot;Spotify&quot;</span>,</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;deezer&quot;</span>: <span class="st">&quot;Deezer&quot;</span>,</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;itunes&quot;</span>: <span class="st">&quot;Apple Music&quot;</span>,</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;youtube&quot;</span>: <span class="st">&quot;YouTube&quot;</span>,</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;soundcloud&quot;</span>: <span class="st">&quot;SoundCloud&quot;</span>,</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>}</span>
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># You can choose your own platforms from the list in songlink_data[&quot;linksByPlatform&quot;]</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>PLATFORMS_TO_LINK_TO <span class="op">=</span> [</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;spotify&quot;</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;youtube&quot;</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;itunes&quot;</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;deezer&quot;</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;soundcloud&quot;</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>PLATFORM_TO_DISPLAY_NAME <span class="op">=</span> {</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;spotify&quot;</span>: <span class="st">&quot;Spotify&quot;</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;deezer&quot;</span>: <span class="st">&quot;Deezer&quot;</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;itunes&quot;</span>: <span class="st">&quot;Apple Music&quot;</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;youtube&quot;</span>: <span class="st">&quot;YouTube&quot;</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;soundcloud&quot;</span>: <span class="st">&quot;SoundCloud&quot;</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co"># (Assumes all the icons live at &#39;assets/PLATFORM_NAME.svg&#39;</span></span>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>PLATFORM_TO_ICON <span class="op">=</span> {</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;spotify&quot;</span>: Path(<span class="st">&quot;assets/spotify.svg&quot;</span>).read_text(),</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;deezer&quot;</span>: Path(<span class="st">&quot;assets/deezer.svg&quot;</span>).read_text(),</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;itunes&quot;</span>: Path(<span class="st">&quot;assets/itunes.svg&quot;</span>).read_text(),</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;youtube&quot;</span>: Path(<span class="st">&quot;assets/youtube.svg&quot;</span>).read_text(),</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;soundcloud&quot;</span>: Path(<span class="st">&quot;assets/soundcloud.svg&quot;</span>).read_text(),</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>...</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co"># bottom of file</span></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Fetch song.link data &amp; artwork for each track</span></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>old_track_data <span class="op">=</span> (</span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    json.loads(TRACKS_JSON_PATH.read_text()) <span class="cf">if</span> TRACKS_JSON_PATH.exists() <span class="cf">else</span> {}</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>any_track_changed <span class="op">=</span> <span class="va">False</span></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>Path(<span class="st">&quot;img&quot;</span>).mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>Path(<span class="st">&quot;audio&quot;</span>).mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>new_track_data <span class="op">=</span> {}</span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> track <span class="kw">in</span> tracks_to_use:</span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    track_id <span class="op">=</span> track[<span class="st">&quot;track&quot;</span>][<span class="st">&quot;id&quot;</span>]</span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Don&#39;t fetch song.link data &amp; artwork if we already have it</span></span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> track_id <span class="kw">in</span> old_track_data:</span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;Already got &#39;</span><span class="sc">{</span>track[<span class="st">&#39;track&#39;</span>][<span class="st">&#39;name&#39;</span>]<span class="sc">}</span><span class="ss">&#39;&quot;</span>)</span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>        new_track_data[track_id] <span class="op">=</span> old_track_data[track_id]</span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>        any_track_changed <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>        songlink_url <span class="op">=</span> <span class="ss">f&quot;https://api.song.link/v1-alpha.1/links?url=spotify%3Atrack%3A</span><span class="sc">{</span>track_id<span class="sc">}</span><span class="ss">&amp;userCountry=GB&quot;</span></span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;Fecthing </span><span class="sc">{</span>songlink_url<span class="sc">}</span><span class="ss">...&quot;</span>)</span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>        songlink_data <span class="op">=</span> requests.get(songlink_url).json()</span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>        entity_data <span class="op">=</span> songlink_data[<span class="st">&quot;entitiesByUniqueId&quot;</span>][</span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>            [</span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>                key</span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> key <span class="kw">in</span> songlink_data[<span class="st">&quot;entitiesByUniqueId&quot;</span>].keys()</span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> key.startswith(<span class="st">&quot;SPOTIFY_SONG::&quot;</span>)</span>
-<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>            ][<span class="dv">0</span>]</span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>        ]</span>
-<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>        link_data <span class="op">=</span> [</span>
-<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>            {</span>
-<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;platform&quot;</span>: platform,</span>
-<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;name&quot;</span>: PLATFORM_TO_DISPLAY_NAME[platform],</span>
-<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;icon&quot;</span>: PLATFORM_TO_ICON[platform],</span>
-<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;url&quot;</span>: songlink_data[<span class="st">&quot;linksByPlatform&quot;</span>][platform][<span class="st">&quot;url&quot;</span>],</span>
-<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>            }</span>
-<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> platform <span class="kw">in</span> PLATFORMS_TO_LINK_TO</span>
-<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> platform <span class="kw">in</span> songlink_data[<span class="st">&quot;linksByPlatform&quot;</span>]</span>
-<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>        ]</span>
-<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>        new_track_data[track_id] <span class="op">=</span> {</span>
-<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;title&quot;</span>: entity_data[<span class="st">&quot;title&quot;</span>],</span>
-<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;artist&quot;</span>: entity_data[<span class="st">&quot;artistName&quot;</span>],</span>
-<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;image&quot;</span>: <span class="bu">str</span>(image_path),</span>
-<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;links&quot;</span>: link_data,</span>
-<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;songlink_url&quot;</span>: songlink_data[<span class="st">&quot;pageUrl&quot;</span>],</span>
-<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;preview_mp3&quot;</span>: <span class="bu">str</span>(preview_path),</span>
-<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>        }</span></code></pre></div>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    platform: Path(<span class="ss">f&quot;assets/</span><span class="sc">{</span>platform<span class="sc">}</span><span class="ss">.svg&quot;</span>).read_text()</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> platform <span class="kw">in</span> PLATFORMS_TO_LINK_TO</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>...</span></code></pre></div>
+<p>Now at the bottom of your file:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>...</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fetch song.link data &amp; artwork for each track</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>TRACKS_JSON_PATH <span class="op">=</span> Path(<span class="st">&#39;tracks.json&#39;</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>old_track_data <span class="op">=</span> (</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    json.loads(TRACKS_JSON_PATH.read_text()) <span class="cf">if</span> TRACKS_JSON_PATH.exists() <span class="cf">else</span> {}</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>any_track_changed <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>Path(<span class="st">&quot;img&quot;</span>).mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>Path(<span class="st">&quot;audio&quot;</span>).mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>new_track_data <span class="op">=</span> {}</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> track <span class="kw">in</span> tracks_to_use:</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    track_id <span class="op">=</span> track[<span class="st">&quot;track&quot;</span>][<span class="st">&quot;id&quot;</span>]</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Don&#39;t fetch song.link data &amp; artwork if we already have it</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> track_id <span class="kw">in</span> old_track_data:</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;Already got &#39;</span><span class="sc">{</span>track[<span class="st">&#39;track&#39;</span>][<span class="st">&#39;name&#39;</span>]<span class="sc">}</span><span class="ss">&#39;&quot;</span>)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        new_track_data[track_id] <span class="op">=</span> old_track_data[track_id]</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        any_track_changed <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        songlink_url <span class="op">=</span> <span class="ss">f&quot;https://api.song.link/v1-alpha.1/links?url=spotify%3Atrack%3A</span><span class="sc">{</span>track_id<span class="sc">}</span><span class="ss">&amp;userCountry=GB&quot;</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;Fecthing </span><span class="sc">{</span>songlink_url<span class="sc">}</span><span class="ss">...&quot;</span>)</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        songlink_data <span class="op">=</span> requests.get(songlink_url).json()</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        entity_data <span class="op">=</span> songlink_data[<span class="st">&quot;entitiesByUniqueId&quot;</span>][</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>            [</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>                key</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> key <span class="kw">in</span> songlink_data[<span class="st">&quot;entitiesByUniqueId&quot;</span>].keys()</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> key.startswith(<span class="st">&quot;SPOTIFY_SONG::&quot;</span>)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>            ][<span class="dv">0</span>]</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>        link_data <span class="op">=</span> [</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>            {</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;platform&quot;</span>: platform,</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;name&quot;</span>: PLATFORM_TO_DISPLAY_NAME[platform],</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;url&quot;</span>: songlink_data[<span class="st">&quot;linksByPlatform&quot;</span>][platform][<span class="st">&quot;url&quot;</span>],</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> platform <span class="kw">in</span> PLATFORMS_TO_LINK_TO</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> platform <span class="kw">in</span> songlink_data[<span class="st">&quot;linksByPlatform&quot;</span>]</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>        new_track_data[track_id] <span class="op">=</span> {</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;title&quot;</span>: entity_data[<span class="st">&quot;title&quot;</span>],</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;artist&quot;</span>: entity_data[<span class="st">&quot;artistName&quot;</span>],</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;links&quot;</span>: link_data,</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;songlink_url&quot;</span>: songlink_data[<span class="st">&quot;pageUrl&quot;</span>],</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>TRACKS_JSON_PATH.write_text(json.dumps(new_track_data))</span></code></pre></div>
 <p>(This code sneakily saves the data from the previous run, so if your
-playslist hasn’t changed since then it won’t make anny further web
+playlist hasn’t changed since then it won’t make any further web
 requests :) )</p>
 <h1 id="step-3-store-process-the-album-art-song-preview">Step 3: Store
 &amp; process the album art &amp; song preview</h1>
@@ -224,36 +242,41 @@ requests :) )</p>
 and a low-bitrate 30-second preview of the track, which we can embed in
 the page! We’ll need to put them on our server first, which we can do by
 downloading the files and uploading via FTP later.</p>
-<div class="sourceCode" id="cb4"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>...</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> track <span class="kw">in</span> tracks_to_use:</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    ...</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        ...</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        thumbnail_url <span class="op">=</span> entity_data[<span class="st">&quot;thumbnailUrl&quot;</span>]</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        image_path <span class="op">=</span> Path(<span class="ss">f&quot;img/</span><span class="sc">{</span>thumbnail_url<span class="sc">.</span>split(<span class="st">&#39;/&#39;</span>)[<span class="op">-</span><span class="dv">1</span>]<span class="sc">}</span><span class="ss">.jpg&quot;</span>)</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> <span class="bu">open</span>(image_path, <span class="st">&quot;wb&quot;</span>) <span class="im">as</span> f:</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f&quot;Fetching </span><span class="sc">{</span>thumbnail_url<span class="sc">}</span><span class="ss">...&quot;</span>)</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>            f.write(requests.get(thumbnail_url).content)</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        preview_url <span class="op">=</span> track[<span class="st">&quot;track&quot;</span>][<span class="st">&quot;preview_url&quot;</span>]</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        preview_path <span class="op">=</span> Path(<span class="ss">f&quot;audio/</span><span class="sc">{</span>preview_url<span class="sc">.</span>split(<span class="st">&#39;/&#39;</span>)[<span class="op">-</span><span class="dv">1</span>]<span class="sc">.</span>split(<span class="st">&#39;?&#39;</span>)[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">.mp3&quot;</span>)</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> <span class="bu">open</span>(preview_path, <span class="st">&quot;wb&quot;</span>) <span class="im">as</span> f:</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f&quot;Fetching </span><span class="sc">{</span>preview_url<span class="sc">}</span><span class="ss">...&quot;</span>)</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>            f.write(requests.get(preview_url).content)</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        ...</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        new_track_data[track_id] <span class="op">=</span> {</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>            ...</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;image&quot;</span>: <span class="bu">str</span>(image_path),</span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;preview_mp3&quot;</span>: <span class="bu">str</span>(preview_path),</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        }</span></code></pre></div>
+<p>These need to be downloaded once for each track, so we’ll need to add
+to the <code>for track in tracks_to_use</code> loop:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>...</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> track <span class="kw">in</span> tracks_to_use:</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    ...</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        ...</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        thumbnail_url <span class="op">=</span> entity_data[<span class="st">&quot;thumbnailUrl&quot;</span>]</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        image_path <span class="op">=</span> Path(<span class="ss">f&quot;img/</span><span class="sc">{</span>thumbnail_url<span class="sc">.</span>split(<span class="st">&#39;/&#39;</span>)[<span class="op">-</span><span class="dv">1</span>]<span class="sc">}</span><span class="ss">.jpg&quot;</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;Fetching </span><span class="sc">{</span>thumbnail_url<span class="sc">}</span><span class="ss">...&quot;</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        image_path.write_bytes(requests.get(thumbnail_url).content)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        preview_url <span class="op">=</span> track[<span class="st">&quot;track&quot;</span>][<span class="st">&quot;preview_url&quot;</span>]</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Sometimes the track doesn&#39;t have a preview :( so we&#39;ll just have to</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        <span class="co"># skip it.</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> preview_url <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f&quot;Fetching </span><span class="sc">{</span>preview_url<span class="sc">}</span><span class="ss">...&quot;</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>            preview_path <span class="op">=</span> Path(</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f&quot;audio/</span><span class="sc">{</span>preview_url<span class="sc">.</span>split(<span class="st">&#39;/&#39;</span>)[<span class="op">-</span><span class="dv">1</span>]<span class="sc">.</span>split(<span class="st">&#39;?&#39;</span>)[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">.mp3&quot;</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>            preview_path.write_bytes(requests.get(preview_url).content)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        ...</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        new_track_data[track_id] <span class="op">=</span> {</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>            ...</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;image&quot;</span>: <span class="bu">str</span>(image_path),</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;preview_mp3&quot;</span>: <span class="bu">str</span>(preview_path) <span class="cf">if</span> preview_url <span class="cf">else</span> <span class="va">None</span>,</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>        }</span></code></pre></div>
 <p>Next, you might want to downscale the image we downloaded from
 Spotify’s servers (640x640px) to whatever resolution you’ll display it
 at (150x150px for me). This isn’t <em>that</em> big of a difference, but
 other services might send you images many thousands of pixels wide/high,
-so it’s good practise to do this step!</p>
+so it’s good practice to do this step!</p>
 <p>I’ll use <a
 href="https://imagemagick.org/script/download.php">ImageMagick</a> to
 process images, which unfortunately you’ll need to install separately to
@@ -261,47 +284,44 @@ Python/PIP using that link. Once it’s installed and <a
 href="https://helpdeskgeek.com/windows-10/add-windows-path-environment-variable/">available
 on your PATH</a>, though, you can transform images quickly from the
 command line, or from a Python subprocess:</p>
-<div class="sourceCode" id="cb5"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># top of file</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>...</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> track <span class="kw">in</span> tracks_to_use:</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    ...</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        ...</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        image_mono_path <span class="op">=</span> image_path.with_suffix(<span class="st">&quot;.mono.png&quot;</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;Processing </span><span class="sc">{</span>image_path<span class="sc">}</span><span class="ss"> with imagemagick...&quot;</span>)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        subprocess.run(</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>            [</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;magick&quot;</span>,</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;convert&quot;</span>,</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                image_path,</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;-resize&quot;</span>,</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;200x200&quot;</span>,</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>                image_mono_path,</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>            ],</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        ...</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        new_track_data[track_id] <span class="op">=</span> {</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>            ...</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;image_mono&quot;</span>: <span class="bu">str</span>(image_mono_path),</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>        }</span></code></pre></div>
-<p>If you’re feeling fancy, you could apply more effects:</p>
 <div class="sourceCode" id="cb6"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>        subprocess.run(</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>            [</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;magick&quot;</span>,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;convert&quot;</span>,</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                image_path,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;-colors&quot;</span>,</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;2&quot;</span>,</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;-resize&quot;</span>,</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;200x200&quot;</span>,</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;-ordered-dither&quot;</span>,</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;o8x8,2&quot;</span>,</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                image_mono_path,</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>            ],</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div>
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> track <span class="kw">in</span> tracks_to_use:</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    ...</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        ...</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        edited_image_path <span class="op">=</span> image_path.with_suffix(<span class="st">&quot;.mono.png&quot;</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;Processing </span><span class="sc">{</span>image_path<span class="sc">}</span><span class="ss"> with imagemagick...&quot;</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        subprocess.run(</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>            [</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;magick&quot;</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;convert&quot;</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                image_path,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;-resize&quot;</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;200x200&quot;</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                edited_image_path,</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>            ],</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>        ...</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        new_track_data[track_id] <span class="op">=</span> {</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>            ...</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;image_edited&quot;</span>: <span class="bu">str</span>(edited_image_path),</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>        }</span></code></pre></div>
+<p>If you’re feeling fancy, you could apply more effects:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>        subprocess.run(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>            [</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;magick&quot;</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;convert&quot;</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                image_path,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;-colors&quot;</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;2&quot;</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;-resize&quot;</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;200x200&quot;</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;-ordered-dither&quot;</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;o8x8,2&quot;</span>,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                edited_image_path,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>            ],</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        )</span></code></pre></div>
 <figure>
 <img src="img/dithered_album_art.png"
 alt="Example dithered album art - I just think they’re neat!" />
@@ -309,29 +329,29 @@ alt="Example dithered album art - I just think they’re neat!" />
 they’re neat!</figcaption>
 </figure>
 <p>The last step I would <em>stongly</em> recommend is using a program
-like `ffmpeg`` to turn down the volume of the MP3s because <em>my
-god</em> are they loud<a href="#fn1" class="footnote-ref" id="fnref1"
-role="doc-noteref"><sup>1</sup></a>. 25% volume (-6.0dB) should do the
-trick.</p>
-<div class="sourceCode" id="cb7"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>        ...</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        processed_preview_path <span class="op">=</span> preview_path.with_suffix(<span class="st">&quot;.proc.mp3&quot;</span>)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;Processing </span><span class="sc">{</span>preview_url<span class="sc">}</span><span class="ss">...&quot;</span>)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        subprocess.run(</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>            [<span class="st">&quot;ffmpeg&quot;</span>, <span class="st">&quot;-y&quot;</span>,<span class="st">&quot;-i&quot;</span>, preview_path, <span class="st">&quot;-af&quot;</span>, <span class="st">&quot;volume=0.25&quot;</span>, processed_preview_path]</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        ...</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        new_track_data[track_id] <span class="op">=</span> {</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>            ...</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;preview_mp3&quot;</span>: <span class="bu">str</span>(processed_preview_path),</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        }</span></code></pre></div>
+like <code>ffmpeg</code> to turn down the volume of the MP3s because
+<em>my god</em> are they loud<a href="#fn1" class="footnote-ref"
+id="fnref1" role="doc-noteref"><sup>1</sup></a>. 25% volume (-6.0dB)
+should do the trick.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>        ...</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        processed_preview_path <span class="op">=</span> preview_path.with_suffix(<span class="st">&quot;.proc.mp3&quot;</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f&quot;Processing </span><span class="sc">{</span>preview_url<span class="sc">}</span><span class="ss">...&quot;</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        subprocess.run(</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>            [<span class="st">&quot;ffmpeg&quot;</span>, <span class="st">&quot;-y&quot;</span>,<span class="st">&quot;-i&quot;</span>, preview_path, <span class="st">&quot;-af&quot;</span>, <span class="st">&quot;volume=0.25&quot;</span>, processed_preview_path]</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        ...</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        new_track_data[track_id] <span class="op">=</span> {</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>            ...</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;preview_mp3&quot;</span>: <span class="bu">str</span>(processed_preview_path) <span class="cf">if</span> preview_url <span class="cf">else</span> <span class="va">None</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        }</span></code></pre></div>
 <h1 id="step-4-create-the-widget-file-from-a-html-template-css">Step 4:
 Create the widget file from a HTML template (&amp; CSS!)</h1>
 <p>Now we have all the content (track data, album art, and links), we
 can put them together into a small HTML widget. We could construct some
-valid HTML in Pythn just with some string manipulation, but it gets a
+valid HTML in Python just with some string manipulation, but it gets a
 bit tricky when your data is complex. Instead, it’s a good opportunity
 to try out a ‘templating engine’ called <a
 href="https://jinja.palletsprojects.com">Jinja</a>: it takes in a
@@ -340,110 +360,119 @@ data’ object, and outputs a new string containing the expanded intput
 data. You could use it to make all sorts of documents, but we’ll use it
 to make HTML :) (You may need to run <code>pip install Jinja2</code>
 first.)</p>
-<p>Firstly, let’s write the HTML template code to
-<code>widget.html.tmpl</code>:</p>
-<div class="sourceCode" id="cb8"><pre
-class="sourceCode html"><code class="sourceCode html"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;html&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;head&gt;</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;title&gt;</span>Wow it&#39;s a Spotify Widget!<span class="kw">&lt;/title&gt;</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/head&gt;</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;body&gt;</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;carousel&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        {% for track in tracks %}</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;track&quot;</span><span class="kw">&gt;</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>            <span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">&quot;{{ track.image_mono }}&quot;</span> <span class="kw">/&gt;</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>            <span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;trackinfo&quot;</span><span class="kw">&gt;&lt;b&gt;</span>{{ track.title }}<span class="kw">&lt;/b&gt;&lt;br</span> <span class="kw">/&gt;</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>                by <span class="kw">&lt;i&gt;</span>{{ track.artist }}<span class="kw">&lt;/i&gt;&lt;br</span> <span class="kw">/&gt;</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                <span class="kw">&lt;audio</span> <span class="er">controls</span> <span class="er">src</span><span class="ot">=</span><span class="st">&quot;{{ track.preview_mp3 }}&quot;</span> <span class="er">preload</span><span class="ot">=</span><span class="st">&quot;none&quot;</span> <span class="er">controlslist</span><span class="ot">=</span><span class="st">&quot;play nodownload noplaybackrate&quot;</span> <span class="er">onplay</span><span class="ot">=</span><span class="st">&quot;pauseOthers(this);&quot;</span><span class="kw">&gt;&lt;/audio&gt;</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>                <span class="kw">&lt;br</span> <span class="kw">/&gt;</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>                {% for link in track.links %}<span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;{{ link.url }}&quot;</span> <span class="er">target</span><span class="ot">=</span><span class="st">&quot;_blank&quot;</span><span class="kw">&gt;</span>{{ link.icon }}<span class="kw">&lt;/a&gt;</span>{% endfor %}</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>            <span class="kw">&lt;/div&gt;</span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">&lt;/div&gt;</span></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>        {% endfor %}</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;/ul&gt;</span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;/div&gt;</span></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/body&gt;</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;script&gt;</span></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Adapted from https://stackoverflow.com/a/54839316 - thank you Sayyed Dawood!</span></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> pauseOthers <span class="op">=</span> ele <span class="kw">=&gt;</span> [<span class="op">...</span><span class="bu">document</span><span class="op">.</span><span class="fu">getElementsByTagName</span>(<span class="st">&#39;audio&#39;</span>)]<span class="op">.</span><span class="fu">filter</span>(audio<span class="kw">=&gt;</span> audio <span class="op">!=</span> ele)<span class="op">.</span><span class="fu">forEach</span>(audio <span class="kw">=&gt;</span>audio<span class="op">.</span><span class="fu">pause</span>())<span class="op">;</span></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/script&gt;</span></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/html&gt;</span></span></code></pre></div>
+<p>Firstly, let’s write the HTML template code to a file called
+<code>widget.tmpl.html</code>, next to your python script:</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;html&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;head&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;title&gt;</span>Wow it&#39;s a Spotify Widget!<span class="kw">&lt;/title&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/head&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;body&gt;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;carousel&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        {% for track in tracks %}</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;track&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>            <span class="kw">&lt;img</span> <span class="er">src</span><span class="ot">=</span><span class="st">&quot;{{ track.image_edited }}&quot;</span> <span class="kw">/&gt;</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>            <span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">&quot;trackinfo&quot;</span><span class="kw">&gt;&lt;b&gt;</span>{{ track.title }}<span class="kw">&lt;/b&gt;&lt;br</span> <span class="kw">/&gt;</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>                by <span class="kw">&lt;i&gt;</span>{{ track.artist }}<span class="kw">&lt;/i&gt;&lt;br</span> <span class="kw">/&gt;</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>                <span class="co">&lt;!-- Don&#39;t make an &lt;audio&gt; tag if the preview .mp3 file doesn&#39;t exist.--&gt;</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>                {% if track.preview_mp3 %}</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>                <span class="kw">&lt;audio</span> <span class="er">controls</span> <span class="er">src</span><span class="ot">=</span><span class="st">&quot;{{ track.preview_mp3 }}&quot;</span> <span class="er">preload</span><span class="ot">=</span><span class="st">&quot;none&quot;</span> <span class="er">controlslist</span><span class="ot">=</span><span class="st">&quot;play nodownload noplaybackrate&quot;</span> <span class="er">onplay</span><span class="ot">=</span><span class="st">&quot;pauseOthers(this);&quot;</span><span class="kw">&gt;&lt;/audio&gt;</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>                {% endif%}</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>                <span class="kw">&lt;br</span> <span class="kw">/&gt;</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>                {% for link in track.links %}<span class="kw">&lt;a</span> <span class="er">href</span><span class="ot">=</span><span class="st">&quot;{{ link.url }}&quot;</span> <span class="er">target</span><span class="ot">=</span><span class="st">&quot;_blank&quot;</span><span class="kw">&gt;</span>{{ icons[link.platform] }}<span class="kw">&lt;/a&gt;</span>{% endfor %}</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>            <span class="kw">&lt;/div&gt;</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>        <span class="kw">&lt;/div&gt;</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>        {% endfor %}</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;/ul&gt;</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;/div&gt;</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/body&gt;</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;script&gt;</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Adapted from https://stackoverflow.com/a/54839316 - thank you Sayyed Dawood!</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> pauseOthers <span class="op">=</span> ele <span class="kw">=&gt;</span> [<span class="op">...</span><span class="bu">document</span><span class="op">.</span><span class="fu">getElementsByTagName</span>(<span class="st">&#39;audio&#39;</span>)]<span class="op">.</span><span class="fu">filter</span>(audio<span class="kw">=&gt;</span> audio <span class="op">!=</span> ele)<span class="op">.</span><span class="fu">forEach</span>(audio <span class="kw">=&gt;</span>audio<span class="op">.</span><span class="fu">pause</span>())<span class="op">;</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/script&gt;</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/html&gt;</span></span></code></pre></div>
 <p>There’s two for loops in this template: one for each track object
 we’ve just made, and one for each link. Any HTML code inside those loops
 will be written once for each entry in the list.</p>
-<p>We’ll also need to add a bit of styling, in the same file:</p>
-<div class="sourceCode" id="cb9"><pre
-class="sourceCode css"><code class="sourceCode css"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>(paste this after the &lt;/body<span class="op">&gt;</span> tag)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  &lt;style<span class="op">&gt;</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="in">:root</span>{</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">--col-background</span>: <span class="cn">#fafefa</span><span class="op">;</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>body {</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">font-family</span>: Georgia<span class="op">,</span> <span class="st">&#39;Times New Roman&#39;</span><span class="op">,</span> Times<span class="op">,</span> <span class="dv">serif</span><span class="op">;</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">background-color</span>: <span class="fu">var(</span><span class="va">--col-background</span><span class="fu">)</span><span class="op">;</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">color</span>: <span class="cn">#666666</span><span class="op">;</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="fu">.carousel</span> {</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">height</span>: <span class="dv">160</span><span class="dt">px</span><span class="op">;</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">/*max-width: 1000px;*/</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">overflow</span>: <span class="dv">hidden</span><span class="op">;</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">margin</span>:<span class="bu">auto</span><span class="op">;</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">white-space</span>: <span class="dv">nowrap</span><span class="op">;</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">overflow-x</span>: <span class="dv">scroll</span><span class="op">;</span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* Adapted from https://stackoverflow.com/a/44794221 - thank you Hash! */</span></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="kw">background</span>:</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="fu">linear-gradient(</span>to <span class="dv">right</span><span class="op">,</span> <span class="fu">var(</span><span class="va">--col-background</span><span class="fu">)</span> <span class="dv">30</span><span class="dt">%</span><span class="op">,</span> <span class="fu">rgba(</span><span class="dv">255</span><span class="op">,</span> <span class="dv">255</span><span class="op">,</span> <span class="dv">255</span><span class="op">,</span> <span class="dv">0</span><span class="fu">))</span><span class="op">,</span> <span class="fu">linear-gradient(</span>to <span class="dv">right</span><span class="op">,</span> <span class="fu">rgba(</span><span class="dv">255</span><span class="op">,</span> <span class="dv">255</span><span class="op">,</span> <span class="dv">255</span><span class="op">,</span> <span class="dv">0</span><span class="fu">)</span><span class="op">,</span> <span class="fu">var(</span><span class="va">--col-background</span><span class="fu">)</span> <span class="dv">70</span><span class="dt">%</span><span class="fu">)</span> <span class="dv">100</span><span class="dt">%</span> <span class="dv">0</span><span class="op">,</span></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="fu">radial-gradient(</span>farthest-side at <span class="dv">0</span> <span class="dv">50</span><span class="dt">%</span><span class="op">,</span> <span class="fu">rgba(</span><span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0.3</span><span class="fu">)</span><span class="op">,</span> <span class="fu">rgba(</span><span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="fu">))</span><span class="op">,</span> <span class="fu">radial-gradient(</span>farthest-side at <span class="dv">100</span><span class="dt">%</span> <span class="dv">50</span><span class="dt">%</span><span class="op">,</span> <span class="fu">rgba(</span><span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0.3</span><span class="fu">)</span><span class="op">,</span> <span class="fu">rgba(</span><span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="fu">))</span> <span class="dv">100</span><span class="dt">%</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="kw">background-repeat</span>: <span class="dv">no-repeat</span><span class="op">;</span></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="kw">background-size</span>: <span class="dv">40</span><span class="dt">px</span> <span class="dv">100</span><span class="dt">%</span><span class="op">,</span> <span class="dv">40</span><span class="dt">px</span> <span class="dv">100</span><span class="dt">%</span><span class="op">,</span> <span class="dv">15</span><span class="dt">px</span> <span class="dv">100</span><span class="dt">%</span><span class="op">,</span> <span class="dv">15</span><span class="dt">px</span> <span class="dv">100</span><span class="dt">%</span><span class="op">;</span></span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="kw">background-attachment</span>: local<span class="op">,</span> local<span class="op">,</span> <span class="dv">scroll</span><span class="op">,</span> <span class="dv">scroll</span><span class="op">;</span></span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>b {</span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">font-size</span>: <span class="dv">2</span><span class="dt">em</span><span class="op">;</span></span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">font-style</span>: <span class="dv">italic</span><span class="op">;</span></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">font-weight</span>: <span class="dv">100</span><span class="op">;</span></span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">color</span>: <span class="cn">#999</span><span class="op">;</span></span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="fu">.track</span>{</span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>    <span class="kw">display</span>: <span class="dv">inline-flex</span><span class="op">;</span></span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>    <span class="kw">flex-direction</span>: row<span class="op">;</span></span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>    <span class="kw">align-items</span>: <span class="dv">center</span><span class="op">;</span></span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>    <span class="kw">margin-bottom</span>: <span class="dv">10</span><span class="dt">px</span><span class="op">;</span></span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>    <span class="kw">margin-right</span>:<span class="dv">10</span><span class="dt">px</span><span class="op">;</span></span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>    <span class="kw">min-width</span>:<span class="dv">400</span><span class="dt">px</span><span class="op">;</span></span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a><span class="fu">.track</span> img{</span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>    <span class="kw">height</span>:<span class="dv">150</span><span class="dt">px</span><span class="op">;</span></span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a><span class="fu">.track</span> img<span class="op">,</span> <span class="fu">.trackinfo</span><span class="op">,</span> <span class="fu">.trackinfo</span> a{</span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>    <span class="kw">animation</span>: fade_in <span class="dv">1</span><span class="dt">s</span> <span class="fu">cubic-bezier(</span><span class="dv">0.16</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">0.3</span><span class="op">,</span> <span class="dv">1</span><span class="fu">)</span><span class="op">;</span></span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>    <span class="kw">animation-fill-mode</span>: <span class="dv">both</span><span class="op">;</span></span>
-<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a><span class="fu">.trackinfo</span>{</span>
-<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>    <span class="kw">margin-left</span>: <span class="dv">20</span><span class="dt">px</span><span class="op">;</span></span>
-<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>    <span class="kw">white-space</span>: <span class="dv">normal</span><span class="op">;</span></span>
-<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a><span class="fu">.trackinfo</span> a{</span>
-<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>    <span class="kw">margin-right</span>: <span class="dv">5</span><span class="dt">px</span><span class="op">;</span></span>
-<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>  &lt;/style<span class="op">&gt;</span></span></code></pre></div>
+<p>We’ll also need to add a bit of CSS, using a
+<code>&lt;style&gt;</code> tag in the same file (inside the
+<code>&lt;html&gt;</code> tag):</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode css"><code class="sourceCode css"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>&lt;style<span class="op">&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="in">:root</span>{</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">--col-background</span>: <span class="cn">#fafefa</span><span class="op">;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>body {</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">font-family</span>: Georgia<span class="op">,</span> <span class="st">&#39;Times New Roman&#39;</span><span class="op">,</span> Times<span class="op">,</span> <span class="dv">serif</span><span class="op">;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">background-color</span>: <span class="fu">var(</span><span class="va">--col-background</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">color</span>: <span class="cn">#666666</span><span class="op">;</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="fu">.carousel</span> {</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">height</span>: <span class="dv">160</span><span class="dt">px</span><span class="op">;</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">/*max-width: 1000px;*/</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">overflow</span>: <span class="dv">hidden</span><span class="op">;</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">margin</span>:<span class="bu">auto</span><span class="op">;</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">white-space</span>: <span class="dv">nowrap</span><span class="op">;</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">overflow-x</span>: <span class="dv">scroll</span><span class="op">;</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">/* Adapted from https://stackoverflow.com/a/44794221 - thank you Hash! */</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="kw">background</span>:</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="fu">linear-gradient(</span>to <span class="dv">right</span><span class="op">,</span> <span class="fu">var(</span><span class="va">--col-background</span><span class="fu">)</span> <span class="dv">30</span><span class="dt">%</span><span class="op">,</span> <span class="fu">rgba(</span><span class="dv">255</span><span class="op">,</span> <span class="dv">255</span><span class="op">,</span> <span class="dv">255</span><span class="op">,</span> <span class="dv">0</span><span class="fu">))</span><span class="op">,</span> <span class="fu">linear-gradient(</span>to <span class="dv">right</span><span class="op">,</span> <span class="fu">rgba(</span><span class="dv">255</span><span class="op">,</span> <span class="dv">255</span><span class="op">,</span> <span class="dv">255</span><span class="op">,</span> <span class="dv">0</span><span class="fu">)</span><span class="op">,</span> <span class="fu">var(</span><span class="va">--col-background</span><span class="fu">)</span> <span class="dv">70</span><span class="dt">%</span><span class="fu">)</span> <span class="dv">100</span><span class="dt">%</span> <span class="dv">0</span><span class="op">,</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="fu">radial-gradient(</span>farthest-side at <span class="dv">0</span> <span class="dv">50</span><span class="dt">%</span><span class="op">,</span> <span class="fu">rgba(</span><span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0.3</span><span class="fu">)</span><span class="op">,</span> <span class="fu">rgba(</span><span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="fu">))</span><span class="op">,</span> <span class="fu">radial-gradient(</span>farthest-side at <span class="dv">100</span><span class="dt">%</span> <span class="dv">50</span><span class="dt">%</span><span class="op">,</span> <span class="fu">rgba(</span><span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0.3</span><span class="fu">)</span><span class="op">,</span> <span class="fu">rgba(</span><span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="fu">))</span> <span class="dv">100</span><span class="dt">%</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="kw">background-repeat</span>: <span class="dv">no-repeat</span><span class="op">;</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="kw">background-size</span>: <span class="dv">40</span><span class="dt">px</span> <span class="dv">100</span><span class="dt">%</span><span class="op">,</span> <span class="dv">40</span><span class="dt">px</span> <span class="dv">100</span><span class="dt">%</span><span class="op">,</span> <span class="dv">15</span><span class="dt">px</span> <span class="dv">100</span><span class="dt">%</span><span class="op">,</span> <span class="dv">15</span><span class="dt">px</span> <span class="dv">100</span><span class="dt">%</span><span class="op">;</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="kw">background-attachment</span>: local<span class="op">,</span> local<span class="op">,</span> <span class="dv">scroll</span><span class="op">,</span> <span class="dv">scroll</span><span class="op">;</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>b {</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">font-size</span>: <span class="dv">2</span><span class="dt">em</span><span class="op">;</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">font-style</span>: <span class="dv">italic</span><span class="op">;</span></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">font-weight</span>: <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>    <span class="kw">color</span>: <span class="cn">#999</span><span class="op">;</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="fu">.track</span>{</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">display</span>: <span class="dv">inline-flex</span><span class="op">;</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>    <span class="kw">flex-direction</span>: row<span class="op">;</span></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>    <span class="kw">align-items</span>: <span class="dv">center</span><span class="op">;</span></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>    <span class="kw">margin-bottom</span>: <span class="dv">10</span><span class="dt">px</span><span class="op">;</span></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>    <span class="kw">margin-right</span>:<span class="dv">10</span><span class="dt">px</span><span class="op">;</span></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>    <span class="kw">min-width</span>:<span class="dv">400</span><span class="dt">px</span><span class="op">;</span></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a><span class="fu">.track</span> img{</span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>    <span class="kw">height</span>:<span class="dv">150</span><span class="dt">px</span><span class="op">;</span></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a><span class="fu">.track</span> img<span class="op">,</span> <span class="fu">.trackinfo</span><span class="op">,</span> <span class="fu">.trackinfo</span> a{</span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>    <span class="kw">animation</span>: fade_in <span class="dv">1</span><span class="dt">s</span> <span class="fu">cubic-bezier(</span><span class="dv">0.16</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">0.3</span><span class="op">,</span> <span class="dv">1</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>    <span class="kw">animation-fill-mode</span>: <span class="dv">both</span><span class="op">;</span></span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a><span class="fu">.trackinfo</span>{</span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>    <span class="kw">margin-left</span>: <span class="dv">20</span><span class="dt">px</span><span class="op">;</span></span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>    <span class="kw">white-space</span>: <span class="dv">normal</span><span class="op">;</span></span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a><span class="fu">.trackinfo</span> a{</span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>    <span class="kw">margin-right</span>: <span class="dv">5</span><span class="dt">px</span><span class="op">;</span></span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>&lt;/style<span class="op">&gt;</span></span></code></pre></div>
 <p>Now let’s edit the Python script to generate a HTML file based on the
 template:</p>
-<div class="sourceCode" id="cb10"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># top of file</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> jinja2</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>...</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#bottom of file</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Generating HTML...&quot;</span>)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>environment <span class="op">=</span> jinja2.Environment(loader<span class="op">=</span>jinja2.FileSystemLoader(<span class="st">&quot;.&quot;</span>))</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>results_template <span class="op">=</span> environment.get_template(<span class="st">&quot;widget.html.tmpl&quot;</span>)</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">&quot;index.html&quot;</span>, <span class="st">&quot;w&quot;</span>) <span class="im">as</span> results:</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    results.write(results_template.render({<span class="st">&quot;tracks&quot;</span>: <span class="bu">list</span>(new_track_data.values())}))</span></code></pre></div>
-<p>And let’s see how it looks:</p>
-<p>@@@ html embed</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> jinja2</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Generating HTML...&quot;</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>environment <span class="op">=</span> jinja2.Environment(loader<span class="op">=</span>jinja2.FileSystemLoader(<span class="st">&quot;.&quot;</span>))</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>results_template <span class="op">=</span> environment.get_template(<span class="st">&quot;widget.tmpl.html&quot;</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>Path(<span class="st">&quot;index.html&quot;</span>).write_text(</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    results_template.render(</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;tracks&quot;</span>: <span class="bu">list</span>(new_track_data.values()),</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;icons&quot;</span>: PLATFORM_TO_ICON,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>If you open the new ‘index.html’ file in your browser, you should
+have something like this:</p>
+<iframe src="https://live.samboyer.uk/fav-music" style="width: 100%;height: 200px;border: none;">
+</iframe>
 <p>Nice!</p>
 <p><strong>Note on JavaScript:</strong> this file does contain a tiny
 bit of JS to improve the listening experience, but would work perfectly
@@ -455,41 +484,41 @@ connections.</p>
 server via FTP</h1>
 <p>Like all things worth doing, there’s a Python built-in library for
 that ;)</p>
-<div class="sourceCode" id="cb11"><pre
-class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># top of file</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> ftplib</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>FTP_DOMAIN <span class="op">=</span> <span class="st">&quot;your.ftp_server.com&quot;</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>FTP_USERNAME <span class="op">=</span> <span class="st">&quot;your_username&quot;</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>FTP_PASSWORD <span class="op">=</span> <span class="st">&quot;your_password&quot;</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>...</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># bottom of file</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>files_to_upload <span class="op">=</span> [</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;index.html&quot;</span>,</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>(track[<span class="st">&quot;image_mono&quot;</span>] <span class="cf">for</span> track <span class="kw">in</span> new_track_data.values()),</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>(track[<span class="st">&quot;preview_mp3&quot;</span>] <span class="cf">for</span> track <span class="kw">in</span> new_track_data.values()),</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>Path(<span class="st">&quot;assets&quot;</span>).glob(<span class="st">&quot;*&quot;</span>),</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _try_mkdir(ftp, <span class="bu">dir</span>):</span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>        ftp.mkd(<span class="bu">dir</span>)</span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> ftplib.error_perm <span class="im">as</span> e:</span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Sending to FTP server...&quot;</span>)</span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> ftplib.FTP(FTP_ADDRESS, FTP_USER, FTP_PASS) <span class="im">as</span> ftp:</span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    ftp.cwd(FTP_SUBDIR)</span>
-<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>    _try_mkdir(ftp, <span class="st">&quot;img&quot;</span>)</span>
-<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>    _try_mkdir(ftp, <span class="st">&quot;audio&quot;</span>)</span>
-<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    _try_mkdir(ftp, <span class="st">&quot;assets&quot;</span>)</span>
-<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> files_to_upload:</span>
-<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> <span class="bu">open</span>(<span class="bu">file</span>, <span class="st">&quot;rb&quot;</span>) <span class="im">as</span> f:</span>
-<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f&quot;Uploading </span><span class="sc">{</span><span class="bu">file</span><span class="sc">}</span><span class="ss">...&quot;</span>)</span>
-<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>            ftp.storbinary(<span class="ss">f&quot;STOR </span><span class="sc">{</span><span class="bu">file</span><span class="sc">}</span><span class="ss">&quot;</span>, f)</span>
-<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>    ftp.quit()</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># top of file</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> ftplib</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>FTP_DOMAIN <span class="op">=</span> <span class="st">&quot;your.ftp_server.com&quot;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>FTP_USERNAME <span class="op">=</span> <span class="st">&quot;your_username&quot;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>FTP_PASSWORD <span class="op">=</span> <span class="st">&quot;your_password&quot;</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>...</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co"># bottom of file</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>files_to_upload <span class="op">=</span> [</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;index.html&quot;</span>,</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>(track[<span class="st">&quot;image_edited&quot;</span>] <span class="cf">for</span> track <span class="kw">in</span> new_track_data.values()),</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>(track[<span class="st">&quot;preview_mp3&quot;</span>] <span class="cf">for</span> track <span class="kw">in</span> new_track_data.values()),</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>Path(<span class="st">&quot;assets&quot;</span>).glob(<span class="st">&quot;*&quot;</span>),</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _try_mkdir(ftp, <span class="bu">dir</span>):</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>        ftp.mkd(<span class="bu">dir</span>)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> ftplib.error_perm <span class="im">as</span> e:</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Sending to FTP server...&quot;</span>)</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> ftplib.FTP(FTP_ADDRESS, FTP_USER, FTP_PASS) <span class="im">as</span> ftp:</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    ftp.cwd(FTP_SUBDIR)</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>    _try_mkdir(ftp, <span class="st">&quot;img&quot;</span>)</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>    _try_mkdir(ftp, <span class="st">&quot;audio&quot;</span>)</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>    _try_mkdir(ftp, <span class="st">&quot;assets&quot;</span>)</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> files_to_upload:</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> <span class="bu">open</span>(<span class="bu">file</span>, <span class="st">&quot;rb&quot;</span>) <span class="im">as</span> f:</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f&quot;Uploading </span><span class="sc">{</span><span class="bu">file</span><span class="sc">}</span><span class="ss">...&quot;</span>)</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>            ftp.storbinary(<span class="ss">f&quot;STOR </span><span class="sc">{</span><span class="bu">file</span><span class="sc">}</span><span class="ss">&quot;</span>, f)</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>    ftp.quit()</span></code></pre></div>
 <p>Now run your script, and you should see</p>
 <p><em>Note for GitHub Pages users:</em> If you only have access to a
 GitHub Pages website, then you don’t have FTP access to a webserver… but
@@ -517,10 +546,11 @@ href="https://stackoverflow.com/a/44727480">normal Task Scheduler
 task</a>.</p>
 <h1 id="thats-it">That’s it!</h1>
 <p>I hope your new Spotify widget brings you &amp; your visitors much
-joy! 😊 The full script I use will be available on GitHub Gist soon. It
-contains a bit of extra styling and robustness.</p>
-<!-- @@@ upload to Gist -->
-<p><em><strong>A little caveat.</strong> Shaing songs from your Spotify
+joy! 😊 In case you find it useful, the full script I use is <a
+href="https://github.com/samboyer/spotify-static-widget">available on my
+GitHub</a>. It contains a bit of extra styling (animations!) &amp;
+config.</p>
+<p><em><strong>A little caveat.</strong> Sharing songs from your Spotify
 isn’t really reminiscent of the old ‘small web’; Spotify tends to favour
 established label artists over indie artists or stuff your friends make.
 Platforms like Bandcamp or Soundcloud are more likely to contain the
@@ -533,8 +563,8 @@ role="doc-endnotes">
 <hr />
 <ol>
 <li id="fn1"><p>For the audio nerds: the previews live around -6 - -7
-LUFS, whereas the Spotify app normalises all music to -14 LUFS, so their
-previews are inexplicably 4x louder. Many jumpscares occured as a
+LUFS, whereas the Spotify app normalizes all music to -14 LUFS, so their
+previews are inexplicably 4x louder. Many jumpscares occurred as a
 result.<a href="#fnref1" class="footnote-back"
 role="doc-backlink">↩︎</a></p></li>
 </ol>
