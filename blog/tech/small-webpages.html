@@ -1,0 +1,422 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>How to make small(er) web pages - Sam Boyer</title>
+<link rel="stylesheet" href="/blog/style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="feed.rss"/>
+</head>
+<body>
+<div class="page_header">
+<div class="header_top_left">
+    <a href="/" style="display: inherit;"><img src="/img/logo_dark.svg" title="Back to main site" height="24px"></a>
+  <div class="vbar"></div>
+    <a href="/blog" title="Back to blog index" class="blog_link">blog</a>
+  </div>
+</div>
+<div class="content">
+<h1 id="how-to-make-smaller-web-pages">How to make small(er) web
+pages</h1>
+<h2 id="it-wont-save-the-world-but-its-kinda-cool">It won’t save the
+world, but it’s kinda cool</h2>
+<p><em>September 2023</em></p>
+<p><em>Sam Boyer</em></p>
+<p>For the past 10 years, the web has been in a bit of a state. Websites
+are <a href="https://httparchive.org/reports/state-of-the-web">~6x
+larger than they used to be in 2012</a>, resulting in a pretty terrible
+experience for mobile users with slow connection speeds (e.g. while
+travelling through the countryside), or with weaker CPUs. Reducing the
+size of your website can alleviate both problems: your webpage will load
+faster on slower connections, and will consume fewer resources.</p>
+<p>I started paying attention to <a href="https://samboyer.uk/">my main
+webpage’s</a> weight a few years ago - here’s how it’s changed since
+then:</p>
+<figure>
+<img src="website_size_chart.svg" alt="Website size over time" />
+<figcaption aria-hidden="true">Website size over time</figcaption>
+</figure>
+<p><em>(I don’t want this to be a repeat of <a
+href="https://developer.chrome.com/docs/lighthouse/performance/#opportunities">Chrome’s
+Lighthouse recommendations</a> - an excellent set of tips for optimising
+page load performance - so I’ll instead focus on more likely factors, or
+things that Lighthouse doesn’t cover.)</em></p>
+<h2 id="shrinking-my-site-saving-the-world">Shrinking my site = saving
+the world?</h2>
+<p>There’s an argument that reducing page sizes is important for
+reducing the climate impact of your website, and the Web in general.
+While partially true, page size and climate impact aren’t directly
+proportional for the following reasons:</p>
+<ul>
+<li>The dominant factor in the Web’s climate impact is the end-user
+device’s energy consumption<a href="#fn1" class="footnote-ref"
+id="fnref1" role="doc-noteref"><sup>1</sup></a>, which in turn is mostly
+dependent on how much time they spend using your site - not the kind of
+thing you can code your way out of.
+<ul>
+<li>There’s other relvant factors here: DOM and CSS complexity affects
+rendering times, and heavy Javascript usage will eat up the CPU - the
+size of their respective files is a good proxy for their
+complexity.</li>
+</ul></li>
+<li>Internet routers consume <a
+href="https://www.academia.edu/download/49015594/978-3-642-01399-7_62.pdf">about
+as much energy when idle than when at max throughput</a>, so halving
+your page size probably won’t affect how much energy they use.
+<ul>
+<li>An industry-wide movement to reduce file sizes <em>could</em> result
+in less Internet capacity/equipment needed, considering how HD video
+streaming and giant software updates are the dominant factors in
+internet usage<a href="#fn2" class="footnote-ref" id="fnref2"
+role="doc-noteref"><sup>2</sup></a>, shaving off a few kilobytes from a
+webpage is unlikely to affect the Internet’s growth trends.</li>
+</ul></li>
+</ul>
+<p>So climate impact aside, the main motivators are page load
+performance and code-golf-style fun. Maybe you can even get yourself
+into the <a href="https://github.com/susam/10kbclub">10KB Club</a>.</p>
+<h2 id="invisible-changes">Invisible changes</h2>
+<!-- ### Compress in-transit.
+
+Unless you've set up your own HTTP server from scratch it's most likely enabled already, but make sure that your server gives out files with compression applied - Look for a `Content-Encoding` header in your HTTP Response Headers (Inspect Element->Network).
+
+The cost of gzipping/gunzipping these files is almost certainly less than
+the cost of sending uncompressed data over the Internet [citation needed], so this is defintiely a worthwhile option. Note that images, videos or anything already compressed won't usually be given a `Content-Encoding`, because compressing a file twice doesn't reduce the size any further - it usually increases it! -->
+<h3 id="choose-better-file-formats.">Choose better file formats.</h3>
+<p>Developed by Google in 2010 and officially released in 2018, the WebP
+format is generally considered the best file format for sending raster
+images over the Internet right now. It supports both lossy and lossless
+compression, <a
+href="https://developers.google.com/speed/webp/gallery2">alpha channels
+(transparency)</a>, and animated images, all with <a
+href="https://insanelab.com/blog/web-development/webp-web-design-vs-jpeg-gif-png/">better
+compression ratios</a> than the existing JPEG, PNG, and GIF formats.</p>
+<table>
+<colgroup>
+<col style="width: 49%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><img src="img/voxels-feature.jpg"
+alt="JPEG, quality=80: 21KB" /></th>
+<th style="text-align: center;"><img src="img/voxels-feature.webp"
+alt="WebP, quality=80: 9.0KB" /></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">JPEG, quality=80: 21KB</td>
+<td style="text-align: center;">WebP, quality=80: 9.0KB</td>
+</tr>
+</tbody>
+</table>
+<p><strong>How to switch to WebP?</strong> Not all image editors come
+with WebP support built-in<a href="#fn3" class="footnote-ref"
+id="fnref3" role="doc-noteref"><sup>3</sup></a>, and any upstream photos
+are probably JPEG or PNG, so you may want to automate the conversion to
+WebP images. I used <a
+href="https://github.com/samboyer/samboyer.github.io/blob/860d870a1b6aaa0884b4c2f0274b8d3193ca7575/webp.js">a
+short Node.js script</a> in the past, but nowadays I’d probably use a
+wrapper around <a href="https://imagemagick.org/">ImageMagick</a>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess, pathlib</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> Path(<span class="st">&#39;.&#39;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> img <span class="kw">in</span> path.rglob(<span class="st">&#39;*.jpg&#39;</span>):</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(img)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    subprocess.run(<span class="ss">f&#39;magick convert </span><span class="sc">{</span>img<span class="sc">}</span><span class="ss"> -quality 50 </span><span class="sc">{</span>img<span class="sc">.</span>with_suffix<span class="sc">.</span>png<span class="sc">}</span><span class="ss">&#39;</span>)</span></code></pre></div>
+<p><strong>Animated images:</strong> GIFs, belive it or not, were not
+designed to share animated pictures. This means that while each frame is
+somewhat compressed (using LZW - not great), there’s no comporession
+<em>between</em> frames, so a long animation can become <em>very</em>
+large.</p>
+<p>Instead of GIF images, you should consider animated WebP images, or
+(for better backwards-compatibility) MP4 videos in a
+<code>&lt;video&gt;</code> tag. <a
+href="https://wordpress.com/go/tutorials/how-to-embed-video-wordpress/">WordPress
+users can also use self-hosted videos.</a></p>
+<h4 id="consider-svg-images">Consider SVG images</h4>
+<p>SVG files are used for ‘vector’ graphics, meaning instead of an array
+of pixel data, an SVG file contains instructions to draw the lines and
+shapes that comprise the image, which can then be rendered at <em>any
+resolution</em>. This makes them extremely efficient for sharing large
+images:</p>
+<table>
+<colgroup>
+<col style="width: 49%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th
+style="text-align: center;"><img src="img/svg-comparison.jpg" alt="JPEG, quality=80: 131KB" width="400px"></th>
+<th
+style="text-align: center;"><img src="img/svg-comparison.svg" alt="SVG: 17KB" width="400px"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">JPEG, 1200x900, quality=80: 131KB</td>
+<td style="text-align: center;">SVG, ∞x∞: 17KB</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">(124KB zipped )</td>
+<td style="text-align: center;">(7KB zipped)</td>
+</tr>
+</tbody>
+</table>
+<p>Deciding between raster (JPG, WebP) and vector (SVG) images will
+depend on the complexity and display size of your images. For example,
+solid line art that takes up the full width of your page is much better
+as an SVG, but a detailed photograph should probably stay as a WebP
+image.</p>
+<h3 id="serve-your-images-at-the-right-resolution.">Serve your images at
+the right resolution.</h3>
+<p><em>(This doesn’t apply to SVGs)</em></p>
+<p>Since you usually know in advance the maximum size your image will be
+viewed at, you can reduce the resolution of your image to this size. A
+CMS like Wordpress might give you options for this in the page editor;
+otherwise you may need to do it locally. All good image editors have a
+resize option, including MS Paint and OSX’s Preview 🥳</p>
+<p>If your page is responsive, you might want to change which image is
+sourced depending on the screen resolution. This can be achieved via the
+<code>&lt;img&gt;</code> <code>srcset</code> and <code>sizes</code>
+attributes (<a
+href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images#how_do_you_create_responsive_images">more
+info here</a>), or <a
+href="https://css-tricks.com/responsive-images-css/">in CSS via <span
+class="citation" data-cites="media">@media</span> queries</a>.</p>
+<h3 id="dont-load-cssjs-that-you-dont-need.">Don’t load CSS/JS that you
+don’t need.</h3>
+<p><strong>Simple:</strong> If you don’t need a certain CSS/JS
+framework, don’t use it. This happened to me with jQuery - lots of
+StackOverflow answers use jQuery in their example code, leading us to
+import a whole package to perform one task we probably could have done
+with pure Javascript. If you can avoid dependencies on such libraries,
+you can save 100s of kilobytes and avoid lengthening your critical
+execution path.</p>
+<p><strong>Advanced:</strong> Only include the parts of a
+framework/library that you need.</p>
+<p>CSS frameworks are an good option for styling a new webapp - you just
+add one line to import the framework - but they usually contain far more
+rules than you need to use. Tools such as <a
+href="https://purgecss.com/">PurgeCSS</a> can identify unused rules and
+remove them.</p>
+<p>I didn’t gain much from running PurgeCSS on my index page, since I
+already keep my custom CSS file quite small, but on a WIP webapp that
+imports Bootstrap I was able to reduce it from 233KB to 8.6KB
+(<em>-96%</em>), without any loss of functionality 🎉 (Note that it
+won’t check for any rules activated via Javascript, so remember to set
+the <code>safelist</code> correcttly!)</p>
+<p>There doesn’t seem to be an equivalent tool for removing unused
+Javascript - possibly because it’s impossible to obtain coverage via
+static analysis - but thankfully a few CDNs are beginning to serve their
+libraries in smaller pieces, such as <a
+href="https://docs.angularjs.org/misc/downloading#!">AngularJS</a>.</p>
+<p>Another thing to consider is that you’ll need to host these
+customized files yourself, instead of linking directly to a CDN. This is
+probably a good thing for performance (skips a DNS lookup and TCP
+connection to the CDN), but you’ll need to remember to update your copy
+of the library/framework when needed.</p>
+<h3 id="dont-load-fontsicon-sets-you-arent-using.">Don’t load fonts/icon
+sets you aren’t using.</h3>
+<p>When you’re selecting fonts from a site like Google Fonts, it’s easy
+to select many weights of the same font in case you use them later; but
+(unless you’re using a fancy new <a
+href="https://fonts.google.com/knowledge/introducing_type/introducing_variable_fonts">Variable
+Fonts</a>), every weight selected is its own font file at roughly equal
+cost as each other weight (e.g. ~170kb per weight for <a
+href="https://fonts.google.com/specimen/Roboto">Roboto</a>).</p>
+<p>I don’t have an easy technique for detecting unused fonts sadly, but
+you could try checking which fonts are downloaded via DevTools -&gt;
+Network -&gt; Filter on ‘Fonts’, then check that each weight is used by
+<em>some</em> CSS rule, and finally that those CSS rules apply to
+<em>some</em> visible elements.</p>
+<p><strong>Trimming icon sets:</strong> Icon sets, like any other web
+fonts, can get quite large. Font Awesome v4 (an icon set I used to use
+on my site) weighs ~197KB (TTF+CSS file), but the handful of icons that
+I actually used only weighed 6KB. Tools such as the <a
+href="https://icomoon.io/app/">Icomoon app</a> allow you to trim an icon
+set font down to the subset you need; Font Awesome also appears to <a
+href="https://fontawesome.com/docs/web/setup/use-kit">offer something
+similar now</a>.</p>
+<h2 id="visible-but-cool-changes">Visible (but cool) changes</h2>
+<p>The following suggestions are for people like (like me) you have no
+designer to answer to.</p>
+<h3 id="use-fonts-that-are-already-available-to-you">Use fonts that are
+already available to you</h3>
+<p>After you’ve removed all the unused fonts/weight variants, you should
+consider going the extra mile and removing web fonts altogether. Modern
+OSes come packaged with beautiful fonts installed already, and a browser
+can use any of them :) A particularly good <code>font-family</code>
+option is <code>system-ui</code>: it resolves to San Francisco on
+iOS/OSX, Roboto on Android, and Segoe UI on Windows - all lovely
+sans-serif fonts with <a
+href="https://github.com/system-fonts/modern-font-stacks#system-ui">many
+weight options to choose from</a>. If you care about those <a
+href="https://caniuse.com/?search=system-ui">5.5% of browsers which
+don’t support <code>system-ui</code></a>, however, you might want to
+expand that macro into a long list of fallback fonts, like in GitHub’s
+stylesheet:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode css"><code class="sourceCode css"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>font-family<span class="in">: -apple-system</span><span class="op">,</span> BlinkMacSystemFont<span class="op">,</span> &quot;Segoe UI&quot;<span class="op">,</span> &quot;Noto Sans&quot;<span class="op">,</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  Helvetica<span class="op">,</span> Arial<span class="op">,</span> sans-serif<span class="op">,</span> &quot;Apple Color Emoji&quot;<span class="op">,</span> &quot;Segoe UI Emoji&quot;;</span></code></pre></div>
+<p>(<a
+href="https://www.w3schools.com/csSref/css_websafe_fonts.php">‘Web safe’
+fonts</a> are guaranteed to be installed on any system, but you don’t
+need to limit yourself to them - just make sure you add one as a
+fallback!)</p>
+<h3 id="extreme-image-compression">🔥🔥🔥 Extreme image compression
+🔥🔥🔥</h3>
+<p>If you’re willing to abandon flawless image quality and venture into
+some more retro image compression techniques, you can get
+<em>extremely</em> small image files.</p>
+<p>Firstly: resolution. We already talked about reducing the resolution
+to match, but there’s no need to stop there - you can reduce the
+resolution as much as you like and scale it back upwards - just remember
+to set <code>image-rendering: pixelated</code> in CSS to avoid blurry
+edges.</p>
+<table>
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 63%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><img src="img/voxels-feature.webp"
+alt="WebP, quality=80: 9.0KB" /></th>
+<th
+style="text-align: center;"><img src="img/voxels-feature-small.webp" style="width:400px; image-rendering:pixelated"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">WebP, 400x300: 9.0KB</td>
+<td style="text-align: center;">WebP, 80x60, quality=90: 6.2KB</td>
+</tr>
+</tbody>
+</table>
+<p>Another easy option: JPEG/Webp quality. If you’re really desperate to
+shave off a few extra KB, just turn the export quality <em>way</em>
+down. If anyone asks, tell them you’re aiming for <a
+href="https://www.creativebloq.com/animation/flash-animations-you-must-see-7092720">that
+00s Flash animation aesthetic</a>.</p>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 35%" />
+<col style="width: 35%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><img src="img/voxels-feature.webp"
+alt="WebP, quality=80: 9.0KB" /></th>
+<th style="text-align: center;"><img
+src="img/voxels-feature-compressed.webp"
+alt="JPEG, quality=15: 16KB" /></th>
+<th style="text-align: center;"><img
+src="img/voxels-feature-compressed.webp"
+alt="WebP, quality=10: 6.7KB" /></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">WebP, quality=80: 9.0KB</td>
+<td style="text-align: center;">JPEG, quality=15: 16KB</td>
+<td style="text-align: center;">WebP, quality=10: 6.7KB</td>
+</tr>
+</tbody>
+</table>
+<p>Probably the most powerful example is replacing 24-bit RGB colour
+with <em>indexed</em> colour profiles, where a small palette is declared
+at the start of the file and pixels refer to that table instead of the
+whole gamut. The palette is usually 8-bits (as in GIF images), but you
+can reduce this as much as you like; 2-bit monochrome at low resolutions
+can give you some really funky effects that resemble old GameBoy
+graphics:</p>
+<table>
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 54%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><img src="img/voxels-feature.webp"
+alt="WebP, quality=80: 9.0KB" /></th>
+<th style="text-align: center;"><img src="img/voxels-feature-mono.png"
+alt="PNG, 2-bit monochrome: 3.3KB" /></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">WebP, quality=80: 9.0KB</td>
+<td style="text-align: center;">PNG, 2-bit monochrome: 3.3KB</td>
+</tr>
+</tbody>
+</table>
+<p>Once it’s in monochrome, you can use <code>background</code> and
+<code>mix-blend-mode</code> rules to recolour it however you like, with
+next-to-no cost:</p>
+<div
+style="background: rgb(98,52,216); background: linear-gradient(0deg, rgba(98,52,216,1) 0%, rgba(124,178,140,1) 47%, rgba(157,229,255,1) 100%);height:300px;width:400px;margin:0 auto;">
+<p><img src="img/voxels-feature-mono.png" style="mix-blend-mode:screen;"></p>
+</div>
+<figcaption>
+Still 3.3KB!
+</figcaption>
+<p>I use a <a
+href="https://github.com/samboyer/samboyer.github.io/blob/master/image_monofier.py">script</a>
+to convert all the hi-res images on my website into dithered images like
+the above; the crucial ImageMagick incantation is:</p>
+<pre><code>magick convert {input_file}  -ordered-dither o8x8,2 -monochrome {output_file}</code></pre>
+<h3 id="bonus-track-show-the-size-of-your-page">Bonus: Track &amp; show
+the size of your page</h3>
+<p><img src="img/size_monitor_fixed.jpg" /></p>
+<p>The <a
+href="https://developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver">PerformanceObserver
+API</a> lets you access the total amount of data transferred between
+your webservers and the end-user’s device. You could use this to measure
+the weight of your page in the wild (i.e. outside of a DevTools
+environment), or present it to the end-user, like I do in the top-right
+corner of <a href="https://samboyer.uk">my website</a> (at the time of
+writing). While your end-user doesn’t have much control over how
+<em>your</em> website is served to them, it raises awareness about page
+weight. And it kinda looks cool :)</p>
+<p>Feel free to copy my PerformanceObserver code added at the bottom of
+<a
+href="https://github.com/samboyer/samboyer.github.io/commit/18d91aa32ff5c5eeb2ce881b966fbcac9eafa071#diff-0eb547304658805aad788d320f10bf1f292797b5e6d745a3bf617584da017051">this
+commit</a>. Or, if you prefer to measure in (estimated) CO2 emissions,
+you could try <a
+href="https://www.thegreenwebfoundation.org/news/start-calculating-digital-carbon-emissions-in-5-minutes-with-co2-js/">CO2.js</a>.</p>
+<hr />
+<p>To conclude this post, I considered a long, passionate monologue
+about how ‘undesigning’ the Web will give us faster, easier-to-use, and
+more aesthetic websites, and we should celebrate those who achieve it;
+but I think it’s best summarised by <a
+href="http://motherfuckingwebsite.com/">this motherf***ing
+website</a>.</p>
+<aside id="footnotes" class="footnotes footnotes-end-of-document"
+role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>From a <a
+href="https://www.carbontrust.com/our-work-and-impact/guides-reports-and-tools/carbon-impact-of-video-streaming">report
+on the carbon impact of video streaming</a>, the end-user’s device was
+found to be the largest source of energy consumption. The same is likely
+to apply to web browsing, as the transfer size is much smaller and the
+end-user device’s CPU usage will be a little bit higher.<a
+href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>On this note, if you happen to run one of those news
+websites which autoplay muted videos that vastly outweigh the rest of
+the page, <em>please</em> stop.<a href="#fnref2" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>GIMP and Photoshop do now :)<a href="#fnref3"
+class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside>
+
+<hr>
+<a href='.'><i>Return to index.</i></a>
+</div>
+</body>
+</html>

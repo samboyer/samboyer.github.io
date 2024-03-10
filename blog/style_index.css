@@ -1,0 +1,23 @@
+html{
+    color:#333;
+    background-color: #fcfcfc;
+    font-size: 1.3em;
+}
+table{
+    font-family: monospace;
+    min-width:1000px;
+    border-collapse: collapse;
+    font-size: 1.1em;
+}
+th{
+    font-weight: unset;
+    text-align: left;
+    border-bottom:solid 1px black;
+}
+td, th{
+    padding:5px;
+}
+
+body{
+    padding:0   20px;
+}
