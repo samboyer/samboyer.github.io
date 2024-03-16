@@ -1,0 +1,319 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Webex Bots are so simple, even you could make one! - Sam Boyer</title>
+<link rel="stylesheet" href="/blog/style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="feed.rss"/>
+</head>
+<body>
+<div class="page_header">
+<div class="header_top_left">
+    <a href="/" style="display: inherit;"><img src="/img/logo_dark.svg" title="Back to main site" height="24px"></a>
+  <div class="vbar"></div>
+    <a href="/blog" title="Back to blog index" class="blog_link">blog</a>
+  </div>
+</div>
+<div class="content">
+<h1 id="webex-bots-are-so-simple-even-you-could-make-one">Webex Bots are
+so simple, even you could make one!</h1>
+<h2 id="sorry-i-didnt-mean-for-that-to-sound-offensive">sorry I didn’t
+mean for that to sound offensive</h2>
+<p><em>February 2024</em></p>
+<p><em>Sam Boyer</em></p>
+<p>Cisco’s Webex isn’t most people’s first choice for a team
+collaboration platform, but it’s not the worst thing around. One feature
+I think is well implemented are Bots: everyone can register many bots
+for free; they’e clearly marked as being a bot; and you don’t need to
+ask admins to add them to your organization for you.</p>
+<p>Not many organisations use Webex for comms (and presumably even fewer
+people use it to talk to friends…), so unless you have other reasons to
+be on Webex, your efforts might be best placed elsewhere. But I want to
+talk about them anyway just to showcase how the ecosystem/tech works,
+which is probably quite similar to other platforms anyway.</p>
+<p>For this tutorial, you will need: - A Webex account (they are free to
+make) - A web server with a publically-accessible web address, that can
+run e.g. PHP scripts - If you don’t have a web server, you can still
+make bots with WebSockets instead - in this case, skip Step 3 and go to
+the WebSockets section. - A hunger for esoteric bots</p>
+<h1 id="step-1-register-a-bot">Step 1: Register a bot</h1>
+<ul>
+<li>Login to <a
+href="https://developer.webex.com/my-apps">https://developer.webex.com/my-apps</a>
+with your Webex credentials.
+<ul>
+<li><em>Try to use an email address that you don’t expect to lost in a
+few years - it’s a bit of a pain to transfer bot ownership!</em></li>
+</ul></li>
+<li>Click ‘Create a New App’, then ‘Create a Bot’. Give it a good name
+and username, and an icon if you have one already (it can be changed
+later if not). We won’t be sharing this bot to the App Hub, so the
+description isn’t important - maybe be more descriptive later if you
+decide to publish it there.</li>
+<li>Click ‘Add Bot’, and make a note of the Bot ID and the Bot access
+token. (This is like a password, so keep it safe!)</li>
+</ul>
+<p>And you’re done! Your bot can now be messaged on Webex, though it
+won’t send anything back. Let’s fix that.</p>
+<h1 id="step-2-try-sending-a-message">Step 2: Try sending a message</h1>
+<p>{curl}</p>
+<p>This is cool, but we don’t really have time to run a Terminal command
+anytime someone wants a message. We’ll need a script to reply to
+messages for us.</p>
+<h1 id="step-3-create-a-script-to-handle-incoming-messages">Step 3:
+Create a script to handle incoming messages</h1>
+<p>To let us know about incoming messages, Webex uses a <a
+href="https://en.wikipedia.org/wiki/Webhook">webhook</a> system -
+basically, they’ll send a HTTP POST request to <em>our</em> server,
+containing the incoming message. Our goal is to read that, and send
+something back.</p>
+<p>I’ll be using PHP, because it’s the quickest to write &amp; get
+running online. I’m not a PHP expert so I won’t dwell on the contents of
+the script, but it’s essentially a simplified version of <a
+href="https://github.com/samboyer/cowpanion/tree/main/cowpanion-server">cowpanion</a>,
+an old bot of mine that repeats what you said back in a <a
+href="https://linux.die.net/man/1/cowsay"><code>cowsay</code></a>
+message. The bot will do the following things:</p>
+<ul>
+<li>If the user sends ‘say this long sentence’, a cow saying ‘this long
+sentence’ will be sent back to the user</li>
+<li>If the user sends ‘send my_bro@example.com another long sentence’, a
+cow saying ‘another long sentence’ will be sent to
+‘my_bro@example.com’</li>
+<li>If the user sends ‘help’, a cow giving instructions about commands
+to use will be sent.</li>
+<li>Any other message that the user sends will be responded to with an
+‘invalid command’ message.</li>
+</ul>
+<p>See if you can spot those features in the code below!</p>
+<p>@@@ split up this script, describe what’s goin on in each</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;?php</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Imports - cow specific, can remove or otherwise fetch from </span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">// https://github.com/Gipetto/CowSay </span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="cf">foreach</span> (<span class="fu">glob</span>(<span class="st">&quot;CowSay/src/Traits/*.php&quot;</span>) <span class="kw">as</span> <span class="va">$filename</span>) <span class="kw">require_once</span>(<span class="va">$filename</span>)<span class="ot">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="cf">foreach</span> (<span class="fu">glob</span>(<span class="st">&quot;CowSay/src/Core/*.php&quot;</span>) <span class="kw">as</span> <span class="va">$filename</span>) <span class="kw">require_once</span>(<span class="va">$filename</span>)<span class="ot">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">require_once</span>(<span class="st">&quot;CowSay/src/Carcases/Cow.php&quot;</span>)<span class="ot">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> <span class="cn">C</span>owSay\<span class="cn">C</span>ow<span class="ot">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">// =-= CONFIG ===</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="va">$COWPANION_ID</span> <span class="op">=</span> <span class="st">&#39;YOUR_BOT_ID_HERE&#39;</span><span class="ot">;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="va">$COWPANION_KEY</span> <span class="op">=</span> <span class="st">&#39;YOUR_BOT_ACCESS_TOKEN_HERE&#39;</span><span class="ot">;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="va">$COWPANION_EMAIL</span> <span class="op">=</span> <span class="st">&#39;YOUR_BOT_USERNAME_HERE@webex.bot&#39;</span><span class="ot">;</span></span></code></pre></div>
+<p>@@@</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// === MESSAGE SENDING FUNCTIONS ===</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Send a DM to the recipient via a curl request.</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> send_message(<span class="va">$recipient</span><span class="ot">,</span> <span class="va">$message_body_markdown</span>) {</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">GLOBAL</span> <span class="va">$COWPANION_KEY</span><span class="ot">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">assert</span>(<span class="op">!</span><span class="fu">is_null</span>(<span class="va">$message_body_markdown</span>)<span class="ot">,</span> <span class="st">&quot;empty message&quot;</span>)<span class="ot">;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="va">$url</span> <span class="op">=</span> <span class="st">&#39;https://webexapis.com/v1/messages&#39;</span><span class="ot">;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="va">$data</span> <span class="op">=</span> <span class="dt">array</span>(</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;toPersonEmail&#39;</span> =&gt; <span class="va">$recipient</span><span class="ot">,</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;markdown&#39;</span> =&gt; <span class="va">$message_body_markdown</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="va">$headers</span> <span class="op">=</span> <span class="dt">array</span>(</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Authorization: Bearer </span><span class="va">$COWPANION_KEY</span><span class="st">&quot;</span><span class="ot">,</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        <span class="co">// &#39;Content-Type: multipart/form-data&#39;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="va">$ch</span> <span class="op">=</span> <span class="fu">curl_init</span>(<span class="va">$url</span>)<span class="ot">;</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">curl_setopt</span>(<span class="va">$ch</span><span class="ot">,</span> <span class="cn">CURLOPT_POST</span><span class="ot">,</span> <span class="dv">1</span>)<span class="ot">;</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">curl_setopt</span>(<span class="va">$ch</span><span class="ot">,</span> <span class="cn">CURLOPT_HTTPHEADER</span><span class="ot">,</span> <span class="va">$headers</span>)<span class="ot">;</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">curl_setopt</span>(<span class="va">$ch</span><span class="ot">,</span> <span class="cn">CURLOPT_POSTFIELDS</span><span class="ot">,</span> <span class="va">$data</span>)<span class="ot">;</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">curl_setopt</span>(<span class="va">$ch</span><span class="ot">,</span> <span class="cn">CURLOPT_RETURNTRANSFER</span><span class="ot">,</span> <span class="kw">true</span>)<span class="ot">;</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="va">$curl_response</span> <span class="op">=</span> <span class="fu">curl_exec</span>(<span class="va">$ch</span>)<span class="ot">;</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">curl_close</span>(<span class="va">$ch</span>)<span class="ot">;</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">json_decode</span>(<span class="va">$curl_response</span>)<span class="ot">;</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co">// Make a cow say it!</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> send_cow_message(<span class="va">$recipient</span><span class="ot">,</span> <span class="va">$cowsay_input</span>) {</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="va">$cow_obj</span> <span class="op">=</span> <span class="kw">new</span> <span class="cn">C</span>ow(<span class="va">$cowsay_input</span>)<span class="ot">;</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="va">$cow_out</span> <span class="op">=</span> <span class="va">$cow_obj</span>-&gt;say()<span class="ot">;</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    <span class="va">$response</span> <span class="op">=</span> <span class="st">&quot;```</span><span class="sc">\n</span><span class="va">$cow_out</span><span class="sc">\n</span><span class="st">```&quot;</span><span class="ot">;</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> send_message(<span class="va">$recipient</span><span class="ot">,</span> <span class="va">$response</span>)<span class="ot">;</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co">// Send information about which commands are available</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> send_usage(<span class="va">$recipient</span><span class="ot">,</span> <span class="va">$error_string</span>) {</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="va">$USAGE</span> <span class="op">=</span> <span class="st">&quot;Usage:</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="st">- [cowpanion] say your_message</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="st">  - Cow says your_message to you.</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="st">- [cowpanion] send recipient_email_address your_message</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="st">  - Cow says your_message to the given recipient.</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span><span class="ot">;</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="va">$error_string</span> <span class="op">!==</span> <span class="st">&quot;&quot;</span>) {</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>        <span class="va">$msg</span> <span class="op">=</span> <span class="st">&quot;</span><span class="va">$error_string</span><span class="sc">\n</span><span class="va">$USAGE</span><span class="st">&quot;</span><span class="ot">;</span></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>        <span class="va">$msg</span> <span class="op">=</span> <span class="va">$USAGE</span><span class="ot">;</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> send_cow_message(<span class="va">$recipient</span><span class="ot">,</span> <span class="va">$msg</span>)<span class="ot">;</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Rather frustratingly, webex doesn&#39;t actually give us the contents of the</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">// incoming message in its webhook request, so we need to send a request back</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">// to Webex to get it :/</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> get_message_info(<span class="va">$message_id</span>) {</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">GLOBAL</span> <span class="va">$COWPANION_KEY</span><span class="ot">;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">$url</span> <span class="op">=</span> <span class="st">&quot;https://webexapis.com/v1/messages/</span><span class="va">$message_id</span><span class="st">&quot;</span><span class="ot">;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="va">$headers</span> <span class="op">=</span> <span class="dt">array</span>(</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;Authorization: Bearer </span><span class="va">$COWPANION_KEY</span><span class="st">&quot;</span><span class="ot">,</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="va">$ch</span> <span class="op">=</span> <span class="fu">curl_init</span>(<span class="va">$url</span>)<span class="ot">;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">curl_setopt</span>(<span class="va">$ch</span><span class="ot">,</span> <span class="cn">CURLOPT_HTTPHEADER</span><span class="ot">,</span> <span class="va">$headers</span>)<span class="ot">;</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">curl_setopt</span>(<span class="va">$ch</span><span class="ot">,</span> <span class="cn">CURLOPT_RETURNTRANSFER</span><span class="ot">,</span> <span class="kw">true</span>)<span class="ot">;</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="va">$curl_response</span> <span class="op">=</span> <span class="fu">curl_exec</span>(<span class="va">$ch</span>)<span class="ot">;</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">curl_close</span>(<span class="va">$ch</span>)<span class="ot">;</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">json_decode</span>(<span class="va">$curl_response</span>)<span class="ot">;</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>@@@</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">// === MAIN PATH ===</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Decode the POST request, if it exists.</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="va">$notif_body</span> <span class="op">=</span> <span class="fu">json_decode</span>(<span class="fu">file_get_contents</span>(<span class="st">&#39;php://input&#39;</span>))<span class="ot">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="op">!</span><span class="fu">is_object</span>(<span class="va">$notif_body</span>)) {</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">exit</span>()<span class="ot">;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Webex likes to tell us about messages the bot just sent, which causes an</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">// infinite loop if we don&#39;t catch it!</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="va">$sender_email</span> <span class="op">=</span> <span class="va">$notif_body</span>-&gt;{<span class="st">&#39;data&#39;</span>}-&gt;{<span class="st">&#39;personEmail&#39;</span>}<span class="ot">;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="va">$sender_email</span> <span class="op">==</span> <span class="va">$COWPANION_EMAIL</span>) {</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">exit</span>()<span class="ot">;</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">// Send a HTTP request to get the _actual_ message info</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="va">$msg_info</span> <span class="op">=</span> get_message_info(<span class="va">$notif_body</span>-&gt;{<span class="st">&#39;data&#39;</span>}-&gt;{<span class="st">&#39;id&#39;</span>})<span class="ot">;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="va">$is_dm</span> <span class="op">=</span> (<span class="va">$msg_info</span>-&gt;{<span class="st">&#39;roomType&#39;</span>} <span class="op">===</span> <span class="st">&#39;direct&#39;</span>)<span class="ot">;</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="va">$msg_text</span> <span class="op">=</span> <span class="va">$msg_info</span>-&gt;{<span class="st">&#39;text&#39;</span>}<span class="ot">;</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="va">$msg_words</span> <span class="op">=</span> <span class="fu">explode</span>(<span class="st">&#39; &#39;</span><span class="ot">,</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_replace</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="ot">,</span> <span class="st">&#39; &#39;</span><span class="ot">,</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        <span class="fu">preg_replace</span>(<span class="st">&#39;/ +/&#39;</span><span class="ot">,</span><span class="st">&#39; &#39;</span><span class="ot">,</span> <span class="va">$msg_text</span>)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>)<span class="ot">;</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co">// Bots can either be messaged directly, or in a group chat when &#39;atted&#39; </span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co">// (i.e. &#39;@cowpanion do something&#39;). So if the first word is the sender atting</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co">// the bot, remove it.</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="va">$bot_mentioned</span> <span class="op">=</span> <span class="kw">false</span><span class="ot">;</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">property_exists</span>(<span class="va">$msg_info</span><span class="ot">,</span> <span class="st">&#39;mentionedPeople&#39;</span>)) {</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">foreach</span> (<span class="va">$msg_info</span>-&gt;{<span class="st">&#39;mentionedPeople&#39;</span>} <span class="kw">as</span> <span class="va">$person_id</span>) {</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="va">$person_id</span> <span class="op">===</span> <span class="va">$COWPANION_ID</span>) {</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>            <span class="va">$bot_mentioned</span> <span class="op">=</span> <span class="kw">true</span><span class="ot">;</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="va">$bot_mentioned</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="va">$is_dm</span> <span class="op">&amp;&amp;</span> <span class="va">$msg_words</span>[<span class="dv">0</span>] <span class="op">==</span> <span class="st">&#39;cowpanion&#39;</span>) {</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="co">// remove &#39;cowpanion&#39; from start of message</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    <span class="va">$msg_words</span> <span class="op">=</span> <span class="fu">array_slice</span>(<span class="va">$msg_words</span><span class="ot">,</span> <span class="dv">1</span>)<span class="ot">;</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    <span class="va">$msg_text</span> <span class="op">=</span> <span class="fu">preg_replace</span>(</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;/\s*cowpanion\s+/&#39;</span><span class="ot">,</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;&#39;</span><span class="ot">,</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>        <span class="va">$msg_text</span><span class="ot">,</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>@@@</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Main command handling</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="va">$msg_words</span>[<span class="dv">0</span>] <span class="op">===</span> <span class="st">&#39;say&#39;</span>) {</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">$message_to_say</span> <span class="op">=</span> <span class="fu">preg_replace</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;/\s*say\s+/&#39;</span><span class="ot">,</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;&#39;</span><span class="ot">,</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">$msg_text</span><span class="ot">,</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    )<span class="ot">;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    send_cow_message(<span class="va">$sender_email</span><span class="ot">,</span> <span class="va">$message_to_say</span>)<span class="ot">;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="cf">elseif</span> (<span class="va">$msg_words</span>[<span class="dv">0</span>] <span class="op">===</span> <span class="st">&#39;send&#39;</span>) {</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="va">$cmd_send_recipient</span> <span class="op">=</span> <span class="va">$msg_words</span>[<span class="dv">1</span>]<span class="ot">;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Cursed regex to validate the recipient&#39;s email address - I can&#39;t</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// remember where I got it from</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">preg_match</span>(<span class="st">&#39;/^[\w_.+-]+@[\w-]+\.[\w-.]+$/&#39;</span><span class="ot">,</span> <span class="va">$cmd_send_recipient</span>) <span class="op">==</span> <span class="dv">1</span>) {</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">$message_to_say</span> <span class="op">=</span> <span class="fu">preg_replace</span>(</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;/\s*send\s+[^\s]+\s+/&#39;</span><span class="ot">,</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;&#39;</span><span class="ot">,</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>            <span class="va">$msg_text</span><span class="ot">,</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>            <span class="dv">1</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>        )<span class="ot">;</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>        <span class="va">$resp</span> <span class="op">=</span> send_cow_message(<span class="va">$cmd_send_recipient</span><span class="ot">,</span> <span class="va">$message_to_say</span>)<span class="ot">;</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">property_exists</span>(<span class="va">$resp</span><span class="ot">,</span> <span class="st">&#39;errors&#39;</span>)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>            <span class="op">&amp;&amp;</span> <span class="fu">count</span>(<span class="va">$resp</span>-&gt;{<span class="st">&#39;errors&#39;</span>}) <span class="op">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>            <span class="co">// If sending message fails, report an error to the user.</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>            send_message(<span class="va">$sender_email</span><span class="ot">,</span> <span class="st">&quot;Error: &quot;</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>                <span class="op">.</span> <span class="va">$resp</span>-&gt;{<span class="st">&#39;errors&#39;</span>}[<span class="dv">0</span>]-&gt;{<span class="st">&#39;description&#39;</span>})<span class="ot">;</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>{</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>            send_message(<span class="va">$sender_email</span><span class="ot">,</span> <span class="st">&quot;Sent!&quot;</span>)<span class="ot">;</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> {</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>        send_usage(<span class="va">$sender_email</span><span class="ot">,</span> <span class="st">&quot;Invalid recipient </span><span class="va">$cmd_send_recipient</span><span class="st">&quot;</span>)<span class="ot">;</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="cf">elseif</span> (<span class="va">$msg_words</span>[<span class="dv">0</span>] <span class="op">===</span> <span class="st">&#39;help&#39;</span>) {</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>    send_usage(<span class="va">$sender_email</span><span class="ot">,</span> <span class="st">&#39;&#39;</span>)<span class="ot">;</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> { </span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Invalid command message</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>  send_cow_message(<span class="va">$sender_email</span><span class="ot">,</span> <span class="st">&quot;mooooooooo</span><span class="sc">\n\n</span><span class="st">(Send &#39;help&#39; to see commands.)&quot;</span>)<span class="ot">;</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="kw">?&gt;</span></span></code></pre></div>
+<h2 id="step-3.5-upload-the-script-somewhere">Step 3.5: upload the
+script somewhere</h2>
+<p>To put it somewhere Webex can see it, we’ll upload the PHP script to
+a web server, probably via FTP.</p>
+<p><strong>Note:</strong> This script is insecure in that it does no
+check to confirm that the POST request came from Webex and not an
+impersonator. Webex webhook messages aren’t signed by default, so anyone
+with the correct bot/room IDs can impersonate a valid Webex
+notification. Thankfully, you can enable HMAC-SHA1 signatures by
+supplying a <code>secret</code> key to webex when establishing the
+webhook in the next step. You’ll then have to verify the incoming
+signature in the above script, using your stored secret key.</p>
+<h1 id="step-3-establish-the-webhook">Step 3: Establish the webhook</h1>
+<p>{think I have the code in an ADS note file } otherwise
+https://developer.webex.com/docs/api/guides/webhooks#creating-a-webhook
+?</p>
+<h1 id="step-4-try-it-out">Step 4: try it out!</h1>
+<p>Let’s see how it looks!</p>
+<p>{screenshot of cowpanion}</p>
+<h1 id="alternative-websockets">Alternative: WebSockets</h1>
+<p>If you don’t have a public webserver from which to receive webhooks,
+your bot can instead connect to Webex directly via a WebSocket - this is
+basically just a TCP socket with some extra bits that make it easy to
+use from within a web browser. The easiest way to use this is via the
+Webex SDK for Node.JS (SDKs for other languages don’t seem to support
+WebSockets yet):</p>
+<p>{steal some code from feedbackbot}</p>
+<h1 id="bonus-adaptivecards">Bonus: AdaptiveCards</h1>
+<p>Webex also implements v1.3 of Microsoft’s <a
+href="https://adaptivecards.io/">AdaptiveCard specification</a>, which
+is a way to embed HTML-like content in a messaging platform. Cards in
+Webex are treated as attachments to a normal message, where the normal
+text field is what’s displayed on unsupported devices
+(e.g. smartphones). The ‘send message’ payload becomes a bit
+unnecessarily complicated:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>{feedbackbot payload <span class="bu">object</span>}</span></code></pre></div>
+<p>Clicking a Submit button sends something called an
+‘attachmentAction’, which you’ll need a separate webhook or WebSocket to
+receive, but contains references to the message that was interacted
+with, the user who interacted with it, and the contents of all form
+fields in the Card.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>That’s everything I know about bots! I hope you now feel prepared to
+make silly/helpful bots for Webex, or even other platforms. If you do
+make anything cool, let me know!</p>
+
+<hr>
+<a href='.'><i>Return to index.</i></a>
+</div>
+</body>
+</html>

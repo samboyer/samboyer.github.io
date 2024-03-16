@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+<channel>
+<title>samboyer.uk/blog</title>
+<link>https://samboyer.uk/blog/</link>
+<description>Sam's blog. He'll write something one day.</description>
+
+<item>
+<title>Fun stuff that Sam enjoys and is listing here because he's too serious all the time</title>
+<link>https://samboyer.uk/blog/fun-stuff.md</link>
+<guid>https://samboyer.uk/blog/fun-stuff.md</guid>
+<pubDate>Wed, 28 Feb 2024 18:32:55 -0000</pubDate>
+<description>Music</description>
+</item>
+
+<item>
+<title>Welcome to my blog!</title>
+<link>https://samboyer.uk/blog/intro.md</link>
+<guid>https://samboyer.uk/blog/intro.md</guid>
+<pubDate>Sun, 25 Feb 2024 15:21:12 -0000</pubDate>
+<description></description>
+</item>
+
+<item>
+<title>Interesting stuff that you might enjoy reading too.</title>
+<link>https://samboyer.uk/blog/recommendations.md</link>
+<guid>https://samboyer.uk/blog/recommendations.md</guid>
+<pubDate>Wed, 28 Feb 2024 18:32:55 -0000</pubDate>
+<description>Blog posts</description>
+</item>
+
+<item>
+<title>How to make small(er) web pages</title>
+<link>https://samboyer.uk/blog/tech/small-webpages.md</link>
+<guid>https://samboyer.uk/blog/tech/small-webpages.md</guid>
+<pubDate>Sat, 11 Nov 2023 14:46:15 -0000</pubDate>
+<description>It won't save the world, but it's kinda cool</description>
+</item>
+
+<item>
+<title>Building a static HTML widget to showcase your new favourite songs</title>
+<link>https://samboyer.uk/blog/tech/spotify-recs-widget.md</link>
+<guid>https://samboyer.uk/blog/tech/spotify-recs-widget.md</guid>
+<pubDate>Sun, 25 Feb 2024 14:46:46 -0000</pubDate>
+<description>Hey, the 90s Internet called, they want their music discovery back</description>
+</item>
+
+</channel>
+</rss>  

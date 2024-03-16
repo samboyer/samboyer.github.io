@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>How to make your own website for free with GitHub Pages and your own HTML! - Sam Boyer</title>
+<link rel="stylesheet" href="/blog/style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="feed.rss"/>
+</head>
+<body>
+<div class="page_header">
+<div class="header_top_left">
+    <a href="/" style="display: inherit;"><img src="/img/logo_dark.svg" title="Back to main site" height="24px"></a>
+  <div class="vbar"></div>
+    <a href="/blog" title="Back to blog index" class="blog_link">blog</a>
+  </div>
+</div>
+<div class="content">
+<h1
+id="how-to-make-your-own-website-for-free-with-github-pages-and-your-own-html">How
+to make your own website for free with GitHub Pages and your own
+HTML!</h1>
+<h2 id="centralised-internet-platforms-hate-him">Centralised Internet
+Platforms Hate Him!</h2>
+<p><em>February 2024</em></p>
+<p><em>Sam B</em></p>
+<p>{intro}</p>
+<p><strong>Warning</strong>: while this is a beginner-friendly tutorial,
+the intent is to teach you a bit about how the Web works. If you don’t
+care about technology and just want to write stuff (which is fine!!),
+you might be better off with a platform like <a
+href="https://wordpress.com/">Wordpress.com</a> or <a
+href="http://blogger.com/">Blogger</a>. (Both have export features, so
+you <em>should</em> be able to move your stuff to a new site if
+necessary.)</p>
+<p><strong>What I’ll be covering in this post:</strong></p>
+<ul>
+<li>Creating a GitHub Pages repository</li>
+<li>(optionally) Registering a custom domain and linking it to your
+Pages site</li>
+<li>Adding content to your site via <code>git</code></li>
+</ul>
+<p><strong>What I won’t be covering:</strong> - Absolutely everything
+there is to know about HTML/CSS - Generating HTML from text/Markdown
+(static site generators)</p>
+<h1
+id="step-1-make-a-github-pages-repository-and-put-something-in-it.">Step
+1: Make a GitHub Pages repository and put something in it.</h1>
+<ol type="1">
+<li><p>If you don’t have one already, create a GitHub account <a
+href="https://github.com/signup">here</a>.</p></li>
+<li><p>Once you’re logged in, create a new repository <a
+href="https://github.com/new">here</a>, giving it the name
+<code>'YOUR_GITHUB_USERNAME.github.io'</code>. All the other settings
+can be left at their defaults.</p></li>
+<li><p>Now we’ll clone the repository to your computer, so you can add
+files to it.</p>
+<ol type="a">
+<li><p>If you’ve never use <code>git</code> before, I’d recommend <a
+href="https://desktop.github.com/">GitHub Desktop</a> or <a
+href="https://www.sourcetreeapp.com/">SourceTree</a>, both available on
+Windows and OSX.</p></li>
+<li><p>From your repository page on GitHub, click the green ‘&lt;&gt;
+Code’ button. If you’re using GitHub Desktop, the ‘Open in GitHub
+Desktop’ link should work; otherwise you’ll need to copy the
+<code>'git@github.com/....git'</code> URL into your client. CLI users
+can run <code>git clone git@github.com/...git</code>.</p></li>
+</ol></li>
+<li><p>Create a file in your ‘checked out’ repository called
+‘index.html’. Add some text like ‘Hello world!’.</p></li>
+<li><p>Use your Git client to Commit and Push the file (sometimes called
+Sync). When you reload the GitHub repository page, your new file should
+appear there - and even better, navigating to
+<code>YOUR_GITHUB_USERNAME.github.io</code> in the web browser should
+show that message you just wrote!</p></li>
+</ol>
+<h1 id="optional-get-yourself-a-domain-name">(Optional) Get yourself a
+domain name</h1>
+<p>By default, GitHub Pages are accessible on the web via
+<code>'yourname.github.io'</code>. While this is a fine option for code
+projects and the like, it has the following disadvantages:</p>
+<ul>
+<li>You won’t be able to move the website off GitHub in the future</li>
+<li>You won’t be able to register any subdomains (e.g. ), or use any
+other DNS features (like MX records for mail servers).</li>
+<li>You won’t be impressing any hipster domain connoisseurs with
+‘.github.io’ in your domain name. (whether you care about that is up to
+you.)</li>
+</ul>
+<p>When choosing a name:</p>
+<ul>
+<li>Make sure it’s one you’ll be happy with in few years time. Changing
+a domain after the fact is a bit of a pain, and you’ll likely forget to
+update the URL in a few places.</li>
+<li>Be careful with unconventional TLDs, especially when they’re owned
+by less-savoury countries/organisations. It’s fun to <a
+href="https://en.wikipedia.org/wiki/Domain_hack">combine domain names
+with extensions</a> to make a word (e.g. <code>youtu.be</code>), or jump
+on the whichever TLD is trendy this year, but <a
+href="https://www.itnews.com.au/news/brokeaf-goes-offline-as-afghan-web-domains-suspended-605232/">this
+can and does result in unexpected domain suspensions</a>, or at the very
+least <a href="https://www.spamhaus.org/statistics/tlds/">getting
+blocked by lazy domain-level firewalls</a>.</li>
+</ul>
+<h1 id="add-some-proper-html-content">Add some proper HTML content</h1>
+<h1 id="get-funky-with-css">Get funky with CSS</h1>
+<h1 id="optional-use-a-static-site-generator.">(Optional) Use a static
+site generator.</h1>
+<p>Static site generators (Jekyll, Hugo etc) take in ‘preformatted text’
+(think Markdown or .txt files) and output HTML. While this can be great
+for speeding up the process of creating webpages (<a
+href="https://github.com/samboyer/samboyer.github.io/tree/master/blog/make_blog.py">this
+blog uses an SSG</a>), they’re not beginner friendly, and don’t make
+sense for a website with few pages. Florens Verschelde summarizes the
+topic well <a
+href="https://fvsch.com/static-site-generators">here</a>.</p>
+<p>If you’re comfortable with writing Markdown, and running commands
+from a terminal, <em>and</em> plan to add lots of text to your website,
+then a SSG might be worthwhile. In that case, Jekyll might be your best
+bet - GitHub Pages can build your site from source each time you push to
+the main branch. Otherwise, I’d recommend keeping a seperate
+branch/repository containing your preformatted content, and writing some
+precommit hook to commit the generated pages to the ‘production’ branch
+(usually ‘main’, but this can be customised in the GitHub Pages
+settings).</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>By now you should have a working website, either living under
+github.io or your own snazzy domain name. Whatever you add now is up to
+you!</p>
+
+<hr>
+<a href='.'><i>Return to index.</i></a>
+</div>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Welcome to my blog! - Sam Boyer</title>
+<link rel="stylesheet" href="/blog/style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="feed.rss"/>
+</head>
+<body>
+<div class="page_header">
+<div class="header_top_left">
+    <a href="/" style="display: inherit;"><img src="/img/logo_dark.svg" title="Back to main site" height="24px"></a>
+  <div class="vbar"></div>
+    <a href="/blog" title="Back to blog index" class="blog_link">blog</a>
+  </div>
+</div>
+<div class="content">
+<h1 id="welcome-to-my-blog">Welcome to my blog!</h1>
+<p>It’s the slightly more unhinged corner of my otherwise composed
+website, and honestly been a long time coming.</p>
+<p>The thought of writing a few paragraphs about some topic has popped
+into my head many times over the past few years, but I’ve never had a
+good place to put things. Medium, Substack or were good options once,
+but I feel like starting one of those implies to the reader that I’ll be
+writing about the same topic for the next few years. Here, instead, I
+can make a one-off post about whatever takes my interest.</p>
+<p>Another perk of hosting it myself is that I have full control over
+the styling of the posts. I’m sure this will be used for <span
+class="rainbow"
+style="font-family:Comic Sans MS; color:red;font-size:1em">very serious
+purposes</span>.</p>
+<style>
+.rainbow {
+  font-size: 1.2em;
+  font-family: Comic Sans MS;
+  animation: rainbow 3s linear 0s infinite;
+}
+
+@keyframes rainbow {
+  0% {
+    color: #ff0000;
+  }
+  16.7%{
+    color: #ffff00;
+  }
+  33% {
+    color: #00ff00;
+  }
+  50%{
+    color: #00ffff;
+  }
+  66% {
+    color: #0000ff;
+  }
+  88.3%{
+    color: #ff00ff;
+  }
+  100% {
+    color: #ff0000;
+  }
+}
+</style>
+<p>For the techy peeps in the audience, here’s the current process:</p>
+<ul>
+<li>I’ve rolled my own static site generator because <a
+href="https://xkcd.com/927/">I love worsening the problem</a></li>
+<li>Posts are written in Markdown and comitted to a private GitHub
+repository.
+<ul>
+<li><em>I find the <a
+href="https://marketplace.visualstudio.com/items?itemName=vsls-contrib.gitdoc">GitDoc
+VSCode plugin</a> really useful to auto-commit and sync the content
+between devices. A cheapskate’s <a href="https://obsidian.md/">Obsidian
+Sync</a>, really.</em></li>
+</ul></li>
+<li>A Python script invokes <a
+href="https://pandoc.org/"><code>pandoc</code></a> to convert from
+Markdown to HTML, add some boilerplate, and create the index pages.
+<ul>
+<li>I use made-up directives like <code>@draft</code> to skip a post I’m
+in the middle of writing.</li>
+</ul></li>
+<li>The HTML files are then published to my public GitHub Pages. This
+step is currently manual; I’ll think of something better if I start
+posting more regularly.</li>
+</ul>
+<p>(I might write more about this method in more detail if it becomes a
+thing.)</p>
+<p>Anyway, I hope you enjoy your stay and find something of
+interest!</p>
+<p>- Sam</p>
+
+<hr>
+<a href='.'><i>Return to index.</i></a>
+</div>
+</body>
+</html>
