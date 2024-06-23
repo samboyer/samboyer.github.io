@@ -64,7 +64,7 @@ li>p{
 }
 .page_header{
     padding: 0 10px;
-    position: absolute;
+    position: fixed;
 }
 .header_top_left{
     display: flex;
@@ -88,17 +88,46 @@ li>p{
     padding-top: 70px;
     padding-bottom: 50px;
 }
-.content>figure>img{
+.content img{
     max-width: 100%;
     margin: 0 auto;
     display:block;
 }
+
 .content figcaption{
     text-align: center;
     font-style: italic;
     color:#777;
     font-size:16px;
 }
+
+.content video, .conent img{
+    max-width: 800px;
+}
+
+.table_of_contents{
+    display:inline-block;
+    width:calc(50vw - 420px);
+    position:fixed;
+    top:100px;
+    left:0;
+    font-size:0.8em;
+}
+
+/*mobile rules*/
+@media screen and (max-width:1200px){
+    .table_of_contents{
+      position:unset;
+      width: unset;
+      max-width: 800px;
+      margin: 0 auto;
+      display: block;
+    }
+  }
+
+
+/* === CODE STYLING === */
+
 pre{
     border: 1px solid #777;
     padding: 10px;

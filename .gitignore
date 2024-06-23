@@ -1,3 +1,5 @@
 EXCLUDE/
 /node_modules/
-/.vscode/
+*/.vscode/
+.vscode/
+/blog_dev/

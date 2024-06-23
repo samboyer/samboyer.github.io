@@ -7,43 +7,59 @@
 
 <item>
 <title>Fun stuff that Sam enjoys and is listing here because he's too serious all the time</title>
-<link>https://samboyer.uk/blog/fun-stuff.md</link>
-<guid>https://samboyer.uk/blog/fun-stuff.md</guid>
+<link>https://samboyer.uk/blog/fun-stuff.html</link>
+<guid>https://samboyer.uk/blog/fun-stuff.html</guid>
 <pubDate>Wed, 28 Feb 2024 18:32:55 -0000</pubDate>
-<description>Music</description>
+<description>A subtitle! Sam doesn't know what to put in the subtitle yet!</description>
 </item>
 
 <item>
 <title>Welcome to my blog!</title>
-<link>https://samboyer.uk/blog/intro.md</link>
-<guid>https://samboyer.uk/blog/intro.md</guid>
+<link>https://samboyer.uk/blog/intro.html</link>
+<guid>https://samboyer.uk/blog/intro.html</guid>
 <pubDate>Sun, 25 Feb 2024 15:21:12 -0000</pubDate>
-<description></description>
+<description>A subtitle! Sam doesn't know what to put in the subtitle yet!</description>
 </item>
 
 <item>
 <title>Interesting stuff that you might enjoy reading too.</title>
-<link>https://samboyer.uk/blog/recommendations.md</link>
-<guid>https://samboyer.uk/blog/recommendations.md</guid>
+<link>https://samboyer.uk/blog/recommendations.html</link>
+<guid>https://samboyer.uk/blog/recommendations.html</guid>
 <pubDate>Wed, 28 Feb 2024 18:32:55 -0000</pubDate>
-<description>Blog posts</description>
+<description>A subtitle! Sam doesn't know what to put in the subtitle yet!</description>
+</item>
+
+<item>
+<title>Making a game for Ludum Dare 42 (solo, at 18 years old, with no project planning experience)</title>
+<link>https://samboyer.uk/blog/gamedev/ld42.html</link>
+<guid>https://samboyer.uk/blog/gamedev/ld42.html</guid>
+<pubDate>Tue, 23 Apr 2024 17:15:00 -0000</pubDate>
+<description>A subtitle! Sam doesn't know what to put in the subtitle yet!</description>
+</item>
+
+<item>
+<title>Racetracks and Rediscovery: Making a game for Ludum Dare 55</title>
+<link>https://samboyer.uk/blog/gamedev/ld55.html</link>
+<guid>https://samboyer.uk/blog/gamedev/ld55.html</guid>
+<pubDate>Tue, 23 Apr 2024 17:15:00 -0000</pubDate>
+<description>A subtitle! Sam doesn't know what to put in the subtitle yet!</description>
 </item>
 
 <item>
 <title>How to make small(er) web pages</title>
-<link>https://samboyer.uk/blog/tech/small-webpages.md</link>
-<guid>https://samboyer.uk/blog/tech/small-webpages.md</guid>
+<link>https://samboyer.uk/blog/tech/small-webpages.html</link>
+<guid>https://samboyer.uk/blog/tech/small-webpages.html</guid>
 <pubDate>Sat, 11 Nov 2023 14:46:15 -0000</pubDate>
-<description>It won't save the world, but it's kinda cool</description>
+<description>A subtitle! Sam doesn't know what to put in the subtitle yet!</description>
 </item>
 
 <item>
 <title>Building a static HTML widget to showcase your new favourite songs</title>
-<link>https://samboyer.uk/blog/tech/spotify-recs-widget.md</link>
-<guid>https://samboyer.uk/blog/tech/spotify-recs-widget.md</guid>
+<link>https://samboyer.uk/blog/tech/spotify-recs-widget.html</link>
+<guid>https://samboyer.uk/blog/tech/spotify-recs-widget.html</guid>
 <pubDate>Sun, 25 Feb 2024 14:46:46 -0000</pubDate>
-<description>Hey, the 90s Internet called, they want their music discovery back</description>
+<description>A subtitle! Sam doesn't know what to put in the subtitle yet!</description>
 </item>
 
 </channel>
-</rss>  
+</rss>

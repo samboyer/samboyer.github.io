@@ -1,0 +1,449 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Making a game for Ludum Dare 42 (solo, at 18 years old, with no project planning experience) - Sam Boyer</title>
+<link rel="stylesheet" href="/blog/style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="feed.rss"/>
+</head>
+<body>
+<div class="page_header">
+<div class="header_top_left">
+    <a href="/" style="display: inherit;"><img src="/img/logo_dark.svg" title="Back to main site" height="24px"></a>
+  <div class="vbar"></div>
+    <a href="/blog" title="Back to blog index" class="blog_link">blog</a>
+  </div>
+</div>
+<div class="content">
+<h1
+id="making-a-game-for-ludum-dare-42-solo-at-18-years-old-with-no-project-planning-experience">Making
+a game for Ludum Dare 42 (solo, at 18 years old, with no project
+planning experience)</h1>
+<h2
+id="and-yet-i-will-literally-never-be-able-to-make-a-game-more-polished-than-this">-
+and yet, I will literally never be able to make a game more polished
+than this 😔</h2>
+<p>Sept 2018</p>
+<p>This is a transcript of a YouTube video I made back in 2018 about
+making a video game in 3 days. I’ve added Editor’s Notes where I’ve
+changed my mind in the 6 years(!) since writing this script, so reading
+this post is undoubtedly a better experience.</p>
+<p><em>(If you really want to see/hear the bad editing and low-quality
+v/o, though, <a href="https://www.youtube.com/watch?v=SjFnyeXqhSU">I
+won’t stop you</a>.)</em></p>
+<hr />
+<h1 id="intro">Intro</h1>
+<p>A few weeks ago there was the 42nd instalment of a game jam called <a
+href="https://ldjam.com/">Ludum Dare</a>. For 2-3 days, thousands of
+people around the world come together as teams or individually and try
+to make a video game as quickly and as completely as possible (with
+varying degrees of success). This is my third time participating and my
+work resulted in “<a
+href="https://ldjam.com/events/ludum-dare/42/ludum-dare-simulator-2019">Ludum
+Dare Simulator 2019</a>”. (I’m not sure I’m actually allowed to use the
+Jam’s name like this… we’ll assume it’s okay.)</p>
+<figure>
+<img src="ld42.gif" alt="Ludum Dare 42 gameplay GIF" />
+<figcaption aria-hidden="true">Ludum Dare 42 gameplay GIF</figcaption>
+</figure>
+<p>The idea of my game is that it simulates the Ludum Dare jam itself;
+you have to construct a game, <em>within the game</em>, by playing six
+different minigames. It’s it’s all very frantic and it was very fun to
+make - I honestly thought I wasn’t gonna finish it at all but somehow it
+did eventually get finished. After the jam, the games are rated by other
+participants, then the results come out - I think it’s safe to say that
+this time my results were… <em>pretty good!</em></p>
+<blockquote>
+<p><strong>Final results</strong></p>
+</blockquote>
+<blockquote>
+<ul>
+<li>Overall: <strong>3rd</strong> (4.481 average from 28 ratings)</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>Fun: <strong>2nd</strong> (4.423 average from 28 ratings)</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>Innovation: <strong>7th</strong> (4.231 average from 28
+ratings)</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>Theme: <strong>688th</strong> (3.385 average from 28 ratings)</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>Graphics: <strong>94th</strong> (4.327 average from 28 ratings)</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>Humor: <strong>23rd</strong> (4.188 average from 26 ratings)</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>Mood: <strong>12th</strong> (4.292 average from 26 ratings)</li>
+</ul>
+</blockquote>
+<p>An additional challenge of Ludum Dare (and most jams really) is to
+follow a theme in your game, which gets voted on by the community and is
+announced as soon as the Jam starts. A few days beforehand, you get to
+see about 15 themes that <em>might</em> be selected, so I sat down with
+a few friends and tried to figure out some game ideas for each of themes
+- this all got put into an ‘theme ideas table’. Some of them were
+<em>much</em> better than others so I was sort of really hoping for one
+of the good themes! But as everyone knows, <em><a
+href="https://github.com/JamBrain/JamBrain/issues/1797">the theme always
+sucks</a></em>.</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><img src="theme-always-sucks.jpg"
+alt="The Theme Always Sucks movie poster by Phil Strahl" /></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><em>courtesy of <a
+href="https://www.youtube.com/@PixelProphecy/videos">Phil Strahl</a> -
+he knows a thing or two about LDJam.</em></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>The theme for Ludum Dare 42 is: Running out of space.</p>
+</blockquote>
+<p>This was definitely not the theme I wanted at all - it was one of the
+least populated entries on my ideas table. I sat in front of an empty
+notepad for an hour trying to think of some new game ideas but just
+<em>wasn’t getting anywhere</em>… so decided to call a day (this was
+like 12AM so not really unexpected) and get started the morning
+after.</p>
+<h1 id="day-1">Day 1</h1>
+<p>I get a couple of new ideas! But they’re mostly just really bad puns
+and wouldn’t tend themselves well to a game. I wasn’t happy with how
+long I was spending having <em>literally nothing made</em>, so I made
+the executive decision to… just ditch the theme 😬 (They’re more like
+guidelines?? and I’m not too bothered about getting a lot position in
+the theme category.)</p>
+<p>One idea from the brainstorm that was stuck in my head was from the
+‘One minute’ theme category - Ludum Dare Simulator. The original idea
+was you’d have 60 seconds to produce a game, and it’d use WarioWare
+style minigames to contribute towards ‘building’ a game. It didn’t
+really work with the theme, even after I tried to retrofit a ‘disk space
+limitation’ on it - it’s clearly just a timer!</p>
+<p>Anyway, a spark was better than nothing, so I got going. The very
+first thing that did was draw a UI mock-up on my whiteboard, and then I
+drew it again in Serif DrawPlus… and then I drew it <em>again</em> in
+Unity. That was a waste of a few hours. <em>(<strong>Editor’s
+note:</strong> no it wasn’t! The clean UI was a huge part of why this
+game was successful. Mocking up in external software was very useful to
+quickly prototype some designs, but the whiteboard stage maybe could’ve
+been skipped since I wasn’t working with anyone in-person.)</em></p>
+<h2 id="minigame-1-physics">Minigame 1: Physics</h2>
+<p>Once the menu was in Unity I started work on the first minigame. I
+knew what the ‘game data’ categories to work towards would be (Code,
+Art, Dialogue, Physics, Music, Effects), but not what game I’d make for
+each of them yet… The first one I knew what I would do was the Physics
+game - it’s just a simple tennis game, where the aim is to keep a rally
+going against… a wall?</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><img src="ld42-tennis.jpg"
+alt="Tennis minigame screenshot" /></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">The tennis player is inside your
+walls</td>
+</tr>
+</tbody>
+</table>
+<p>I spent about an hour trying to make a tennis ball ‘look right’
+(modelling and the textures unwrapping properly), and that meant that it
+got to 5PM on the first day before I’d even started scripting the
+minigame! So as soon as I got that working I moved straight on to the
+second game</p>
+<h2 id="minigame-2-effects">Minigame 2: Effects</h2>
+<figure>
+<img src="ld42-effects.jpg" alt="Effects minigame screenshot" />
+<figcaption aria-hidden="true">Effects minigame screenshot</figcaption>
+</figure>
+<p>The Effects minigame is just a target practice game: targets appear
+on the screen and you have to click them. Like the Physics minigame it
+was fairly easy to code, but the time consuming bit was making particle
+systems. When you clicked on a target, I wanted them to fire huge fancy
+particle systems, to suit the name. I’m not sure if I should have been
+spending so much time on fancy particle effects considering <em>nothing
+was working at the moment</em> [i.e. the main game loop], but it made
+the minigame look fun, which probably helped its success.</p>
+<h2 id="minigame-3-dialogue">Minigame 3: Dialogue</h2>
+<p>I started on the third minigame, dialogue, at about midnight; this
+one wasn’t too hard either. It’s a typing game where words appear on the
+screen and you have to use your keyboard to type out the words. One step
+here was finding a suitably big wordlist; fortunately I had one already
+from an earlier project. I wrote a short Python script to filter out a
+bunch of duplicate words and sort them by length.</p>
+<p><em>Why sort by length?</em> The more time you spend in a minigame,
+the more difficult they would get; e.g. on the tennis game, more tennis
+balls would appear, and on the Effects game, more crosshairs would
+appear. So on the Dialogue game, the words will get longer and more
+difficult to spell. Again, none of these features are really that
+difficult to code; the challenge is figuring out game design ideas and
+implementing them as quickly as possible.</p>
+<p>This brought me to the end of the first day and things were not
+looking very good. <em>(<strong>Editor’s note:</strong> Sure they were!
+there were two whole days left! I just wasn’t experienced enough to know
+I could close the game loop later on.)</em> I had 3/7 minigames
+playable, but they weren’t really that fun to play? You could switch
+between them, but there was still no overarching game controller.</p>
+<h1 id="day-2">Day 2</h1>
+<p>For the start of Day 2 I decided to make a bit of progress on that
+game controller: I set up the ‘energy decline’ system: after spending
+too much time ‘building’ your ‘game’, you need to rest and recover your
+energy. <em>(<strong>Editor’s note:</strong> I don’t think there was a
+specific design reason that I added this feature, other than for having
+a more accurate simulation of the Jam. But in hindsight I think it
+creates a risk/reward opportunity? You can still play on low energy, but
+your visibility is reduced/blurred, which lets the player choose exactly
+when to recover.)</em></p>
+<h2 id="minigame-4-code">Minigame 4: Code</h2>
+<p>After that I moved on to the next minigame, Code, although I still
+didn’t know what I was going to make… so needed to spend more time
+brainstorming. Eventually I decided the Code game would be one of those
+block-based robot instruction games (basically <a
+href="https://lightbot.com/">LightBot</a>). You control a robot and you
+have to give it Forward, Back, Left/Right turn instructions to get to
+the destination, and it executes the commands by itself. <em>‘Okay, I
+can do that, can’t be too hard’</em>, I thought. Oops, it took about
+five hours. Even worse, about three of those hours was just code for
+dragging and dropping instructions from a pool to the instruction list.
+Also the robot was currently just a white capsule - I’ll need to fix
+that later.</p>
+<figure>
+<img src="ld42-code.jpg" alt="Screenshot of Code minigame" />
+<figcaption aria-hidden="true">Screenshot of Code minigame</figcaption>
+</figure>
+<h2 id="minigame-5-art">Minigame 5: Art</h2>
+<p>I knew what this minigame would be from the start: you’d be given a
+drawing and you had to recreate it on another canvas, using a limited
+palette and very basic drawing controls. Again, this took ages, mainly
+because I had to make up a bunch of reference sprites, and <em>they had
+to look good because the whole gimmick was that you won’t be able to
+recreate them with the limited tools!</em> I can’t do nice pixel art,
+and I really wasn’t enjoying the task, but I did most of them while
+streaming to Twitch which helped me get through. Eventually I drew
+enough.</p>
+<p>The next hurdle was writing the algorithm to compare the player’s
+drawing to the reference sprite. I didn’t have any references for how I
+should do that, so I just threw a bunch of random colour distance
+calculations into the minigame script and hoped it would work… (it
+didn’t. but it was close enough to pretend it was thinking about
+something.)</p>
+<p>This brought me to the end of the second day. At this point I have
+5/7 minigames working; they’re looking better than before, but still not
+fully complete. And there’s still no overarching game controller.</p>
+<h1 id="day-3">Day 3</h1>
+<h2 id="minigame-6-music">Minigame 6: Music</h2>
+<p>To start the third day I immediately got going on the final ‘main’
+minigame, Music. It’s a straightforward Simon Says ‘drum loop recreation
+thing’. It gives you a sequence of drum hits and you have to play them
+back; the minigame script compares your input with its pattern and
+awards you based on that. That meant I had to create <em>another</em>
+accuracy scoring algorithm that cost me so much time the night before…
+Somehow, this version worked out really well the first time!</p>
+<figure>
+<img src="ld42-music.jpg" alt="Screenshot of music minigame" />
+<figcaption aria-hidden="true">Screenshot of music minigame</figcaption>
+</figure>
+<p>That meant that the music game only took about three hours to do. The
+drum pattern production pipeline I’d made was working really well - it
+meant I could type a drum loop in Microsoft Excel <em>(<strong>Editor’s
+note:</strong> wtf???)</em> and I could churn out a bunch of drum loops.
+They’re not very good drum loops - I’m not a beatmaker.
+<em>(<strong>Editor’s note:</strong> <a
+href="https://sb00.bandcamp.com/album/transgressions-in-cyberspace">I am
+now a beatmaker.</a>)</em></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><img src="ld42-music-excel.jpg"
+alt="Screenshot of MS Excel beat maker" /></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><em>What fresh hell he hath wrought on
+this land</em></td>
+</tr>
+</tbody>
+</table>
+<h2 id="all-minigames-done">All minigames done!</h2>
+<p>At this point all six ‘main’ minigames were done - in terms of code.
+They’re still using a lot of placeholder assets and generally not
+looking very nice, so I spent a lot of time refining the assets, adding
+juicy animations/transitions in here and there, etc. One big thing I had
+to go back and fix was the robot model in the code game. I used Blender
+to model which is maybe a bit too unoriginal in hindsight…</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><img src="ld42-robot.jpg"
+alt="Picture of robot model for the Code minigame" /></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><em>look at this cute lil boi</em></td>
+</tr>
+</tbody>
+</table>
+<p>Then I focussed on adding sound effects around the place, to improve
+the atmosphere. Up until now, the game was unnervingly silent, which
+definitely needed to change.</p>
+<h2 id="the-final-stretch">The final stretch</h2>
+<p>Soon enough I was at six hours to go and there was <em>still no
+actual game loop</em>, because I kept putting it off. I’d been mulling
+it over how the game controller would need to behave throughout the jam,
+so I knew what I had to do for it; it was just a case of typing a ton of
+code as quickly as possible.</p>
+<p>At about four hours ago I decided the game needed a soundtrack…
+possibly a mistake because that took about half an hour to find tracks,
+trim them to be loopable, putting them in a ‘music controller’ script,
+etc… spending lots of time I didn’t really have.</p>
+<h2 id="minigame-7-debug-t-3hrs">Minigame 7: Debug (T-3hrs)</h2>
+<p>At three hours ago, most of it was coming together, but it was still
+missing a final piece - the Debug minigame. I had this idea from the
+start; once you’ve done making your game you progress to the Debug
+minigame, which is a really fast-paced final rush to eliminate as many
+bug as possible. It was a very unnecessary addition to the game
+<em>(Edior’s note: disagree!)</em>, but I just thought it would sell the
+idea of this frantic development cycle, and gives a really nice finale
+to the playthrough.</p>
+<figure>
+<img src="ld42-debug.gif" alt="Gameplay from the Debug minigame" />
+<figcaption aria-hidden="true">Gameplay from the Debug
+minigame</figcaption>
+</figure>
+<p><em>(<strong>Editor’s note:</strong> ironic that I was using my final
+hours of a jam making a minigame about squashing bugs in the final hours
+of a jam, instead of squashing bugs in my game…)</em></p>
+<p>It was a final race to draw pixel art and write code as quick as I
+could.</p>
+<h2 id="times-up">Time’s up!</h2>
+<p>I got the Debug minigame done, thankfully, and had about 30 minutes
+left to throw in as many extra bits of polish as possible. There were a
+lot of things I wanted to improve, but to be honest I was just glad that
+I even got the game finished!</p>
+<p>I was finally ready to build and upload the game to the Ludum Dare
+website, exactly on time.</p>
+<h1 id="reflections">Reflections</h1>
+<p>Considering how tight I was working to the deadline, there were so
+many opportunities, especially on the final day, for just one thing to
+go wrong and everything would have fallen apart. This was terrible
+planning on my part and it should be a lesson for everyone: “Don’t make
+your entire game in the last 10 minutes of a 72 hour game jam.”</p>
+<p><em>(<strong>Editor’s note:</strong> Not sure I agree with this. If
+you understand you/your team’s capabilities, and are good at estimating
+how long it will take to ‘do/make X thing’, then it’s okay to put
+critical tasks off until later. Sometimes you have to do it, because the
+critical component can’t be made until the smaller parts are made;
+sometimes it makes the task easier because the design can be refined as
+you build up to it; and sometimes it’s a mistake to make components so
+sequentially. In the case of this game, I definitely could have worked
+on the overarching game loop script earlier in development, which would
+have decreased the risk of ‘not finishing’; but arguably the six/seven
+minigames were equally critical to the ‘fun’ of the game. ‘Player
+funness’ is a hard metric to prioritize tasks by!)</em></p>
+<p>Once the jamming was finished, all entrants had 25 days to play and
+rate each of those games. Given I spent all my time developing, I had no
+time to do any playtesting* or QA, so was just hoping that reviewers
+would play the exact same way I did so bugs couldn’t be found… A few
+minor bugs were found by reviewers, but from what I could tell from
+people were just really enjoying it! It was a huge relief to see that I
+didn’t just waste three days making something that wasn’t even fun…</p>
+<p>Comparing it to my first Ludum Dare game, <a
+href="https://ldjam.com/events/ludum-dare/40/ketchup-quest-endless-arcade-fighting-to-protect-your-saucy-stash">Ketchup
+Quest</a>, I thought this one was a bit more contentful and had more
+atmosphere, so I had an inkling that it would score slightly higher than
+that. The problem with these results is that it’ll be almost impossible
+to top it in the future!</p>
+<p>Perhaps in future jams I should push the boat out a bit more…? I
+think the fact I was so familiar with Unity and C# it made it kinda
+trivial to implement the ideas - maybe in the future I should try using
+a different engine? <em>(<strong>Editor’s note:</strong> disagree - jams
+are not a good time to throw out the tools you’re good at using. Trying
+to pick up new engines in a time-pressured environment does not tend to
+be enjoyable. Definitely do try out new engines, but maybe in advance of
+a jam 🙂)</em></p>
+<p>Overall it was a really fun few days, and the amazing scores just
+added to that. I’d definitely recommend checking out the Ludum Dare site
+for yourself and <a
+href="https://ldjam.com/events/ludum-dare/42/games">trying out some of
+the games that everyone made</a>. Some dev teams carry on working, and
+produce ‘post-jam’ versions of their games; maybe you’ll see ‘Ludum Dare
+Simluator 2019 DX’ hitting store shelves in the near future… but I don’t
+I don’t think so. I’ll be too busy with university :P
+<em>(<strong>Editor’s note:</strong> the university course was
+time-consuming to say the least 😅)</em></p>
+<p>If you’re interested in developing games yourself you totally should!
+I’d recommend downloading Unity, try out the tutorials, and once you’re
+confident enough, enter a game jam for yourself! It’s a really good
+learning experience, and Ludum Dare is an amazing, positive, welcoming
+community. I’d love to see your projects as well - if you make anything,
+<a href="https://samboyer.uk/#contact">let me know</a> :)</p>
+
+<hr>
+<a href='.'><i>Return to index.</i></a>
+</div>
+<div class="table_of_contents">
+<ul>
+<li><a
+href="#making-a-game-for-ludum-dare-42-solo-at-18-years-old-with-no-project-planning-experience">Making
+a game for Ludum Dare 42 (solo, at 18 years old, with no project
+planning experience)</a>
+<ul>
+<li><a
+href="#and-yet-i-will-literally-never-be-able-to-make-a-game-more-polished-than-this">-
+and yet, I will literally never be able to make a game more polished
+than this 😔</a></li>
+</ul></li>
+<li><a href="#intro">Intro</a></li>
+<li><a href="#day-1">Day 1</a>
+<ul>
+<li><a href="#minigame-1-physics">Minigame 1: Physics</a></li>
+<li><a href="#minigame-2-effects">Minigame 2: Effects</a></li>
+<li><a href="#minigame-3-dialogue">Minigame 3: Dialogue</a></li>
+</ul></li>
+<li><a href="#day-2">Day 2</a>
+<ul>
+<li><a href="#minigame-4-code">Minigame 4: Code</a></li>
+<li><a href="#minigame-5-art">Minigame 5: Art</a></li>
+</ul></li>
+<li><a href="#day-3">Day 3</a>
+<ul>
+<li><a href="#minigame-6-music">Minigame 6: Music</a></li>
+<li><a href="#all-minigames-done">All minigames done!</a></li>
+<li><a href="#the-final-stretch">The final stretch</a></li>
+<li><a href="#minigame-7-debug-t-3hrs">Minigame 7: Debug
+(T-3hrs)</a></li>
+<li><a href="#times-up">Time’s up!</a></li>
+</ul></li>
+<li><a href="#reflections">Reflections</a></li>
+</ul>
+
+</div>
+</body>
+</html>

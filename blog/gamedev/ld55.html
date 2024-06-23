@@ -1,0 +1,392 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Racetracks and Rediscovery: Making a game for Ludum Dare 55 - Sam Boyer</title>
+<link rel="stylesheet" href="/blog/style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="feed.rss"/>
+</head>
+<body>
+<div class="page_header">
+<div class="header_top_left">
+    <a href="/" style="display: inherit;"><img src="/img/logo_dark.svg" title="Back to main site" height="24px"></a>
+  <div class="vbar"></div>
+    <a href="/blog" title="Back to blog index" class="blog_link">blog</a>
+  </div>
+</div>
+<div class="content">
+<h1
+id="racetracks-and-rediscovery-making-a-game-for-ludum-dare-55">Racetracks
+and Rediscovery: Making a game for Ludum Dare 55</h1>
+<h2
+id="you-cant-make-a-gravity-defying-running-game-without-breaking-a-few-physics-engines">You
+can’t make a gravity-defying running game without breaking a few physics
+engines</h2>
+<p><em>April 2024</em></p>
+<p><img src="ld55-screenshot.png" /></p>
+<p>My seventh entry into <a
+href="https://ldjam.com/events/ludum-dare/55">Ludum Dare</a> felt like a
+real throwback.</p>
+<p>The last time I did a solo game jam in Unity was <em>6 years
+ago</em>. Back then, I hadn’t even started university, and probably had
+&lt; 5,000 lines of code to my name. Fast forward to now, where I’ve
+written more lines than I care to admit, but in the domain of Big
+Company Product instead of Small Throwaway Game<a href="#fn1"
+class="footnote-ref" id="fnref1"
+role="doc-noteref"><sup>1</sup></a>.</p>
+<p>Setting aside three non-work days to spend <em>even more</em> time
+coding is sure to cause confusion in the office. But let’s phrase it
+differently: I get three full days to do nothing but <em>make something
+fun</em>, with no managers or approval chains to appease. It felt like a
+protest against the exhausted, serious-code-only lifestyle I’ve grown
+into, and helped me remember why I even got into computer science in the
+first place.</p>
+<p>As you may expect, three days doing nothing but gamedev left me quite
+mentally and emotionally drained for a couple days afterwards, but
+plenty of other weekend plans will do that too ;)</p>
+<hr />
+<p>Before reading this post, take a look at my game: <a
+href="https://ldjam.com/events/ludum-dare/55/birb-world-tour-royale">Birb
+World Tour: Royale</a>!</p>
+<h1 id="pre-jam-decisions">Pre-jam decisions</h1>
+<p>I’d decided to participate in this jam about a month beforehand, and
+spent a lot of time thinking about what I wanted to work on. I decided
+on aiming for these features/tools in advance:</p>
+<ul>
+<li><p>I wanted to make something in full 3D. I’ve worked in 3D before,
+but never shipped anything outside of 2/2.5D. Making a 3D game feels
+completely different to a 2D game to me - not only do you need to
+created textured &amp; animated 3D models instead of 2D sprites, but
+character movement, camera control and level design works quite
+differently in 3D. (VR games are an equally large design jump from 3D
+games; it’s a medium I probably won’t revisit for a while.)</p></li>
+<li><p>I wanted to use Unity, despite <a
+href="https://www.theverge.com/2023/9/18/23879029/unity-pricing-model-change">the
+licencing debacle last year</a>. This wasn’t an easy decision, but I
+figured that</p>
+<ul>
+<li><ol type="a">
+<li>I don’t personally suffer from the new pricing model,</li>
+</ol></li>
+<li><ol start="2" type="a">
+<li>I know how to use Unity’s API much better than Godot’s, and</li>
+</ol></li>
+<li><ol start="3" type="a">
+<li>The challenge I wanted to tackle in this Jam were that of game
+design, art and music, not how to use a new game engine API.</li>
+</ol></li>
+<li>If someone looking to get into making indie games asked me now, I’d
+recommend they start with Godot to avoid feeling ‘locked-in’ to Unity.
+Maybe I’ll learn how to use it better someday too.</li>
+</ul></li>
+<li><p>I wanted to make a ‘running game’. I was randomly feeling quite
+nostalgic for the late-00s Sonic games, where the gameplay boils down to
+“run very fast in one direction and sometimes interact with things”.
+(Think Sonic ’06 Mach Speed sections, Sonic Unleashed Daytime levels,
+maybe even Sonic Frontier’s open-zones.) The moments where you’re forced
+to slow down for a 2D section or precision platforming are occasionally
+fun, but my ideal platformer is one where the objective is to <em>go
+fast</em>. (Would fast movement in open spaces still feel as gratifying
+in the absence of slow, confined moments? I don’t know!)</p></li>
+<li><p>I wanted to include AI opponents. Like, <em>lots</em> of them. I
+also wanted to disguise them as real players that you’re connected to;
+pretending I made a whole Battle Royale network stack in 3 days adds to
+the silliness. Opponents, AI are otherwise, are a classic way to give
+the player an objective (beat the opponents), and to populate the game
+world a little. Let’s just hope the AI code can be competent without
+taking up too many CPU cycles.</p></li>
+<li><p>I wanted to make an original soundtrack for the game. I’ve done
+this before - modular music in <a
+href="https://ldjam.com/events/ludum-dare/54/temple-is-acid-feat-bees">TEMPLE
+IS ACID</a> and chiptune in <a
+href="https://ldjam.com/events/ludum-dare/46/bloom-eternal">BLOOM
+ETERNAL</a> - but nothing that’s really stood out. Some of the
+lesser-polished Sonic games are, <a
+href="https://www.reddit.com/r/SonicTheHedgehog/comments/uvh08i/sega_on_their_way_to_make_the_best_music_for_the/">infamously</a>,
+forgiven by having great soundtracks, which is the exact kind of exploit
+I wanted in my toolkit.</p></li>
+</ul>
+<h1 id="making-the-game-in-3-days">Making the game (in 3 days)</h1>
+<p>I don’t really have any grand insights from this dev cycle, other
+than I finished it in time 😆</p>
+<p>The ‘tasks’ (‘make a model/texture/sound effect’, ‘add some code to
+to X’, ‘fix a bug’, etc.) were done in a somewhat random order, based on
+what I felt more motivated to do at the time. Towards the end of the jam
+I focused less on new features and prioritized bugfixes, playability
+(i.e. the core gameplay loop), then replayability via the unlockable
+upgrades.</p>
+<p>Here’s a few clips/pictures from development:</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><video src="ld55-dev-room.mp4"
+controls=""><a href="ld55-dev-room.mp4">Video</a></video></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">The earliest clip I have of development.
+Working loop-de-loops were a must-have - hence why there’s one right
+after the spawn point.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><video src="ld55-ai-runners.mp4"
+controls=""><a href="ld55-ai-runners.mp4">Video</a></video></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Early AI runners - look at ’em go!</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><video src="ld55-lobby-ai.mp4"
+controls=""><a href="ld55-lobby-ai.mp4">Video</a></video></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Early AI lobby characters enjoyed
+jumping a bit too much.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><video src="ld55-ancient-bridge.mp4"
+controls=""><a href="ld55-ancient-bridge.mp4">Video</a></video></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">An awesome ancient bridge path that was
+not to be. A real gravity-defying level that only used these kinds of
+bendy paths would have been awesome. I reused the bridge in the final
+game at least.</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><video src="ld55-piggy-bank.mp4"
+controls=""><a href="ld55-piggy-bank.mp4">Video</a></video></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">The piggy bank debris are <em>the</em>
+most important feature in the game.</td>
+</tr>
+</tbody>
+</table>
+<h1 id="post-jam-reflections">Post-jam reflections</h1>
+<h2 id="what-went-well">What went well</h2>
+<ul>
+<li>It got finished! Regardless of what I hoped it would be, releasing a
+game that does <em>something</em> fun is always an achievement. It has
+original music, original models, and level design in a genre I’ve never
+worked in before. I got to show it to some friends at a party recently
+and the positive reception was so rewarding.</li>
+<li>Juicy graphics. There’s no coherency between the low-poly,
+flat-shaded models, the pixellated-but-high-poly terrain, the toon
+water, the electric particles, the sharp-angled UI, but <em>man</em>
+does it look <em>cool</em>. I wish there were more particles.</li>
+<li>‘Emergent’ competitive energy. I was never expecting the AI
+characters to put up a real fight, but as soon as I made some of them
+faster than the player (and prevented them from perpetually falling into
+the water…), it was actually <em>fun</em> to try and keep up with them.
+There’s no navmesh, no ML agents; just random button inputs and 99
+chances for the AI to succeed 😆</li>
+</ul>
+<h2 id="what-could-have-been-better">What could have been better</h2>
+<ul>
+<li>The player controller. For a game all about speed, the movement code
+sure doesn’t handle it well! I put this down to the controller being a
+weird mix between Rigidbody/projectile physics and traditional
+character-runs-around-place code. I couldn’t get collisions working
+without treating the player as a ‘sphere with momentum’, which meant
+that the moment you came off a ramp at 100MPH, you weren’t coming back
+down for a <em>while</em>. I feel like watching more Sonic game footage
+would reveal their tricks for keeping the player on the ground while at
+speed, even while covering sharp corners, but I suspect the main
+limitation was acting like a Rigidbody.</li>
+<li>The soundtrack. A passing pre-jam thought was that I could spend
+equal parts on gamedev and music production, but in reality I only spent
+~4 hours on music. Considering <a
+href="https://sb00.bandcamp.com/track/race-hazard">some of my more
+complete tracks</a> can take about 20hrs each, this was nowhere near
+enough time to make quality tracks - I ended up relying more on existing
+loops and samples than I’d have liked. I think 4 race songs and 2 lobby
+songs was enough variety and <a
+href="https://drive.google.com/drive/u/0/folders/18ULQtzU0rroqb1Ccrhv7qThBw0HwnaNL">they
+don’t sound <em>bad</em></a>, but maybe I could have written more and
+only picked the top handful to include.</li>
+<li>Task planning. There’s a lot of stuff in this ~5-minute experience:
+code, world environments, level features, models, textures, UI, music,
+sound effects, particle effects, stacking upgrades, and more. I jotted
+out some ‘MVP’ &amp; ‘Nice to have’ tasks in a Google Doc, which quickly
+grew into a multi-page nested list of bugs, ideas, and reminders. Too
+much time was spent just looking at this document and moving bullet
+points around as I adjusted the scope/priorities. Maybe tools like
+Trello could have sped this up? or resulted in more formality and thus
+planning time?</li>
+<li>Level design. Maybe I’m just asking for too much, but the original
+plan involved ‘touring’ between different levels/regions on rotation -
+hence why the lobby and races are connected via tunnels. I hadn’t
+anticipated how difficult Unity’s terrain system would be to work with
+(particularly just placing objects on it), and that any non-barren
+environments would take a <em>lot</em> of designing, so unfortunately
+had to settle on just one. I even wasted an hour building a procedural
+city block generator using <a
+href="https://www.kenney.nl/assets/city-kit-commercial">Kenney building
+assets</a>, but realised that without aggressive performance
+optimization (LOD mesh/billboard swap-outs), and variations to make the
+level <em>fun</em>, it just wasn’t usable. Ah well, one level it
+is.</li>
+</ul>
+<h2 id="rage-against-the-matheme">Rage against the maTheme</h2>
+<p>This isn’t related to game development, but more of an open question
+to the Ludum Dare community: <em>to what extent does the theme
+matter?</em></p>
+<p>In previous jams I’ve struggled to think of good game ideas that
+relate to the theme, but always found some silly way of shoehorning the
+theme into my game<a href="#fn2" class="footnote-ref" id="fnref2"
+role="doc-noteref"><sup>2</sup></a>. This is definitely a shortcoming in
+my game design ability, but given that limitation, shouldn’t I still
+endeavour to use the 72 hours to make <em>something</em>, regardless of
+theme?</p>
+<p>This time, I had plans to shoehorn the theme in again, but couldn’t
+quite work out the presentation style, and so left it themeless.
+Thankfully, we’re allowed to opt out of the Theme rating category, but a
+LD game that ignores the theme still just <em>feels</em> a bit wrong; as
+expected, the lack of theme was brought up repeatedly in the review
+comments, and probably impacted my Overall score a little. There’s a
+whole section in the <a
+href="https://ldjam.com/events/ludum-dare/rules">LDJam rules</a> called
+‘Is the theme required?’:</p>
+<blockquote>
+<p>Officially no, you are not required to use the Theme. […] To us, the
+Theme is just a single voting category. […] That said, it’s worth
+understanding that all voting categories in Ludum Dare are opinions; The
+opinions of your peers. […] So as a general suggestion, if you want to
+score well in Ludum Dare, make sure you do use the theme in some
+way.</p>
+</blockquote>
+<p>This is a good stance from the organisers, but it raises the
+question(s):</p>
+<ul>
+<li><em>To what extent does the community think about “themeiness” when
+voting in categories other than Theme (e.g. Overall)?</em></li>
+<li><em>Does opting out of Theme affect how the community votes in the
+Overall category?</em></li>
+<li><em>In future jams, would the community prefer themeless games to be
+declared as such (i.e. by opting out of Theme voting), or to hide its
+non-theme origins by shoehorning a theme into the
+story/artwork?</em></li>
+</ul>
+<p>I don’t know whether my score would be lower or higher if I spent
+more time aligning my game with the theme than adding features, but it’d
+be good for all of us to better understand the importance of themes for
+future Jams.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>Making games is fun! You should try it! A game jam is a good place to
+start releasing things, although I’d recommend installing the editor and
+following a tutorial project a few weeks in advance. Having a team might
+also help decrease the workload for your first jam. Here’s some extra
+tips while I’m feeling verbose:</p>
+<ul>
+<li><strong>Try to export to WebGL/HTML5</strong> where possible. Your
+players will thank you for the lack of install/setup experience, but
+obviously if performance is an issue for your game (i.e. large 3D
+environments are necessary) then you might have to settle for a
+downloadable executable instead.</li>
+<li><strong>Focus on juice.</strong> It’s hard to describe exactly what
+‘juice’ is, and especially hard to justify working on it in a Jam when
+you also have critical gameplay code to write, but the amount of joy you
+can create from these relatively tiny additions is always surprising to
+me. These talks are a good introduction to the topic:
+<ul>
+<li><a href="https://www.youtube.com/watch?v=Fy0aCDmgnxg">Juice it or
+lose it</a> by Martin Jonasson &amp; Petri Purho</li>
+<li><a href="https://www.youtube.com/watch?v=216_5nu4aVQ">Secrets of
+Game Feel and Juice</a> by from the Game Maker’s Toolkit</li>
+</ul></li>
+<li><strong>Remember, it’s a marathon, not a sprint.</strong> Three days
+is a long time to be doing nothing but art/coding! Make sure you take
+frequent breaks, go outside, sleep a normal amount, etc. Also, try and
+plan for your workload to be evenly spread out over the jam period, so
+you don’t need to crunch on the last day.</li>
+<li><strong>Remember, it’s a sprint, not a marathon.</strong> Software
+projects that are worked on for years need elegant code, good
+documentation, and lots of unit tests. Chances are your game won’t be
+worked on after the jam, so spending half of your time writing
+testing/documentation/complex class hierarchies in your game code is not
+a great use of your time. Similarly, don’t worry about
+lower-quality-than-usual artwork and music - you can always go back and
+improve it if you have time.</li>
+</ul>
+<p>As ever, if you’ve been inspired to join a game jam or just mess
+around in a game engine, let me know!</p>
+<aside id="footnotes" class="footnotes footnotes-end-of-document"
+role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Maybe this isn’t a surprise to you, but I don’t believe
+a Computer Science degree and 30 months of Software Engineering
+experience have made me better at game jams. If anything, I’m worse off,
+because I need a full 8 hours of sleep to function now.)_<a
+href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>My personal favourite shoehorning moment was for LD54,
+with the theme ‘Limited space’: rearranging those letters gives ‘<a
+href="https://ldjam.com/events/ludum-dare/54/temple-is-acid-feat-bees">TEMPLE
+IS ACID</a>’.<a href="#fnref2" class="footnote-back"
+role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside>
+
+<hr>
+<a href='.'><i>Return to index.</i></a>
+</div>
+<div class="table_of_contents">
+<ul>
+<li><a
+href="#racetracks-and-rediscovery-making-a-game-for-ludum-dare-55">Racetracks
+and Rediscovery: Making a game for Ludum Dare 55</a>
+<ul>
+<li><a
+href="#you-cant-make-a-gravity-defying-running-game-without-breaking-a-few-physics-engines">You
+can’t make a gravity-defying running game without breaking a few physics
+engines</a></li>
+</ul></li>
+<li><a href="#pre-jam-decisions">Pre-jam decisions</a></li>
+<li><a href="#making-the-game-in-3-days">Making the game (in 3
+days)</a></li>
+<li><a href="#post-jam-reflections">Post-jam reflections</a>
+<ul>
+<li><a href="#what-went-well">What went well</a></li>
+<li><a href="#what-could-have-been-better">What could have been
+better</a></li>
+<li><a href="#rage-against-the-matheme">Rage against the
+maTheme</a></li>
+</ul></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+
+</div>
+</body>
+</html>
