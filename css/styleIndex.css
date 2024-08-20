@@ -6,7 +6,7 @@
   /* COLOURS */
   --col-primary: #b86cc7;
   --col-primary-light: #9145ad;
-  --col-secondary-light: #a842fc;
+  --col-secondary-light: #eef;
   --col-background: #fafefa;
   --col-text: #666666;
   --col-select-background: #df9be1;
@@ -148,24 +148,29 @@ li{
   border-bottom:solid 2px rgba(var(--col-white-triplet),0.1);
   /* text-decoration: underline solid rgba(var(--col-white-triplet),0.1); */
   transition: font-size 300ms;
-  animation: h1In 500ms ease-out 0s normal;
-  -webkit-animation: h1In 500ms ease-out 0s 1 normal;
+  animation: h1In 300ms ease-out 300ms normal;
+  animation-fill-mode: both;
   transform: translateY(0px);
 }
 .headerText h1{
-  animation: h1Color2 8s linear infinite;
-  background-image: -webkit-linear-gradient(0deg, #8F9AEF 0%, #94F7EA 5%, #A78FEF 25%, #f0b1fd 37%, #83e2ff 47%, #89ffa4 60%, #b9acff 75%, #ed94ff 81%, #8F9AEF 100%);  -webkit-background-clip: text;
+  animation: h1Color2 8s linear infinite, h1In 500ms ease-out 500ms normal;
+  animation-fill-mode: both;
   background-size: 300% 100%;
   background-position: 0% 0%;
   background-clip: text;
+  background-image: -webkit-linear-gradient(0deg, #8F9AEF 0%, #94F7EA 5%, #A78FEF 25%, #f0b1fd 37%, #83e2ff 47%, #89ffa4 60%, #b9acff 75%, #ed94ff 81%, #8F9AEF 100%);
+  -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0px 0px 10px #fff2;
   font-weight:100;
   font-style: italic;
-  cursor: pointer;
+  transition: filter 300ms;
+  filter:saturate(0.5) brightness(1.1);
+  user-select: none;
 }
 .headerText h1:hover{
-  animation-duration: 1s;
+  animation-duration: 2s;
+  filter:saturate(2);
 }
 
 @-webkit-keyframes h1In {
@@ -255,6 +260,7 @@ li{
   margin: 0 auto;
   display: inline-block;
   transition: width 300ms;
+  user-select: none;
 }
 .navbar a{
   color: var(--col-background) !important;
@@ -300,7 +306,7 @@ h2 i{
 }
 .largeText{
   font-size: 2.5em;
-  padding: 20px 25px 20px;
+  padding: 30vh 25px;
   color: var(--col-subheading);
   font-weight: 300;
   display: block;
@@ -372,10 +378,12 @@ h2 i{
 /*FOOTER*/
 .footer{
   width: 80%;
-  padding: 50px 10%;
+  padding: 50px 10% 150px;
   background-color: var(--col-footer-background);
   color: var(--col-background);
   box-shadow:0px 0px 15px 10px rgba(var(--col-black-triplet),0.1);
+  display: flex;
+  justify-content:space-between;
 }
 .footer a, .footer a:visited{
   color: var(--col-background);
@@ -408,7 +416,7 @@ h2 i{
 .socialLink a{
   color: var(--col-footer-links);
   padding: 0;
-  transition: color 200ms;
+  transition: color 150ms;
   display: inline-block;
   height: 64px;
   width:64px;
