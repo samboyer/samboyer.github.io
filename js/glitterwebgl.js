@@ -151,24 +151,27 @@ function setupGlitter(){
   gl.clearColor(1.0,1.0,1.0,0);
   
 
-
   //render loop
-
-
+  let frames=0;
   const render = (timestamp) => {
+    frames+=1;
     if(glitterInView){
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.uniform1f(timestampId, timestamp);
       if(!started){gl.uniform1f(startTimeId, timestamp);started=true;}
 
       gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
-    //   window.requestAnimationFrame(render);
       setTimeout(_ => window.requestAnimationFrame(render),25);
     }
     else{
       setTimeout(_ => window.requestAnimationFrame(render),100);
     }
   };
+
+  setInterval(()=>{
+    console.log(frames.toString()+'FPS');
+    frames=0;
+  }, 1000);
 
   // Make random noise texture
   gl.activeTexture(gl.TEXTURE0)
@@ -214,7 +217,6 @@ function setupGlitter(){
       canvas.height = newHeight;
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
       gl.uniform1f(heightId, parseInt(canvas.height));
-      render(); //just in case
     }
   }
 }
