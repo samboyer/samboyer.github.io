@@ -59,7 +59,7 @@ h1, h2, h3, h4{
   /* font-family: 'SF Mono', SFMono-Regular, ui-monospace, 'DejaVu Sans Mono', Menlo, Consolas, monospace; */
 }
 h1{
-  font-size: 6rem;
+  font-size:2.5rem;
   font-style: normal;
 }
 h2{
@@ -143,8 +143,7 @@ li{
 .headerText{
   margin: 25vh 10% 20vh;
   display: inline-block;
-  height: 5.8rem;
-  /* padding-right: 6em; */
+  height: 2.3rem;
   border-bottom:solid 2px rgba(var(--col-white-triplet),0.1);
   /* text-decoration: underline solid rgba(var(--col-white-triplet),0.1); */
   transition: font-size 300ms;

@@ -607,22 +607,31 @@
     <div class="footer">
         <div class="footerInfo">
 			<p>© 2017-2024</p>
-			<p>Website design by <a href="https://samboyer.uk" id="website_design_by">me</a></p>
 			<script>
-designers=[
-	"me",
-	"nobody",
-	"you?",
-	"a mug",
-	"SCP-9264",
-	"the collective screams of a billion transistors",
-	"three website designers in a trench coat",
-	"a rat pulling my hair",
-	"a dog piloting a propellor plane",
-	"an unearthed stone tablet from 3000BC",
-	"an unidentified extrasolar signal",
+const headers=[
+    "Hello!",
+	"Wow you made it",
+	"Welcome back!",
+    "Access granted",
+    "Wait who are you???",
+    "Are you refreshing the page?",
+    "✨✨✨",
+    "🚀🛰☄",
+    "🎉🎉🎉",
+
+
+	"₩̷̺͇͕͍̏̽Ɇ̶͇̙͑͛̂̊̄̆͘͠͠Ⱡ̵̮̃́̌̈́̍̊͘₵̴̧̱͇̯̆͊̋̀͐͂́̈̕Ø̷̡͖̙̭̺̭̪͖̔̿́̏̑̿͒̚͜₥̴͎͎̥͇̋̎̀Ɇ̶̧̦̯͉̠̠̹̌͘͝ ̸̼͈̫̌̈́̾̑̅͌̇̌̚₮̴̤̥͈̆ͅØ̸͎̿̾̅͘͘͝ ̶̧̧̤͔̩͗̀̚₥̸͉̤͂̔̊͂͑͒̚̚͝Ɏ̴̠̇̾ ̷͖̘̹̤̑̇̽̈́͗̂͝₩̶̢̛̪͙̻̱̯̓̈́̑̄̐Ɇ̸̫̺̐฿̵͚̂͗̔₴̵̨͙̗͂͆ł̷̮̣̦̖͎̈̄̋̋ͅ₮̴̡̮̻͖͙̥̪̫̰͊̽̌Ɇ̶̮͙̝͚͙̮̠̋̏͝,",
+
+
+	"Test message please ignore",
+    "${props => props.welcomeMessage}",
+    "\\\" OR 1=1; DROP TABLE *; --",
+    "Error: missing locales key 'welcomeMessage'",
+    "No welcome message today sorry :(",
+    ":)",
+    ":o",
 ];
-document.getElementById('website_design_by').innerText = designers[Math.floor(Math.random()*designers.length)];
+document.querySelector('h1').innerText = headers[Math.floor(Math.random()*headers.length)];
 			</script>
             <small>
                 <div>(/._.)/*\(._.\)</div>
