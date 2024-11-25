@@ -87,28 +87,11 @@
             },20);
         }
 
-        function showVideoPopup(videoId){
-            var url = "https://www.youtube.com/embed/"+videoId+"?rel=0&color=white&controls=1&autoplay=1"
-            document.getElementById('videoOverlayIframe').src = url;
-            setTimeout(function(){
-                document.getElementById('videoOverlay').classList.add('overlayOpen');
-            },20);
-        }
-        function closeVideoPopup(){
-            document.getElementById('videoOverlayIframe').src = 'about:blank';
-            setTimeout(function(){
-                document.getElementById('videoOverlay').classList.remove('overlayOpen');
-            },20);
-        }
-        function clearVideoPopup() {
-            document.getElementById('videoOverlayIframe').src = 'about:blank';
-        }
-
     </script>
 
   </head>
 
-  <body onload="clearVideoPopup();">
+  <body>
     <div id="top"></div>
     <div class="top">
         <div class="headerClip">
@@ -551,42 +534,9 @@
             <br><br><br>
             <iframe class="iframe_with_background" loading="lazy" style="width:100%; height:200px;border:none;" src="https://live.samboyer.uk/fav-music/"></iframe>
             <br><br><br>
-            <h3>Some videos I used to make with Blender, Vegas, OBS etc:</h3>
+            <h3>And some music I actually made!</h3>
             <br><br><br>
-            <div class="fullWidth">
-                <div class="videoShowcase">
-                    <picture>
-                        <source srcset="img/video/carousel-dogephone-mono.png">
-                        <source srcset="img/video/carousel-dogephone.jpg" type="image/jpeg">
-                        <img loading="lazy" src="img/video/carousel-dogephone.jpg" onclick="showVideoPopup('WxZ-9TNS9RI')" alt="Video: Dogephone" >
-                    </picture>
-                    <picture>
-                        <source srcset="img/video/carousel-daynightcycle-mono.png">
-                        <source srcset="img/video/carousel-daynightcycle.jpg" type="image/jpeg">
-                        <img loading="lazy" src="img/video/carousel-daynightcycle.jpg" onclick="showVideoPopup('A6ERj4WjYxI')" alt="Video: Unity Day/Night Cycle" >
-                    </picture>
-                    <picture>
-                        <source srcset="img/video/carousel-arity2-mono.png">
-                        <source srcset="img/video/carousel-arity2.jpg" type="image/jpeg">
-                        <img loading="lazy" src="img/video/carousel-arity2.jpg" onclick="showVideoPopup('vngL_MMSq0I')" alt="Video: Arity Music" >
-                    </picture>
-                    <picture>
-                        <source srcset="img/video/carousel-ketchupquesttrailer-mono.png">
-                        <source srcset="img/video/carousel-ketchupquesttrailer.jpg" type="image/jpeg">
-                        <img loading="lazy" src="img/video/carousel-ketchupquesttrailer.jpg" onclick="showVideoPopup('ZxMTdH2rcVU')" alt="Video: Ketchup Quest Trailer" >
-                    </picture>
-                    <picture>
-                        <source srcset="img/video/carousel-ldsim-mono.png">
-                        <source srcset="img/video/carousel-ldsim.jpg" type="image/jpeg">
-                        <img loading="lazy" src="img/video/carousel-ldsim.jpg" onclick="showVideoPopup('SjFnyeXqhSU')" alt="Video: Ludum Dare Simuator Postmortem" >
-                    </picture>
-                    <picture>
-                        <source srcset="img/video/carousel-froggychair-mono.png">
-                        <source srcset="img/video/carousel-froggychair.jpg" type="image/jpeg">
-                        <img loading="lazy" src="img/video/carousel-froggychair.jpg" onclick="showVideoPopup('y0hzxN7pwLU')" alt="Video: Froggy Chair" >
-                    </picture>
-                </div>
-            </div>
+            <iframe class="iframe_with_background" loading="lazy" style="width:100%; height:230px;border:none;" src="my_music.html"></iframe>
         </div>
 
         <div class="section">
@@ -680,15 +630,6 @@ document.querySelector('h1').innerText = headers[Math.floor(Math.random()*header
             <i class="spinner fa fa-cog fa-spin fa-3x fa-fw"></i>
             <iframe id="overlayIframe" title="More Info Popup" src="about:blank" >Loading...</iframe>
             <div onclick="closePopup()" class="popupClose"><i class="fa fa-times-circle" aria-hidden="true"></i></div>
-        </div>
-    </div>
-    </div>
-    <div class="screenOverlay" onclick="closeVideoPopup()" id="videoOverlay">
-        <div class="popupContainer">
-        <div class="videoPopup animated">
-            <i class="spinner fa fa-cog fa-spin fa-3x fa-fw"></i>
-            <iframe id="videoOverlayIframe" title="Video Player Popup" src="about:blank" frameborder="0" allowfullscreen>Loading...</iframe>
-            <div onclick="closeVideoPopup()" class="popupClose"><i class="fa fa-times-circle" aria-hidden="true"></i></div>
         </div>
     </div>
     </div>

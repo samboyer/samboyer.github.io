@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Wow it's a Spotify Widget!</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <div class="carousel">
+        {% for track in tracks %}
+        <div class="track">
+            <img src="{{ track.image_mono }}" />
+            <div class="trackinfo"><b>{{ track.title }}</b><br />
+                {% if track.year %}
+                <i>{{ track.year }}</i><br />
+                {% endif %}
+                {% if track.artist %}
+                by <i>{{ track.artist }}</i><br />
+                {% endif %}
+                {% if track.preview_mp3 %}
+                <audio controls src="{{ track.preview_mp3 }}" preload="none" controlslist="play nodownload noplaybackrate" onplay="pauseOthers(this);"></audio>
+                {% endif %}
+                <br />
+                {% for link in track.links %}<a href="{{ link.url }}" target="_blank"><img src="img/music/{{ link.platform }}.svg" width="24px" height="24px"/></a>{% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+      </ul>
+    </div>
+  </body>
+  <style>
+:root{
+    --col-background: #fafefa;
+}
+body {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    background-color: var(--col-background);
+    color: #666666;
+}
+.carousel {
+    height: 190px;
+    /*max-width: 1000px;*/
+    overflow: hidden;
+    margin:auto;
+    white-space: nowrap;
+    overflow-x: scroll;
+    /* Adapted from https://stackoverflow.com/a/44794221 - thank you Hash! */
+background:
+linear-gradient(to right, var(--col-background) 30%, rgba(255, 255, 255, 0)), linear-gradient(to right, rgba(255, 255, 255, 0), var(--col-background) 70%) 100% 0,
+radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)), radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0)) 100% 0;
+background-repeat: no-repeat;
+background-size: 40px 100%, 40px 100%, 15px 100%, 15px 100%;
+background-attachment: local, local, scroll, scroll;
+
+}
+b {
+    font-size: 2em;
+    font-style: italic;
+    font-weight: 100;
+    color: #999;
+}
+.track{
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-right:10px;
+    min-width:400px;
+}
+.track>img{
+    height:150px;
+}
+.track img, .trackinfo, .trackinfo a{
+    animation: fade_in 1s cubic-bezier(0.16, 1, 0.3, 1);
+    animation-fill-mode: both;
+}
+.trackinfo{
+    margin-left: 20px;
+    white-space: normal;
+    max-width: 500px;
+}
+.trackinfo a{
+    margin-right: 5px;
+    user-select: none;
+}
+/* God has forsaken us: */
+.track:nth-child(1) img {animation-delay: 0s; }
+.track:nth-child(2) img {animation-delay: 0.1s; }
+.track:nth-child(3) img {animation-delay: 0.2s; }
+.track:nth-child(4) img {animation-delay: 0.3s; }
+.track:nth-child(5) img {animation-delay: 0.4s; }
+.track:nth-child(1) .trackinfo {animation-delay: 0.15s; }
+.track:nth-child(2) .trackinfo {animation-delay: 0.25s; }
+.track:nth-child(3) .trackinfo {animation-delay: 0.35s; }
+.track:nth-child(4) .trackinfo {animation-delay: 0.45s; }
+.track:nth-child(5) .trackinfo {animation-delay: 0.55s; }
+.trackinfo a:nth-of-type(1) {animation-delay: 0.15s; }
+.trackinfo a:nth-of-type(2) {animation-delay: 0.25s; }
+.trackinfo a:nth-of-type(3) {animation-delay: 0.35s; }
+.trackinfo a:nth-of-type(4) {animation-delay: 0.45s; }
+.trackinfo a:nth-of-type(5) {animation-delay: 0.55s; }
+
+@keyframes fade_in {
+    0% { opacity:0; transform:translateY(20px); }
+    100% { opacity:1; transform:translateY(0); }
+}
+
+audio{
+    margin-top:5px;
+    width:100px;
+}
+
+    /* Chrome-specific styling */
+audio::-webkit-media-controls-mute-button,
+audio::-webkit-media-controls-current-time-display,
+audio::-webkit-media-controls-time-remaining-display,
+audio::-webkit-media-controls-timeline-container,
+audio::-webkit-media-controls-timeline,
+audio::-webkit-media-controls-fullscreen-button,
+audio::-webkit-media-controls-volume-slider-container,
+audio::-webkit-media-controls-toggle-closed-captions-button,
+audio::-webkit-media-controls-volume-control-container
+{
+    display: none;
+}
+audio::-webkit-media-controls-play-button{
+    margin-left: 15px;
+}
+audio::-webkit-media-controls{
+    width:60px;
+
+}
+audio::-webkit-media-controls-enclosure{
+    width:54px;
+    padding-left: 20px;
+    margin-left: -45px;
+}
+audio::videocontrols-unmute-button{
+    display: none;
+}
+/* Firefox specific styling */
+@-moz-document url-prefix() {
+    audio {
+    width:48px;
+  }
+}
+  </style>
+  <script>
+    // Adapted from https://stackoverflow.com/a/54839316 - thank you Sayyed Dawood!
+    const pauseOthers = ele => [...document.getElementsByTagName('audio')].filter(audio=> audio != ele).forEach(audio =>audio.pause());
+  </script>
+</html>
