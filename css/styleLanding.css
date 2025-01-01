@@ -349,11 +349,11 @@ li{
 
 }
 .socialLinksLanding a{
-  opacity: 0.5;
-  transition: opacity 500ms;
+  opacity: 0.8;
+  transition: all 200ms;
 }
 .socialLinksLanding a:hover{
-  opacity: 0.8;
+  transform: scale(1.05);
 }
 .socialLinksLanding a{
   font-size:48px;
@@ -366,4 +366,26 @@ li{
   width: 100%;
   color:white;
   animation: h2In 1200ms ease-out 0s 1 normal;
+}
+
+.socialLinkTwitter a:hover{
+  color: #1da1f2;
+}
+.socialLinkYoutube a:hover{
+  color: #FF0000;
+}
+.socialLinkLinkedin a:hover{
+  color: #0274b3;
+}
+.socialLinkGithub a:hover{
+  color: #75d4ea;
+}
+.socialLinkLD a:hover path{
+  fill: #EE5533;
+}
+.socialLinkBC a:hover path{
+  fill: #1DA0C3;
+}
+.socialLinkMA a:hover path{
+  fill: #2a8bd4;
 }
