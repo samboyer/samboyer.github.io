@@ -2,8 +2,8 @@ html{
     font-family: Georgia, 'Times New Roman', Times, serif;
     color:#444;
     font-size:20px;
-    line-height: 1.6;
-    background-color: #fafefa;
+    line-height: 1.7;
+    background-color: #fff;
 }
 
 h1, h2, h3{
@@ -83,7 +83,7 @@ li>p{
 }
 
 .content{
-    max-width: 800px;
+    max-width: 700px;
     margin: 0 auto;
     padding-top: 70px;
     padding-bottom: 50px;
