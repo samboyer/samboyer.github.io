@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <title>Sam Boyer</title>
@@ -55,10 +56,10 @@
 
     <script>//NAVBAR
         var glitterInView = true;
-        function sticky_relocate() {
+        const stickyRelocate = () => {
             // if #sticky-anchor goes off-screen, make the navbar sticky &
             // disable the glitter.
-            if(document.getElementById('sticky-anchor').getBoundingClientRect().bottom <0){
+            if (document.getElementById('sticky-anchor').getBoundingClientRect().bottom < 0) {
                 document.getElementById('sticky').classList.add('stick');
                 document.getElementById('page_weight_info').classList.add('stick');
                 // document.getElementById('canvasGlitter').style ='display:none';
@@ -70,28 +71,65 @@
                 glitterInView = true;
             }
         }
-        window.onscroll = sticky_relocate;
+
+        const applyScrollColor = () => {
+            // which element is in the center of the screen?
+            const sections = document.querySelectorAll('.section');
+            let currentSection = null;
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+                    currentSection = section;
+                }
+            });
+            document.body.style = '';
+
+            if (!currentSection) return;
+            const sectionId = currentSection.querySelector('.anchor').id;
+            if (!sectionId) return;
+
+            const colorMap = {
+                'about': '#f0a500',
+                'projects': { from: '#16ac00', to: '#b86cc7' },
+                'more': '#00a6ed',
+                'contact': '#00b894'
+            };
+            if (typeof colorMap[sectionId] === 'string') {
+                document.body.style = `--col-primary: ${colorMap[sectionId]}`;
+                return;
+            }
+            // get percentage progress through the section
+            const sectionTop = currentSection.getBoundingClientRect().top;
+            const sectionHeight = currentSection.offsetHeight;
+            const progress = (window.innerHeight / 2 - sectionTop) / sectionHeight;
+            // interpolate between the two colors
+            document.body.style = `--col-primary: color-mix(in hsl, ${colorMap[sectionId].from} ${(1 - progress) * 100
+                }%, ${colorMap[sectionId].to})`;
+
+        }
+
+        window.onscroll = stickyRelocate;
+        window.onscrollend = applyScrollColor;
     </script>
 
     <script>//custom stuff (popups, preload, sorting)
-        function showPopup(localUrl){
+        function showPopup(localUrl) {
             document.getElementById('overlayIframe').src = localUrl;
-            setTimeout(function(){
+            setTimeout(function () {
                 document.getElementById('overlay').classList.add('overlayOpen');
-            },20);
+            }, 20);
         }
-        function closePopup(){
+        function closePopup() {
             document.getElementById('overlayIframe').src = 'about:blank';
-            setTimeout(function(){
+            setTimeout(function () {
                 document.getElementById('overlay').classList.remove('overlayOpen');
-            },20);
+            }, 20);
         }
-
     </script>
 
-  </head>
+</head>
 
-  <body>
+<body>
     <div id="top"></div>
     <div class="top">
         <div class="headerClip">
@@ -99,32 +137,32 @@
             <img loading="lazy" src="img/logo.svg" class="logoImg" alt="">
         </div>
         <script src="/js/glitterwebgl.js" async></script>
-        <span class = "headerText" class="displayBlock">
-                <h1>Sam Boyer&nbsp;&nbsp;</h1>
-            </span>
-            <h2>web dev <span>-</span> game dev <span>-</span> music production <span>-</span> other stuff
-            </h2>
+        <span class="headerText" class="displayBlock">
+            <h1>Sam Boyer&nbsp;&nbsp;</h1>
+        </span>
+        <h2>web dev <span>-</span> game dev <span>-</span> music production <span>-</span> other stuff
+        </h2>
     </div>
     <div id="sticky-anchor"></div>
     <div id="sticky">
         <div class="navbar">
             <nav>
-            <a href="#top" target="_self">top</a>
-            <span>|</span>
-            <a href="#about" target="_self">about</a>
-            <span>|</span>
-            <a href="#projects" target="_self">projects</a>
-            <span>|</span>
-            <a href="/blog" target="_self">Blog</a>
-            <!-- <span>|</span>
+                <a href="#top" target="_self">top</a>
+                <span>|</span>
+                <a href="#about" target="_self">about</a>
+                <span>|</span>
+                <a href="#projects" target="_self">projects</a>
+                <span>|</span>
+                <a href="/blog" target="_self">Blog</a>
+                <!-- <span>|</span>
             <a href="#games" target="_self">Games</a>
             <span>|</span>
             <a href="#publications" target="_self">Publications</a> -->
-            <span>|</span>
-            <a href="#more" target="_self">more</a>
-            <span>|</span>
-            <a href="#contact" target="_self">contact</a>
-            
+                <span>|</span>
+                <a href="#more" target="_self">more</a>
+                <span>|</span>
+                <a href="#contact" target="_self">contact</a>
+
             </nav>
         </div>
     </div>
@@ -135,9 +173,14 @@
             <div class="sectionHeader">
                 <h2>About Me <i class="fa fa-user" aria-hidden="true"></i></h2>
             </div>
-            <p>👋 Hello! I'm a computer scientist from the UK, previously studying at the University of Oxford, currently working as a software engineer. I love making creative things with computers, whether it's a game, webapp, music, videos, glitch art etc. (with varying degrees of success.)</p>
-            <p>👨‍💻 My go-to languages are Python & TypeScript, but can also whip up some PHP/C#/C/Scala in a pinch. For games, I've used Unity for a few years, but have recently been trying out Godot.</p>
-            <p>🌍 Outside of tech, I'm also pretty keen to do more to help the climate movement - if there's any projects / job roles that I might be able to help with, please <a href="https://linkedin.com/in/samuelboyeruk">get in touch</a>.</p>
+            <p>👋 Hello! I'm a computer scientist from the UK, previously studying at the University of Oxford,
+                currently working as a software engineer. I love making creative things with computers, whether it's a
+                game, webapp, music, videos, glitch art etc. (with varying degrees of success.)</p>
+            <p>👨‍💻 My go-to languages are Python & TypeScript, but can also whip up some PHP/C#/C/Scala in a pinch.
+                For games, I've used Unity for a few years, but have recently been trying out Godot.</p>
+            <p>🌍 Outside of tech, I'm also pretty keen to do more to help the climate movement - if there's any
+                projects / job roles that I might be able to help with, please <a
+                    href="https://linkedin.com/in/samuelboyeruk">get in touch</a>.</p>
         </div>
 
         <div class="section">
@@ -150,379 +193,472 @@
             <br>
 
             <div class="timelineContainer">
-            <div class="timeline">
+                <div class="timeline">
 
-                <div class="timelineCardContainer">
-                    <div class="timelineCard">
-                        <div>
-                            <h3><i class="fa fa-gamepad" aria-hidden="true"></i> Birb World Tour: Royale</h3>
-                        <h4>C#, Unity, Blender</h4>
-                        <p>High-speed 3D running game, with persistent upgrades & 99 totally-not-AI opponents. Made for Ludum Dare 55.</p>
-                        <a target="noopener" href="https://ldjam.com/events/ludum-dare/55/birb-world-tour-royale" class="projectMore">Jam Page</a>
+                    <div class="timelineCardContainer">
+                        <div class="timelineCard">
+                            <div>
+                                <h3><i class="fa fa-gamepad" aria-hidden="true"></i> Birb World Tour: Royale</h3>
+                                <h4>C#, Unity, Blender</h4>
+                                <p>High-speed 3D running game, with persistent upgrades & 99 totally-not-AI opponents.
+                                    Made for Ludum Dare 55.</p>
+                                <a target="noopener"
+                                    href="https://ldjam.com/events/ludum-dare/55/birb-world-tour-royale"
+                                    class="projectMore">Jam Page</a>
+                            </div>
+                            <picture>
+                                <source srcset="img/games/bwtr-feature-mono.png">
+                                <source srcset="img/games/bwtr-feature.jpg" type="image/jpeg">
+                                <img loading="lazy" src="img/games/bwtr-feature.jpg"
+                                    alt="A screenshot from Birb World Tour">
+                            </picture>
                         </div>
-                        <picture>
-                            <source srcset="img/games/bwtr-feature-mono.png">
-                            <source srcset="img/games/bwtr-feature.jpg" type="image/jpeg">
-                            <img loading="lazy" src="img/games/bwtr-feature.jpg" alt="A screenshot from Birb World Tour">
-                        </picture>
                     </div>
+
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCardSmall">
+                            <h3 class="title"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp; <a
+                                    href="https://samboyer.uk/blog" target="_blank">...a blog</a></h3>
+                            <p>A home for scattered thoughts about tech & life. Built using pandoc & jinja. <i>What will
+                                    he write about next??</i></p>
+                        </div>
+                    </div>
+
+                    <ddiv class="timelineYear">
+                        <div>2023</div>
+                    </ddiv>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCard">
+                            <div>
+                                <h3><i class="fa fa-gamepad" aria-hidden="true"></i> TEMPLE IS ACID</h3>
+                                <h4>Godot, Gdscript</h4>
+                                <p>Most accurate Bee simulator of 2023. Made for Ludum Dare 54, rated 3.9/5 overall.</p>
+                                <a target="noopener"
+                                    href="https://ldjam.com/events/ludum-dare/54/temple-is-acid-feat-bees"
+                                    class="projectMore">Jam Page</a>
+                            </div>
+                            <picture>
+                                <source srcset="img/games/templeisacid-feature-mono.png">
+                                <source srcset="img/games/templeisacid-feature.jpg" type="image/jpeg">
+                                <img loading="lazy" src="img/games/templeisacid-feature.jpg" alt="TEMPLE IS ACID logo">
+                            </picture>
+                        </div>
+                    </div>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCard">
+                            <div>
+                                <h3><span class="icon">🎄</span> Advent of Code 2023: Language Zoo</h3>
+                                <h4>Python, JS, PHP, Lua, C#, TypeScript, Scala, Java, Ruby, Perl, Godot, PICO-8, Go,
+                                    Rust, Processing, C, Bash, Haskell, GLSL, CSS, Excel, PostgreSQL, Scratch,
+                                    Carolscript</h4>
+                                <p>My second AoC challenge was to use a new language a day. Sometimes fun, sometimes
+                                    quite painful.</p>
+                                <a target="noopener" href="https://github.com/samboyer/adventofcode/"
+                                    class="projectMore">Watch me suffer</a>
+                            </div>
+                            <picture>
+                                <source srcset="img/projects/adventofcode-feature-mono.png">
+                                <source srcset="img/projects/adventofcode-feature.jpg" type="image/jpeg">
+                                <img loading="lazy" src="img/projects/adventofcode-feature.jpg" alt="picture of code">
+                            </picture>
+                        </div>
+                    </div>
+
+                    <ddiv class="timelineYear">
+                        <div>2022</div>
+                    </ddiv>
+
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCardSmall">
+                            <h3 class="title"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp; <a
+                                    href="https://github.com/samboyer/oxnet-compsci-assignment/"
+                                    target="_blank">"Pathfinding Algorithms and Computational Complexity" -
+                                    Worksheet</a></h3>
+                            <p>for OxNet Summer School 2022, Pembroke College Oxford.</p>
+                        </div>
+                    </div>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCardSmall">
+                            <h3 class="title"><span class="icon">🎓</span> <a href="/assets/4yp.pdf"
+                                    target="_blank">"Proposing, quantifying, and comparing data delivery optimisations
+                                    to reduce the climate impact of computer game distribution" - Dissertation</a></h3>
+                            <p>wow that's a mouthful of a title</p>
+                        </div>
+                    </div>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCard">
+                            <div>
+                                <h3 class="title"><i class="fa fa-code" aria-hidden="true"></i> Mockathon</h3>
+                                <h4>JS, Python, RemarkJS, CSS</h4>
+                                <p>A random hackathon presentation generator. A short questionnaire creates a prompt for
+                                    a GPT-2 model trained on Devpost. Rated top 6 projects at HackCambridge 2022.</p>
+                                <a target="_blank" href="https://devpost.com/software/mockathon"
+                                    class="projectMore">More Info</a>
+                            </div>
+                            <picture>
+                                <source srcset="img/projects/mockathon-feature-mono.png">
+                                <source srcset="img/projects/mockathon-feature.jpg" type="image/jpeg">
+                                <img loading="lazy" src="img/projects/mockathon-feature.jpg"
+                                    alt="Mockathon project sreenshot">
+                            </picture>
+                        </div>
+                    </div>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCard">
+                            <div>
+                                <h3><span class="icon">🎄</span> Advent of Code 2022: Python Golf</h3>
+                                <h4>Python</h4>
+                                <p>Trying to solve 25 programming puzzles in as few characters as possible. The final
+                                    result was 6,3KB, which I reckon is good enough.</p>
+                                <a target="noopener" href="https://github.com/samboyer/adventofcode/tree/main/2022"
+                                    class="projectMore">⛳️💫🏌️</a>
+                            </div>
+                            <picture>
+                                <source srcset="img/projects/adventofcode-feature-mono.png">
+                                <source srcset="img/projects/adventofcode-feature.jpg" type="image/jpeg">
+                                <img loading="lazy" src="img/projects/adventofcode-feature.jpg" alt="picture of code">
+                            </picture>
+                        </div>
+                    </div>
+
+
+                    <ddiv class="timelineYear">
+                        <div>2021</div>
+                    </ddiv>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCardSmall">
+                            <h3 class="title"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp; <a
+                                    href="/assets/3yp.pdf" target="_blank">"Visualising software package dependency
+                                    graphs for Cyber-Supply Chain Risk Management" - Research project</a></h3>
+                        </div>
+                    </div>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCard">
+                            <div>
+                                <h3 class="title"><i class="fa fa-code" aria-hidden="true"></i> Oxford Recording Society
+                                </h3>
+                                <h4>PHP, JS, CSS, Wordpress</h4>
+                                <p>A new web platform for OXRS containing a members lists & posts, customisable
+                                    profiles, and a dynamic termcard. Uses a custom WP theme, static promotional pages
+                                    and an ungodly mashup of WP plugins.</p>
+                                <a target="_blank" href="https://oxrs.uk" class="projectMore">Visit Site</a>
+                            </div>
+                            <picture>
+                                <source srcset="img/projects/ors-website-feature-mono.png">
+                                <source srcset="img/projects/ors-website-feature.jpg" type="image/jpeg">
+                                <img loading="lazy" src="img/projects/ors-website-feature.jpg"
+                                    alt="ORS website sreenshot">
+                            </picture>
+                        </div>
+                    </div>
+
+                    <ddiv class="timelineYear">
+                        <div>2020</div>
+                    </ddiv>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCardSmall">
+                            <h3 class="title"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp; <a
+                                    href="/assets/summer_essay_2020.pdf" target="_blank">"An overview of malware
+                                    analysis - what techniques are available, and how can they be evaded by attackers?"
+                                    - Essay</a></h3>
+                        </div>
+                    </div>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCard">
+                            <div>
+                                <h3><i class="fa fa-gamepad" aria-hidden="true"></i> BLOOM Eternal</h3>
+                                <h4>Lua, PICO-8</h4>
+                                <p>An arcade shooter / water-em-up made in PICO-8 - fend off demons with an arsenal of
+                                    weapons & keep your precious flowers alive. Made for Ludum Dare 46 in a team, rated
+                                    3.6/5 overall.</p>
+                                <a target="noopener" href="https://ldjam.com/events/ludum-dare/46/bloom-eternal"
+                                    class="projectMore">Jam Page</a>
+                            </div>
+                            <picture>
+                                <source srcset="img/games/bloometernal-feature-mono.png">
+                                <source srcset="img/games/bloometernal-feature.jpg" type="image/jpeg">
+                                <img loading="lazy" src="img/games/bloometernal-feature.jpg" alt="BLOOM Eternal logo">
+                            </picture>
+                        </div>
+                    </div>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCard">
+                            <div>
+                                <h3 class="title"><i class="fa fa-code" aria-hidden="true"></i> Stonks VR</h3>
+                                <h4>C#, Unity</h4>
+                                <p>A 3D stock correlation calculator & visualiser. Running Unity3D on the Oculus Quest,
+                                    with real-world stock data. Source code available on <a target="noopener"
+                                        href="https://github.com/samboyer">my Github</a>.</p>
+                                <a target="_self" href="javascript:void" onclick="showVideoPopup('-yt8TO5vEjk')"
+                                    class="projectMore">Demo Video</a>
+                            </div>
+                            <picture>
+                                <source srcset="img/projects/stonksvr-feature-mono.png">
+                                <source srcset="img/projects/stonksvr-feature.jpg" type="image/jpeg">
+                                <img loading="lazy" src="img/projects/stonksvr-feature.jpg" alt="Stonks VR logo">
+                            </picture>
+                        </div>
+                    </div>
+
+                    <ddiv class="timelineYear">
+                        <div>2019</div>
+                    </ddiv>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCardSmall">
+                            <h3 class="title"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp; <a
+                                    href="/assets/summer_essay_2019.pdf" target="_blank">"The Mirai Botnet - How did it
+                                    operate, what did it achieve, and how can IoT botnets be mitigated?" - Essay</a>
+                            </h3>
+                        </div>
+                    </div>
+
+                    <ddiv class="timelineYear">
+                        <div>2018</div>
+                    </ddiv>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCard">
+                            <div>
+                                <h3 class="title"><i class="fa fa-code" aria-hidden="true"></i> ParliaMate</h3>
+                                <h4>JS, CSS, Node.js, MySQL</h4>
+                                <p>A simple app to learn more about UK Parliament, bills that matter to you, and your
+                                    MP. Built in 24 hours for OxfordHack 2018 (and won!)</p>
+                                <a target="noopener" href="https://devpost.com/software/parliamate"
+                                    class="projectMore">Project Page</a>
+                            </div>
+                            <picture>
+                                <source srcset="img/projects/parliamate-feature-mono.png">
+                                <source srcset="img/projects/parliamate-feature.jpg" type="image/jpeg">
+                                <img loading="lazy" src="img/projects/parliamate-feature.jpg" alt="Parliamate logo">
+                            </picture>
+                        </div>
+                    </div>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCard">
+                            <div>
+                                <h3><i class="fa fa-gamepad" aria-hidden="true"></i> Ludum Dare Simulator 2019</h3>
+                                <h4>C#, Unity</h4>
+                                <p>A highly-accurate* simulation of the game jam experience. Play 7 minigames to build
+                                    your greatest game, with limited energy and disk space. Made for Ludum Dare 42,
+                                    positioned <b>3<sup>rd</sup> place Overall!</b></p>
+                                <a target="noopener"
+                                    href="https://ldjam.com/events/ludum-dare/42/ludum-dare-simulator-2019"
+                                    class="projectMore">Jam Page</a>
+                            </div>
+                            <picture>
+                                <source srcset="img/games/ldsim-feature-mono.png">
+                                <source srcset="img/games/ldsim-feature.jpg" type="image/jpeg">
+                                <img loading="lazy" src="img/games/ldsim-feature.jpg"
+                                    alt="Ludum Dare Simulator 2019 Logo">
+                            </picture>
+                        </div>
+                    </div>
+
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCard">
+                            <div>
+                                <h3 class="title"><i class="fa fa-code" aria-hidden="true"></i> QuizNet</h3>
+                                <h4>C#, PHP, Unity, WinForms</h4>
+                                <p>A networked homework distribution system for schools. Manage students &amp; classes,
+                                    create engaging quizzes, assign to classes, then monitor results - all in one place.
+                                </p>
+                                <a target="_self" href="javascript:void"
+                                    onClick="showPopup('popup-projects-quiznet.html')" class="projectMore">More Info</a>
+                            </div>
+                            <picture>
+                                <source srcset="img/projects/quiznet-feature-mono.png">
+                                <source srcset="img/projects/quiznet-feature.jpg" type="image/jpeg">
+                                <img loading="lazy" src="img/projects/quiznet-feature.jpg" alt="QuizNet logo">
+                            </picture>
+                        </div>
+                    </div>
+
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCard">
+                            <div>
+                                <h3 class="title"><i class="fa fa-code" aria-hidden="true"></i> Jukebox-YT</h3>
+                                <h4>JS, CSS, WebExtension API</h4>
+                                <p>A YouTube player WebExtension that lets you collect and group videos into dynamic
+                                    playlists and play with rating-weighted shuffling.</p>
+                                <a target="noopener" href="https://addons.mozilla.org/en-GB/firefox/addon/jukebox-yt"
+                                    class="projectMore">Firefox Addons Page</a>
+                            </div>
+                            <picture>
+                                <source srcset="img/projects/jukebox-feature-mono.png">
+                                <source srcset="img/projects/jukebox-feature.jpg" type="image/jpeg">
+                                <img loading="lazy" src="img/projects/jukebox-feature.jpg" alt="Jukebox-YT logo">
+                            </picture>
+                        </div>
+                    </div>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCard">
+                            <div>
+                                <h3><i class="fa fa-gamepad" aria-hidden="true"></i> Turtle Racers</h3>
+                                <h4>C#, Unity</h4>
+                                <p>A LAN-multiplayer turtle graphics racing game, built in 11 hours. Hastily issue
+                                    commands to beat the course before your opponents. Made for Ludum Dare 41, rated
+                                    3.6/5 overall.</p>
+                                <a target="noopener"
+                                    href="https://ldjam.com/events/ludum-dare/41/turtle-racers-commanding-your-way-to-victory"
+                                    class="projectMore">Jam Page</a>
+                            </div>
+                            <picture>
+                                <source srcset="img/games/turtle-feature-mono.png">
+                                <source srcset="img/games/turtle-feature.jpg" type="image/jpeg">
+                                <img loading="lazy" src="img/games/turtle-feature.jpg" alt="Turtle Racers 2019 Logo">
+                            </picture>
+                        </div>
+                    </div>
+
+                    <ddiv class="timelineYear">
+                        <div>2017</div>
+                    </ddiv>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCard">
+                            <div>
+                                <h3 class="title"><i class="fa fa-code" aria-hidden="true"></i> SimpleSpectrum for Unity
+                                </h3>
+                                <h4>C#, Unity, WebAudioAPI</h4>
+                                <p>A simple package for Unity that generates a great-looking audio visualiser in
+                                    real-time. Free on the Asset Store and used by 7,000+ developers!</p>
+                                <a target="_self" href="javascript:void"
+                                    onClick="showPopup('popup-projects-spectrum.html')" class="projectMore">More
+                                    Info</a>
+                            </div>
+                            <picture>
+                                <source srcset="img/projects/spectrum-feature-mono.png">
+                                <source srcset="img/projects/spectrum-feature.jpg" type="image/jpeg">
+                                <img loading="lazy" src="img/projects/spectrum-feature.jpg" alt="SimpleSpectrum logo">
+                            </picture>
+                        </div>
+                    </div>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCard">
+                            <div>
+                                <h3><i class="fa fa-gamepad" aria-hidden="true"></i> Ketchup Quest</h3>
+                                <h4>C#, Unity</h4>
+                                <p>An endless arcade sauce-em-up: choose from multiple characters to fight alone or with
+                                    a friend, to protect your saucy stash. Made for Ludum Dare 40, positioned
+                                    79<sup>th</sup> overall.</p>
+                                <a target="noopener"
+                                    href="https://ldjam.com/events/ludum-dare/40/ketchup-quest-endless-arcade-fighting-to-protect-your-saucy-stash"
+                                    class="projectMore">Jam Page</a>
+                            </div>
+                            <picture>
+                                <source srcset="img/games/ketchup-feature-mono.png">
+                                <source srcset="img/games/ketchup-feature.jpg" type="image/jpeg">
+                                <img loading="lazy" src="img/games/ketchup-feature.jpg" alt="Ketchup Quest logo">
+                            </picture>
+                        </div>
+                    </div>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCard">
+                            <div>
+                                <h3 class="title"><i class="fa fa-code" aria-hidden="true"></i> ...This Site</h3>
+                                <h4>HTML, JS, CSS, WebGL</h4>
+                                <p>Fairly self-explanatory. Everything here has been hand-crafted by yours truly, with
+                                    small changes over the years.</p>
+                                <a target="_self" href="javascript:void"
+                                    onClick="showPopup('index.html?'+Math.random())" class="projectMore">Descend</a>
+                            </div>
+                            <picture>
+                                <source srcset="img/projects/thiswebsite-square-mono.png">
+                                <source srcset="img/projects/thiswebsite-square.jpg" type="image/jpeg">
+                                <img loading="lazy" src="img/projects/thiswebsite-square.jpg"
+                                    alt="Screenshot of an old and ugly version of this site">
+                            </picture>
+                        </div>
+                    </div>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCard">
+                            <div>
+                                <h3 class="title"><i class="fa fa-gamepad" aria-hidden="true"></i> Untitled Voxel Game
+                                </h3>
+                                <h4>C#, Unity</h4>
+                                <p>A procedurally-generated 3D exploration game in Unity. Roam, collect, design and
+                                    build in a pseudorandom, <small>(nearly)</small> infinite world.</p>
+                                <a target="noopener" href="https://github.com/samboyer/unity-voxel-game-2017"
+                                    class="projectMore">More Info & Source Code</a>
+                            </div>
+                            <picture>
+                                <source srcset="img/games/voxels-feature-mono.png">
+                                <source srcset="img/games/voxels-feature.jpg" type="image/jpeg">
+                                <img loading="lazy" src="img/games/voxels-feature.jpg" alt="Voxel Game screenshot">
+                            </picture>
+                        </div>
+                    </div>
+
+                    <ddiv class="timelineYear">
+                        <div>2016</div>
+                    </ddiv>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCard">
+                            <div>
+                                <h3><i class="fa fa-gamepad" aria-hidden="true"></i> <small>(I Can't Believe It's
+                                        Not)</small> Minesweeper</h3>
+                                <h4>C#, Unity, Photon/PUN</h4>
+                                <p>A totally-not-clone of everyone's favourite bomb-defusal puzzle game. Featuring save
+                                    states & online co-op.<small>(Android port coming soon)</small></p>
+                                <a target="_blank" href="games/minesweeper" class="projectMore">Play Now</a>
+                            </div>
+                            <picture>
+                                <source srcset="img/games/minesweeper-feature-mono.png">
+                                <source srcset="img/games/minesweeper-feature.jpg" type="image/jpeg">
+                                <img loading="lazy" src="img/games/minesweeper-feature.jpg"
+                                    alt="Minesweeper screenshot">
+                            </picture>
+                        </div>
+                    </div>
+
+                    <div class="timelineCardContainer">
+                        <div class="timelineCard">
+                            <div>
+                                <h3 class="title"><i class="fa fa-code" aria-hidden="true"></i> CMD Relay</h3>
+                                <h4>C#, Mobile</h4>
+                                <p>A remote administration app for Windows Phone 8.1. Define your computer network,
+                                    create custom commands & programs, then execute on remote computers via Relay
+                                    Service hosts.</p>
+                                <a target="_self" href="javascript:void"
+                                    onClick="showPopup('popup-projects-cmdrelay.html')" class="projectMore">More
+                                    Info</a>
+                            </div>
+                            <picture>
+                                <source srcset="img/projects/cmdrelay-feature-mono.png">
+                                <source srcset="img/projects/cmdrelay-feature.jpg" type="image/jpeg">
+                                <img loading="lazy" src="img/projects/cmdrelay-feature.jpg" alt="CMD Relay logo">
+                            </picture>
+                        </div>
+                    </div>
+
+
                 </div>
-
-
-                <div class="timelineCardContainer">
-                    <div class="timelineCardSmall">
-                        <h3 class="title"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp; <a href="https://samboyer.uk/blog" target="_blank">...a blog</a></h3>
-                    <p>A home for scattered thoughts about tech & life. Built using pandoc & jinja. <i>What will he write about next??</i></p>
-                    </div>
-                </div>
-
-                <ddiv class="timelineYear"><div>2023</div></ddiv>
-
-                <div class="timelineCardContainer">
-                    <div class="timelineCard">
-                        <div>
-                            <h3><i class="fa fa-gamepad" aria-hidden="true"></i> TEMPLE IS ACID</h3>
-                        <h4>Godot, Gdscript</h4>
-                        <p>Most accurate Bee simulator of 2023. Made for Ludum Dare 54, rated 3.9/5 overall.</p>
-                        <a target="noopener" href="https://ldjam.com/events/ludum-dare/54/temple-is-acid-feat-bees" class="projectMore">Jam Page</a>
-                        </div>
-                        <picture>
-                            <source srcset="img/games/templeisacid-feature-mono.png">
-                            <source srcset="img/games/templeisacid-feature.jpg" type="image/jpeg">
-                            <img loading="lazy" src="img/games/templeisacid-feature.jpg" alt="TEMPLE IS ACID logo">
-                        </picture>
-                    </div>
-                </div>
-
-                <div class="timelineCardContainer">
-                    <div class="timelineCard">
-                        <div>
-                            <h3><span class="icon">🎄</span> Advent of Code 2023: Language Zoo</h3>
-                        <h4>Python, JS, PHP, Lua, C#, TypeScript, Scala, Java, Ruby, Perl, Godot, PICO-8, Go, Rust, Processing, C, Bash, Haskell, GLSL, CSS, Excel, PostgreSQL, Scratch, Carolscript</h4>
-                        <p>My second AoC challenge was to use a new language a day. Sometimes fun, sometimes quite painful.</p>
-                        <a target="noopener" href="https://github.com/samboyer/adventofcode/" class="projectMore">Watch me suffer</a>
-                        </div>
-                        <picture>
-                            <source srcset="img/projects/adventofcode-feature-mono.png">
-                            <source srcset="img/projects/adventofcode-feature.jpg" type="image/jpeg">
-                            <img loading="lazy" src="img/projects/adventofcode-feature.jpg" alt="picture of code">
-                        </picture>
-                    </div>
-                </div>
-
-                <ddiv class="timelineYear"><div>2022</div></ddiv>
-
-
-                <div class="timelineCardContainer">
-                    <div class="timelineCardSmall">
-                        <h3 class="title"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp; <a href="https://github.com/samboyer/oxnet-compsci-assignment/" target="_blank">"Pathfinding Algorithms and Computational Complexity" - Worksheet</a></h3>
-                    <p>for OxNet Summer School 2022, Pembroke College Oxford.</p>
-                    </div>
-                  </div>
-
-                  <div class="timelineCardContainer">
-                    <div class="timelineCardSmall">
-                        <h3 class="title"><span class="icon">🎓</span> <a href="/assets/4yp.pdf" target="_blank">"Proposing, quantifying, and comparing data delivery optimisations to reduce the climate impact of computer game distribution" - Dissertation</a></h3>
-                    <p>wow that's a mouthful of a title</p>
-                    </div>
-                  </div>
-
-                  <div class="timelineCardContainer">
-                    <div class="timelineCard">
-                        <div>
-                            <h3 class="title"><i class="fa fa-code" aria-hidden="true"></i> Mockathon</h3>
-                            <h4>JS, Python, RemarkJS, CSS</h4>
-                            <p>A random hackathon presentation generator. A short questionnaire creates a prompt for a GPT-2 model trained on Devpost. Rated top 6 projects at HackCambridge 2022.</p>
-                            <a target="_blank" href="https://devpost.com/software/mockathon" class="projectMore">More Info</a>
-                        </div>
-                        <picture>
-                            <source srcset="img/projects/mockathon-feature-mono.png">
-                            <source srcset="img/projects/mockathon-feature.jpg" type="image/jpeg">
-                            <img loading="lazy" src="img/projects/mockathon-feature.jpg" alt="Mockathon project sreenshot">
-                        </picture>
-                    </div>
-                  </div>
-
-                  <div class="timelineCardContainer">
-                    <div class="timelineCard">
-                        <div>
-                            <h3><span class="icon">🎄</span> Advent of Code 2022: Python Golf</h3>
-                        <h4>Python</h4>
-                        <p>Trying to solve 25 programming puzzles in as few characters as possible. The final result was 6,3KB, which I reckon is good enough.</p>
-                        <a target="noopener" href="https://github.com/samboyer/adventofcode/tree/main/2022" class="projectMore">⛳️💫🏌️</a>
-                        </div>
-                        <picture>
-                            <source srcset="img/projects/adventofcode-feature-mono.png">
-                            <source srcset="img/projects/adventofcode-feature.jpg" type="image/jpeg">
-                            <img loading="lazy" src="img/projects/adventofcode-feature.jpg" alt="picture of code">
-                        </picture>
-                    </div>
-                </div>
-
-
-                  <ddiv class="timelineYear"><div>2021</div></ddiv>
-                  
-                  <div class="timelineCardContainer">
-                    <div class="timelineCardSmall">
-                        <h3 class="title"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp; <a href="/assets/3yp.pdf" target="_blank">"Visualising software package dependency graphs for Cyber-Supply Chain Risk Management" - Research project</a></h3>
-                    </div>
-                  </div>
-
-                  <div class="timelineCardContainer">
-                    <div class="timelineCard">
-                        <div>
-                            <h3 class="title"><i class="fa fa-code" aria-hidden="true"></i> Oxford Recording Society</h3>
-                            <h4>PHP, JS, CSS, Wordpress</h4>
-                            <p>A new web platform for OXRS containing a members lists & posts, customisable profiles, and a dynamic termcard. Uses a custom WP theme, static promotional pages and an ungodly mashup of WP plugins.</p>
-                            <a target="_blank" href="https://oxrs.uk" class="projectMore">Visit Site</a>
-                        </div>
-                        <picture>
-                            <source srcset="img/projects/ors-website-feature-mono.png">
-                            <source srcset="img/projects/ors-website-feature.jpg" type="image/jpeg">
-                            <img loading="lazy" src="img/projects/ors-website-feature.jpg" alt="ORS website sreenshot">
-                        </picture>
-                    </div>
-                  </div>
-
-                  <ddiv class="timelineYear"><div>2020</div></ddiv>
-
-                  <div class="timelineCardContainer">
-                    <div class="timelineCardSmall">
-                        <h3 class="title"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp; <a href="/assets/summer_essay_2020.pdf" target="_blank">"An overview of malware analysis - what techniques are available, and how can they be evaded by attackers?" - Essay</a></h3>
-                    </div>
-                  </div>
-
-                  <div class="timelineCardContainer">
-                    <div class="timelineCard">
-                        <div>
-                            <h3><i class="fa fa-gamepad" aria-hidden="true"></i> BLOOM Eternal</h3>
-                        <h4>Lua, PICO-8</h4>
-                        <p>An arcade shooter / water-em-up made in PICO-8 - fend off demons with an arsenal of weapons & keep your precious flowers alive. Made for Ludum Dare 46 in a team, rated 3.6/5 overall.</p>
-                        <a target="noopener" href="https://ldjam.com/events/ludum-dare/46/bloom-eternal" class="projectMore">Jam Page</a>
-                        </div>
-                        <picture>
-                            <source srcset="img/games/bloometernal-feature-mono.png">
-                            <source srcset="img/games/bloometernal-feature.jpg" type="image/jpeg">
-                            <img loading="lazy" src="img/games/bloometernal-feature.jpg" alt="BLOOM Eternal logo">
-                        </picture>
-                    </div>
-                  </div>
-
-                  <div class="timelineCardContainer">
-                    <div class="timelineCard">
-                        <div>
-                            <h3 class="title"><i class="fa fa-code" aria-hidden="true"></i> Stonks VR</h3>
-                            <h4>C#, Unity</h4>
-                            <p>A 3D stock correlation calculator & visualiser. Running Unity3D on the Oculus Quest, with real-world stock data. Source code available on <a target="noopener" href="https://github.com/samboyer">my Github</a>.</p>
-                            <a target="_self" href="javascript:void" onclick="showVideoPopup('-yt8TO5vEjk')" class="projectMore">Demo Video</a>
-                        </div>
-                        <picture>
-                            <source srcset="img/projects/stonksvr-feature-mono.png">
-                            <source srcset="img/projects/stonksvr-feature.jpg" type="image/jpeg">
-                            <img loading="lazy" src="img/projects/stonksvr-feature.jpg" alt="Stonks VR logo">
-                        </picture>
-                    </div>
-                </div>
-
-                <ddiv class="timelineYear"><div>2019</div></ddiv>
-
-                <div class="timelineCardContainer">
-                    <div class="timelineCardSmall">
-                        <h3 class="title"><i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp; <a href="/assets/summer_essay_2019.pdf" target="_blank">"The Mirai Botnet - How did it operate, what did it achieve, and how can IoT botnets be mitigated?" - Essay</a></h3>
-                    </div>
-                  </div>
-
-                <ddiv class="timelineYear"><div>2018</div></ddiv>
-
-                <div class="timelineCardContainer">
-                    <div class="timelineCard">
-                        <div>
-                            <h3 class="title"><i class="fa fa-code" aria-hidden="true"></i> ParliaMate</h3>
-                            <h4>JS, CSS, Node.js, MySQL</h4>
-                            <p>A simple app to learn more about UK Parliament, bills that matter to you, and your MP. Built in 24 hours for OxfordHack 2018 (and won!)</p>
-                            <a target="noopener" href="https://devpost.com/software/parliamate" class="projectMore">Project Page</a>
-                        </div>
-                        <picture>
-                            <source srcset="img/projects/parliamate-feature-mono.png">
-                            <source srcset="img/projects/parliamate-feature.jpg" type="image/jpeg">
-                            <img loading="lazy" src="img/projects/parliamate-feature.jpg" alt="Parliamate logo">
-                        </picture>
-                    </div>
-                </div>
-
-                <div class="timelineCardContainer">
-                    <div class="timelineCard">
-                        <div>
-                            <h3><i class="fa fa-gamepad" aria-hidden="true"></i> Ludum Dare Simulator 2019</h3>
-                            <h4>C#, Unity</h4>
-                            <p>A highly-accurate* simulation of the game jam experience. Play 7 minigames to build your greatest game, with limited energy and disk space. Made for Ludum Dare 42, positioned <b>3<sup>rd</sup> place Overall!</b></p>
-                            <a target="noopener" href="https://ldjam.com/events/ludum-dare/42/ludum-dare-simulator-2019" class="projectMore">Jam Page</a>
-                        </div>
-                        <picture>
-                            <source srcset="img/games/ldsim-feature-mono.png">
-                            <source srcset="img/games/ldsim-feature.jpg" type="image/jpeg">
-                            <img loading="lazy" src="img/games/ldsim-feature.jpg" alt="Ludum Dare Simulator 2019 Logo">
-                        </picture>
-                    </div>
-                </div>
-
-
-                <div class="timelineCardContainer">
-                    <div class="timelineCard">
-                        <div>
-                            <h3 class="title"><i class="fa fa-code" aria-hidden="true"></i> QuizNet</h3>
-                            <h4>C#, PHP, Unity, WinForms</h4>
-                            <p>A networked homework distribution system for schools. Manage students &amp; classes, create engaging quizzes, assign to classes, then monitor results - all in one place.</p>
-                            <a target="_self" href="javascript:void" onClick="showPopup('popup-projects-quiznet.html')" class="projectMore">More Info</a>
-                        </div>
-                        <picture>
-                            <source srcset="img/projects/quiznet-feature-mono.png">
-                            <source srcset="img/projects/quiznet-feature.jpg" type="image/jpeg">
-                            <img loading="lazy" src="img/projects/quiznet-feature.jpg" alt="QuizNet logo">
-                        </picture>
-                    </div>
-                </div>
-
-
-                <div class="timelineCardContainer">
-                    <div class="timelineCard">
-                        <div>
-                            <h3 class="title"><i class="fa fa-code" aria-hidden="true"></i> Jukebox-YT</h3>
-                            <h4>JS, CSS, WebExtension API</h4>
-                            <p>A YouTube player WebExtension that lets you collect and group videos into dynamic playlists and play with rating-weighted shuffling.</p>
-                            <a target="noopener" href="https://addons.mozilla.org/en-GB/firefox/addon/jukebox-yt" class="projectMore">Firefox Addons Page</a>
-                        </div>
-                        <picture>
-                            <source srcset="img/projects/jukebox-feature-mono.png">
-                            <source srcset="img/projects/jukebox-feature.jpg" type="image/jpeg">
-                            <img loading="lazy" src="img/projects/jukebox-feature.jpg" alt="Jukebox-YT logo">
-                        </picture>
-                    </div>
-                </div>
-
-                <div class="timelineCardContainer">
-                    <div class="timelineCard">
-                        <div>
-                            <h3><i class="fa fa-gamepad" aria-hidden="true"></i> Turtle Racers</h3>
-                            <h4>C#, Unity</h4>
-                            <p>A LAN-multiplayer turtle graphics racing game, built in 11 hours. Hastily issue commands to beat the course before your opponents. Made for Ludum Dare 41, rated 3.6/5 overall.</p>
-                            <a target="noopener" href="https://ldjam.com/events/ludum-dare/41/turtle-racers-commanding-your-way-to-victory" class="projectMore">Jam Page</a>
-                        </div>
-                        <picture>
-                            <source srcset="img/games/turtle-feature-mono.png">
-                            <source srcset="img/games/turtle-feature.jpg" type="image/jpeg">
-                            <img loading="lazy" src="img/games/turtle-feature.jpg" alt="Turtle Racers 2019 Logo">
-                        </picture>
-                    </div>
-                </div>
-                
-                <ddiv class="timelineYear"><div>2017</div></ddiv>
-
-                  <div class="timelineCardContainer">
-                    <div class="timelineCard">
-                        <div>
-                            <h3 class="title"><i class="fa fa-code" aria-hidden="true"></i> SimpleSpectrum for Unity</h3>
-                            <h4>C#, Unity, WebAudioAPI</h4>
-                            <p>A simple package for Unity that generates a great-looking audio visualiser in real-time. Free on the Asset Store and used by 7,000+ developers!</p>
-                            <a target="_self" href="javascript:void" onClick="showPopup('popup-projects-spectrum.html')" class="projectMore">More Info</a>
-                        </div>
-                        <picture>
-                            <source srcset="img/projects/spectrum-feature-mono.png">
-                            <source srcset="img/projects/spectrum-feature.jpg" type="image/jpeg">
-                            <img loading="lazy" src="img/projects/spectrum-feature.jpg" alt="SimpleSpectrum logo">
-                        </picture>
-                    </div>
-                  </div>
-
-                  <div class="timelineCardContainer">
-                    <div class="timelineCard">
-                        <div>
-                            <h3><i class="fa fa-gamepad" aria-hidden="true"></i> Ketchup Quest</h3>
-                            <h4>C#, Unity</h4>
-                            <p>An endless arcade sauce-em-up: choose from multiple characters to fight alone or with a friend, to protect your saucy stash. Made for Ludum Dare 40, positioned 79<sup>th</sup> overall.</p>
-                            <a target="noopener" href="https://ldjam.com/events/ludum-dare/40/ketchup-quest-endless-arcade-fighting-to-protect-your-saucy-stash" class="projectMore">Jam Page</a>
-                        </div>
-                        <picture>
-                            <source srcset="img/games/ketchup-feature-mono.png">
-                            <source srcset="img/games/ketchup-feature.jpg" type="image/jpeg">
-                            <img loading="lazy" src="img/games/ketchup-feature.jpg" alt="Ketchup Quest logo">
-                        </picture>
-                    </div>
-                </div>
-
-                  <div class="timelineCardContainer">
-                    <div class="timelineCard">
-                        <div>
-                            <h3 class="title"><i class="fa fa-code" aria-hidden="true"></i> ...This Site</h3>
-                            <h4>HTML, JS, CSS, WebGL</h4>
-                            <p>Fairly self-explanatory. Everything here has been hand-crafted by yours truly, with small changes over the years.</p>
-                            <a target="_self" href="javascript:void" onClick="showPopup('index.html?'+Math.random())" class="projectMore">Descend</a>
-                        </div>
-                        <picture>
-                            <source srcset="img/projects/thiswebsite-square-mono.png">
-                            <source srcset="img/projects/thiswebsite-square.jpg" type="image/jpeg">
-                            <img loading="lazy" src="img/projects/thiswebsite-square.jpg" alt="Screenshot of an old and ugly version of this site">
-                        </picture>
-                    </div>
-                  </div>
-
-                  <div class="timelineCardContainer">
-                    <div class="timelineCard">
-                        <div>
-                            <h3 class="title"><i class="fa fa-gamepad" aria-hidden="true"></i> Untitled Voxel Game</h3>
-                            <h4>C#, Unity</h4>
-                            <p>A procedurally-generated 3D exploration game in Unity. Roam, collect, design and build in a pseudorandom, <small>(nearly)</small> infinite world.</p>
-                            <a target="noopener" href="https://github.com/samboyer/unity-voxel-game-2017" class="projectMore">More Info & Source Code</a>
-                        </div>
-                        <picture>
-                            <source srcset="img/games/voxels-feature-mono.png">
-                            <source srcset="img/games/voxels-feature.jpg" type="image/jpeg">
-                            <img loading="lazy" src="img/games/voxels-feature.jpg" alt="Voxel Game screenshot">
-                        </picture>
-                    </div>
-                  </div>
-
-                  <ddiv class="timelineYear"><div>2016</div></ddiv>
-
-                  <div class="timelineCardContainer">
-                    <div class="timelineCard">
-                        <div>
-                            <h3><i class="fa fa-gamepad" aria-hidden="true"></i> <small>(I Can't Believe It's Not)</small> Minesweeper</h3>
-                            <h4>C#, Unity, Photon/PUN</h4>
-                            <p>A totally-not-clone of everyone's favourite bomb-defusal puzzle game. Featuring save states & online co-op.<small>(Android port coming soon)</small></p>
-                            <a target="_blank" href="games/minesweeper" class="projectMore">Play Now</a>
-                        </div>
-                        <picture>
-                            <source srcset="img/games/minesweeper-feature-mono.png">
-                            <source srcset="img/games/minesweeper-feature.jpg" type="image/jpeg">
-                            <img loading="lazy" src="img/games/minesweeper-feature.jpg" alt="Minesweeper screenshot">
-                        </picture>
-                    </div>
-                  </div>
-
-                  <div class="timelineCardContainer">
-                    <div class="timelineCard">
-                        <div>
-                            <h3 class="title"><i class="fa fa-code" aria-hidden="true"></i> CMD Relay</h3>
-                            <h4>C#, Mobile</h4>
-                            <p>A remote administration app for Windows Phone 8.1. Define your computer network, create custom commands & programs, then execute on remote computers via Relay Service hosts.</p>
-                            <a target="_self" href="javascript:void" onClick="showPopup('popup-projects-cmdrelay.html')" class="projectMore">More Info</a>
-                        </div>
-                        <picture>
-                            <source srcset="img/projects/cmdrelay-feature-mono.png">
-                            <source srcset="img/projects/cmdrelay-feature.jpg" type="image/jpeg">
-                            <img loading="lazy" src="img/projects/cmdrelay-feature.jpg" alt="CMD Relay logo">
-                        </picture>
-                    </div>
-                  </div>
-
-
-              </div>
             </div>
 
         </div>
 
-            
+
 
         <div class="section">
             <div id="more" class="anchor"></div>
@@ -532,11 +668,13 @@
             <br>
             <h3>Some music I'm enjoying at the moment:</h3>
             <br><br><br>
-            <iframe class="iframe_with_background" loading="lazy" style="width:100%; height:200px;border:none;" src="https://live.samboyer.uk/fav-music/"></iframe>
+            <iframe class="iframe_with_background" loading="lazy" style="width:100%; height:200px;border:none;"
+                src="https://live.samboyer.uk/fav-music/"></iframe>
             <br><br><br>
-            <h3>And some music I actually made!</h3>
+            <h3>And some music I made!</h3>
             <br><br><br>
-            <iframe class="iframe_with_background" loading="lazy" style="width:100%; height:230px;border:none;" src="my_music.html"></iframe>
+            <iframe class="iframe_with_background" loading="lazy" style="width:100%; height:230px;border:none;"
+                src="my_music.html"></iframe>
         </div>
 
         <div class="section">
@@ -551,74 +689,62 @@
             </span>
 
         </div>
-      </div>
-      <!-- <div class="bottomShadow"></div> -->
+    </div>
+    <!-- <div class="bottomShadow"></div> -->
 
     <div class="footer">
         <div class="footerInfo">
-			<p>© 2017-2024</p>
-			<script>
-const headers=[
-    "Hello!",
-	"Wow you made it",
-	"Welcome back!",
-    "Access granted",
-    "Wait who are you???",
-    "Are you refreshing the page?",
-    "✨✨✨",
-    "🚀🛰☄",
-    "🎉🎉🎉",
-
-
-	"₩̷̺͇͕͍̏̽Ɇ̶͇̙͑͛̂̊̄̆͘͠͠Ⱡ̵̮̃́̌̈́̍̊͘₵̴̧̱͇̯̆͊̋̀͐͂́̈̕Ø̷̡͖̙̭̺̭̪͖̔̿́̏̑̿͒̚͜₥̴͎͎̥͇̋̎̀Ɇ̶̧̦̯͉̠̠̹̌͘͝ ̸̼͈̫̌̈́̾̑̅͌̇̌̚₮̴̤̥͈̆ͅØ̸͎̿̾̅͘͘͝ ̶̧̧̤͔̩͗̀̚₥̸͉̤͂̔̊͂͑͒̚̚͝Ɏ̴̠̇̾ ̷͖̘̹̤̑̇̽̈́͗̂͝₩̶̢̛̪͙̻̱̯̓̈́̑̄̐Ɇ̸̫̺̐฿̵͚̂͗̔₴̵̨͙̗͂͆ł̷̮̣̦̖͎̈̄̋̋ͅ₮̴̡̮̻͖͙̥̪̫̰͊̽̌Ɇ̶̮͙̝͚͙̮̠̋̏͝,",
-
-
-	"Test message please ignore",
-    "${props => props.welcomeMessage}",
-    "\\\" OR 1=1; DROP TABLE *; --",
-    "Error: missing locales key 'welcomeMessage'",
-    "No welcome message today sorry :(",
-    ":)",
-    ":o",
-];
-document.querySelector('h1').innerText = headers[Math.floor(Math.random()*headers.length)];
-			</script>
+            <p>© 2017-2025</p>
             <small>
                 <div>(/._.)/*\(._.\)</div>
             </small>
         </div>
         <div class="socialLinks">
             <div class="socialLink socialLinkYoutube">
-                <a rel="me" href="https://www.youtube.com/channel/UC0Eu5xZXMmX5bn_v5zSB7kA/" title="YouTube"><i class="fa fa-youtube-square" aria-hidden="true"></i></a>
+                <a rel="me" href="https://www.youtube.com/channel/UC0Eu5xZXMmX5bn_v5zSB7kA/" title="YouTube"><i
+                        class="fa fa-youtube-square" aria-hidden="true"></i></a>
             </div>
             <div class="socialLink socialLinkGithub">
-                <a rel="me" href="https://www.github.com/samboyer" title="Github"><i class="fa fa-github-square" aria-hidden="true"></i></a>
+                <a rel="me" href="https://www.github.com/samboyer" title="Github"><i class="fa fa-github-square"
+                        aria-hidden="true"></i></a>
             </div>
             <div class="socialLink socialLinkLinkedin">
-                <a rel="me" href="https://www.linkedin.com/in/samuelboyeruk/" title="LinkedIn"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+                <a rel="me" href="https://www.linkedin.com/in/samuelboyeruk/" title="LinkedIn"><i
+                        class="fa fa-linkedin-square" aria-hidden="true"></i></a>
             </div>
             <div class="socialLink socialLinkLD">
                 <a rel="me" href="https://ldjam.com/users/samboyer276" title="Ludum Dare">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 315 315">
-    <path id="dp_path001" transform="matrix(1,0,0,1,1071.35,-448.244)" fill="white" fill-rule="evenodd" d="M -864.849,604.127 L -855.899,604.127 C -837.032,604.127 -836.82,638.401 -855.899,638.401 L -864.849,638.401 Z M -1034.95,547.807 L -1034.95,634.657 C -1034.95,675.721 -1004.14,696.353 -973.34,696.353 L -925.893,696.353 L -925.893,638.816 L -970.605,638.816 C -975.201,638.816 -979.796,635.101 -979.796,627.677 L -979.796,547.559 Z M -919.764,547.075 L -919.764,696.093 L -856.961,696.093 C -761.127,696.093 -761.127,547.075 -856.961,547.075 Z M -1066.15,512.407 C -1066.15,481.023 -1040.71,455.58 -1009.32,455.58 L -820.708,455.58 C -789.324,455.58 -763.881,481.023 -763.881,512.407 L -763.881,701.023 C -763.881,732.407 -789.324,757.849 -820.708,757.849 L -1009.32,757.849 C -1040.71,757.849 -1066.15,732.407 -1066.15,701.023 Z "/>
-</svg>
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                        viewBox="0 0 315 315">
+                        <path id="dp_path001" transform="matrix(1,0,0,1,1071.35,-448.244)" fill="white"
+                            fill-rule="evenodd"
+                            d="M -864.849,604.127 L -855.899,604.127 C -837.032,604.127 -836.82,638.401 -855.899,638.401 L -864.849,638.401 Z M -1034.95,547.807 L -1034.95,634.657 C -1034.95,675.721 -1004.14,696.353 -973.34,696.353 L -925.893,696.353 L -925.893,638.816 L -970.605,638.816 C -975.201,638.816 -979.796,635.101 -979.796,627.677 L -979.796,547.559 Z M -919.764,547.075 L -919.764,696.093 L -856.961,696.093 C -761.127,696.093 -761.127,547.075 -856.961,547.075 Z M -1066.15,512.407 C -1066.15,481.023 -1040.71,455.58 -1009.32,455.58 L -820.708,455.58 C -789.324,455.58 -763.881,481.023 -763.881,512.407 L -763.881,701.023 C -763.881,732.407 -789.324,757.849 -820.708,757.849 L -1009.32,757.849 C -1040.71,757.849 -1066.15,732.407 -1066.15,701.023 Z " />
+                    </svg>
                 </a>
             </div>
             <div class="socialLink socialLinkBC">
                 <a rel="me" href="https://sb00.bandcamp.com/" title="Bandcamp">
-<svg width="4em" width="4em" viewBox="0 0 313 316" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
-        <path id="dp_path001" fill="white" d="M5.257,255.344C5.219,254.494 5.2,253.639 5.2,252.779L5.2,64.163C5.2,32.779 30.64,7.336 62.03,7.336L250.642,7.336C281.125,7.336 306.004,31.34 307.406,61.474L94.846,61.474L68.383,118.711L84.62,118.711L84.62,168.598L85.012,168.598C92.265,158.078 102.197,153.309 113.86,153.113C140.42,153.113 155.514,174.903 155.514,202.999C155.514,222.242 149.045,246.646 128.79,255.434L193.182,255.434C176.03,248.378 166.295,230.801 166.295,208.717C166.295,177.746 181.192,153.113 214.254,153.113C240.455,153.113 250.387,172.224 251.726,189.605L235.522,189.605C233.431,176.243 225.95,168.206 211.804,168.206C190.993,168.206 184.296,188.069 184.296,205.842C184.296,223.059 188.51,244.261 211.64,244.261C222.911,244.261 232.647,235.833 235.522,220.576L251.759,220.576C251.759,220.641 251.726,220.706 251.726,220.772L307.469,100.185L307.469,252.779C307.469,284.163 282.026,309.605 250.642,309.605L62.03,309.605C31.541,309.605 6.665,285.602 5.263,255.467L67.828,255.467L67.828,119.985L5.257,255.344ZM235.718,255.467L238.822,248.77C235.979,251.449 232.614,253.768 228.629,255.467L235.718,255.467ZM83.673,255.467L96.349,255.467C89.782,252.135 86.221,247.006 84.065,243.543L83.673,243.543L83.673,255.467ZM111.213,244.327C129.574,244.327 138.166,227.698 138.166,205.711C138.166,192.904 136.827,168.239 110.854,168.239C86.58,168.239 83.902,194.407 83.902,210.677C83.869,237.237 100.498,244.327 111.213,244.327Z"/>
-</svg>
+                    <svg width="4em" width="4em" viewBox="0 0 313 316" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve"
+                        xmlns:serif="http://www.serif.com/"
+                        style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+                        <path id="dp_path001" fill="white"
+                            d="M5.257,255.344C5.219,254.494 5.2,253.639 5.2,252.779L5.2,64.163C5.2,32.779 30.64,7.336 62.03,7.336L250.642,7.336C281.125,7.336 306.004,31.34 307.406,61.474L94.846,61.474L68.383,118.711L84.62,118.711L84.62,168.598L85.012,168.598C92.265,158.078 102.197,153.309 113.86,153.113C140.42,153.113 155.514,174.903 155.514,202.999C155.514,222.242 149.045,246.646 128.79,255.434L193.182,255.434C176.03,248.378 166.295,230.801 166.295,208.717C166.295,177.746 181.192,153.113 214.254,153.113C240.455,153.113 250.387,172.224 251.726,189.605L235.522,189.605C233.431,176.243 225.95,168.206 211.804,168.206C190.993,168.206 184.296,188.069 184.296,205.842C184.296,223.059 188.51,244.261 211.64,244.261C222.911,244.261 232.647,235.833 235.522,220.576L251.759,220.576C251.759,220.641 251.726,220.706 251.726,220.772L307.469,100.185L307.469,252.779C307.469,284.163 282.026,309.605 250.642,309.605L62.03,309.605C31.541,309.605 6.665,285.602 5.263,255.467L67.828,255.467L67.828,119.985L5.257,255.344ZM235.718,255.467L238.822,248.77C235.979,251.449 232.614,253.768 228.629,255.467L235.718,255.467ZM83.673,255.467L96.349,255.467C89.782,252.135 86.221,247.006 84.065,243.543L83.673,243.543L83.673,255.467ZM111.213,244.327C129.574,244.327 138.166,227.698 138.166,205.711C138.166,192.904 136.827,168.239 110.854,168.239C86.58,168.239 83.902,194.407 83.902,210.677C83.869,237.237 100.498,244.327 111.213,244.327Z" />
+                    </svg>
                 </a>
             </div>
             <div class="socialLink socialLinkMA">
                 <a rel="me" href="https://mastodon.social/@samboyer276/" title="Mastodon">
-<svg width="100%" height="100%" viewBox="0 0 313 316" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
-    <path id="dp_path001" d="M5.2,64.163C5.2,32.779 30.64,7.336 62.03,7.336L250.642,7.336C282.026,7.336 307.469,32.779 307.469,64.163L307.469,252.779C307.469,284.163 282.026,309.605 250.642,309.605L62.03,309.605C30.64,309.605 5.2,284.163 5.2,252.779L5.2,64.163ZM257.826,180.157C262.738,154.894 262.333,118.507 262.333,118.507C262.333,69.188 230.02,54.732 230.02,54.732C213.728,47.249 185.752,44.102 156.687,43.865L155.973,43.865C126.907,44.102 98.949,47.249 82.656,54.732C82.656,54.732 50.342,69.188 50.342,118.507C50.342,129.8 50.122,143.303 50.48,157.623C51.653,205.854 59.322,253.388 103.915,265.191C124.476,270.633 142.129,271.772 156.346,270.991C182.129,269.561 196.602,261.789 196.602,261.789L195.752,243.083C195.752,243.083 177.327,248.893 156.635,248.185C136.134,247.482 114.492,245.974 111.176,220.804C110.87,218.593 110.717,216.229 110.717,213.746C110.717,213.746 130.842,218.665 156.346,219.834C171.941,220.549 186.566,218.92 201.421,217.147C229.906,213.746 254.709,196.195 257.826,180.157ZM224.218,122.333L224.218,182.049L200.559,182.049L200.559,124.088C200.559,111.87 195.419,105.668 185.136,105.668C173.766,105.668 168.068,113.025 168.068,127.571L168.068,159.297L144.549,159.297L144.549,127.571C144.549,113.025 138.85,105.668 127.481,105.668C117.198,105.668 112.057,111.87 112.057,124.088L112.057,182.049L88.398,182.049L88.398,122.333C88.398,110.128 91.506,100.429 97.748,93.254C104.185,86.079 112.614,82.4 123.078,82.4C135.185,82.4 144.353,87.054 150.415,96.361L156.308,106.24L162.202,96.361C168.263,87.054 177.431,82.4 189.539,82.4C200.002,82.4 208.432,86.079 214.87,93.254C221.11,100.429 224.218,110.128 224.218,122.333Z" />
-</svg>
-                                
+                    <svg width="100%" height="100%" viewBox="0 0 313 316" version="1.1"
+                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                        xml:space="preserve" xmlns:serif="http://www.serif.com/"
+                        style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+                        <path id="dp_path001"
+                            d="M5.2,64.163C5.2,32.779 30.64,7.336 62.03,7.336L250.642,7.336C282.026,7.336 307.469,32.779 307.469,64.163L307.469,252.779C307.469,284.163 282.026,309.605 250.642,309.605L62.03,309.605C30.64,309.605 5.2,284.163 5.2,252.779L5.2,64.163ZM257.826,180.157C262.738,154.894 262.333,118.507 262.333,118.507C262.333,69.188 230.02,54.732 230.02,54.732C213.728,47.249 185.752,44.102 156.687,43.865L155.973,43.865C126.907,44.102 98.949,47.249 82.656,54.732C82.656,54.732 50.342,69.188 50.342,118.507C50.342,129.8 50.122,143.303 50.48,157.623C51.653,205.854 59.322,253.388 103.915,265.191C124.476,270.633 142.129,271.772 156.346,270.991C182.129,269.561 196.602,261.789 196.602,261.789L195.752,243.083C195.752,243.083 177.327,248.893 156.635,248.185C136.134,247.482 114.492,245.974 111.176,220.804C110.87,218.593 110.717,216.229 110.717,213.746C110.717,213.746 130.842,218.665 156.346,219.834C171.941,220.549 186.566,218.92 201.421,217.147C229.906,213.746 254.709,196.195 257.826,180.157ZM224.218,122.333L224.218,182.049L200.559,182.049L200.559,124.088C200.559,111.87 195.419,105.668 185.136,105.668C173.766,105.668 168.068,113.025 168.068,127.571L168.068,159.297L144.549,159.297L144.549,127.571C144.549,113.025 138.85,105.668 127.481,105.668C117.198,105.668 112.057,111.87 112.057,124.088L112.057,182.049L88.398,182.049L88.398,122.333C88.398,110.128 91.506,100.429 97.748,93.254C104.185,86.079 112.614,82.4 123.078,82.4C135.185,82.4 144.353,87.054 150.415,96.361L156.308,106.24L162.202,96.361C168.263,87.054 177.431,82.4 189.539,82.4C200.002,82.4 208.432,86.079 214.87,93.254C221.11,100.429 224.218,110.128 224.218,122.333Z" />
+                    </svg>
+
                 </a>
-            </div>  
+            </div>
             <a class="h-card" style="display:none;" href="https://samboyer.uk">Sam Boyer</a>
         </div>
     </div>
@@ -626,17 +752,19 @@ document.querySelector('h1').innerText = headers[Math.floor(Math.random()*header
 
     <div class="screenOverlay" id="overlay" onclick="closePopup()">
         <div class="popupContainer">
-        <div class="popup animated">
-            <i class="spinner fa fa-cog fa-spin fa-3x fa-fw"></i>
-            <iframe id="overlayIframe" title="More Info Popup" src="about:blank" >Loading...</iframe>
-            <div onclick="closePopup()" class="popupClose"><i class="fa fa-times-circle" aria-hidden="true"></i></div>
+            <div class="popup animated">
+                <i class="spinner fa fa-cog fa-spin fa-3x fa-fw"></i>
+                <iframe id="overlayIframe" title="More Info Popup" src="about:blank">Loading...</iframe>
+                <div onclick="closePopup()" class="popupClose"><i class="fa fa-times-circle" aria-hidden="true"></i>
+                </div>
+            </div>
         </div>
     </div>
-    </div>
     <div id="page_weight_info"></div>
-  </body>
-  <script>
-    sticky_relocate();
+</body>
+<script>
+    stickyRelocate();
+    applyScrollColor();
 
     // thanks to Joseph Silber! https://stackoverflow.com/questions/7717527/smooth-scrolling-when-clicking-an-anchor-link#7717572
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -650,10 +778,11 @@ document.querySelector('h1').innerText = headers[Math.floor(Math.random()*header
 
     var total_transfer_size = 0;
     const observer = new PerformanceObserver((list) => {
-        total_transfer_size += list.getEntries().map(entry => entry.encodedBodySize).reduce((sum, a) => sum+a,0);
-        document.getElementById('page_weight_info').innerText = `⚡️${Math.round(total_transfer_size/1024)}KB`;
+        total_transfer_size += list.getEntries().map(entry => entry.encodedBodySize).reduce((sum, a) => sum + a, 0);
+        document.getElementById('page_weight_info').innerText = `⚡️${Math.round(total_transfer_size / 1024)} KB`;
     });
 
     observer.observe({ type: "resource", buffered: true });
-  </script>
+</script>
+
 </html>
