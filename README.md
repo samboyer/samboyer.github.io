@@ -2,10 +2,10 @@
 
 [https://samboyer.uk](https://samboyer.uk)
 
-PRs welcome 👀
 
 ## Build Instructions
 
 ```bash
-node webp.js # imagemin[-webp] conversion
+python image_monofier.py # (for special images you may want to run/tweak the magick command manually.)
+node webp.js # imagemin[-webp] conversion - not usually needed now I use mono PNGs
 ```
