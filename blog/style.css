@@ -37,7 +37,7 @@ h3{
 }
 a, a:visited{
     text-decoration: none;
-    color:rgb(0, 102, 204);
+    color:#444;
     /* transition:color 100ms ease; */
 }
 a:hover{
@@ -112,6 +112,10 @@ li>p{
     top:100px;
     left:0;
     font-size:0.8em;
+    padding-left:20px;
+}
+.table_of_contents ul{
+    padding-left: 20px;
 }
 
 /*mobile rules*/
