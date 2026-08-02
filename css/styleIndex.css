@@ -179,7 +179,6 @@ li {
 .headerText {
   margin: 25vh 10% 20vh;
   display: inline-block;
-  height: 4rem;
   /*border-bottom: solid 2px rgba(var(--col-white-triplet), 0.3);*/
   /* text-decoration: underline solid rgba(var(--col-white-triplet),0.1); */
   transition: font-size 300ms;
@@ -188,6 +187,7 @@ li {
   transform: translateY(0px);
   z-index: var(--col-abberation-left);
   padding:25px;
+  padding-bottom:0;
   background:#0004;
 }
 
@@ -1113,10 +1113,6 @@ h2 i {
 @media screen and (max-width:640px) {
   .headerText h1 {
     font-size: 4em;
-  }
-
-  .headerText {
-    height: 3.8em;
   }
 
   #logo {
