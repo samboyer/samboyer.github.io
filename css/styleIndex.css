@@ -1074,12 +1074,12 @@ h2 i {
 
 /* setting dot to the left if the card is odd */
 .timelineCardContainer:nth-of-type(odd) h3::before {
-  left: calc(-47.5px + var(--timeline-border-width));
+  left: calc(-50.5px + var(--timeline-border-width));
 }
 
 /* setting dot to the right if the card is odd */
 .timelineCardContainer:nth-of-type(even) h3::before {
-  right: calc(-47.5px + var(--timeline-border-width));
+  right: calc(-50.5px + var(--timeline-border-width));
 }
 
 .timelineYear {
