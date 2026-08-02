@@ -36,8 +36,6 @@
 
     <base target="_blank">
 
-    <!-- <link href="fonts/googlefonts.css" rel="stylesheet"> -->
-
     <link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon/favicon-16x16.png">
@@ -89,10 +87,10 @@
             if (!sectionId) return;
 
             const colorMap = {
-                'about': '#f0a500',
-                'projects': { from: '#16ac00', to: '#b86cc7' },
+                'about': '#EEBD55',
+                'projects': { from: '#00B894', to: '#b86cc7' },
                 'more': '#00a6ed',
-                'contact': '#00b894'
+                'contact': '#00B894'
             };
             if (typeof colorMap[sectionId] === 'string') {
                 document.body.style = `--col-primary: ${colorMap[sectionId]}`;
@@ -133,10 +131,10 @@
     <div id="top"></div>
     <div class="top">
         <div class="headerClip">
-            <canvas id="canvasGlitter"></canvas>
+            <script src="js/q5.min.js"></script>
+            <script src="js/q5header.js"></script>
             <img loading="lazy" src="img/logo.svg" class="logoImg" alt="">
         </div>
-        <script src="/js/glitterwebgl.js" async></script>
         <span class="headerText" class="displayBlock">
             <h1>Sam Boyer&nbsp;&nbsp;</h1>
         </span>
@@ -181,6 +179,7 @@
             <p>🌍 Outside of tech, I'm also pretty keen to do more to help the climate movement - if there's any
                 projects / job roles that I might be able to help with, please <a
                     href="https://linkedin.com/in/samuelboyeruk">get in touch</a>.</p>
+        <hr/>
         </div>
 
         <div class="section">
@@ -194,7 +193,9 @@
 
             <div class="timelineContainer">
                 <div class="timeline">
-
+                <ddiv class="timelineYear">
+                    <div>2025</div>
+                </ddiv>
                     <div class="timelineCardContainer">
                         <div class="timelineCard">
                             <div>
@@ -678,9 +679,8 @@
                 </div>
             </div>
 
+        <hr/>
         </div>
-
-
 
         <div class="section">
             <div id="more" class="anchor"></div>
@@ -697,6 +697,7 @@
             <br><br><br>
             <iframe class="iframe_with_background" loading="lazy" style="width:100%; height:230px;border:none;"
                 src="my_music.html"></iframe>
+        <hr/>
         </div>
 
         <div class="section">
