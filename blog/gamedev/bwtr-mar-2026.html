@@ -17,276 +17,145 @@
     </div>
   </div>
   <div class="content">
-    <h1 id="birb-world-tour-royale-is-now-available-online">Birb World Tour:
-
-      Royale is now available online!</h1>
-
-    <h2 id="some-notes-on-a-post-jam-game-project">Some notes on a post-jam
-
-      game project 🐦</h2>
-
-    <p><em>March 2026</em></p>
-
-    <p>Remember <a href="https://samboyer.uk/blog/gamedev/ld55.html">that
-
-        game with birds</a>? This is him now. Feel old yet?</p>
-
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/3dqVm04dsBM?si=SO-zkEZmG3cGUGn-"
-      title="YouTube video player" frameborder="0" allow="picture-in-picture"
-      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-
-    </iframe>
-
-    <p>Similar to the 2024 Jam version, you race against 99 other birds
-
-      along a long racecourse, with powerups to collect. Unlike the Jam
-
-      version, levels are now procedurally generated, and there’s many
-
-      real-world bird skins to unlock. I’ve also added a tutorial level, and a
-
-      practise room level without a timer or opponents.</p>
-
-    <p>If this is your type of thing, I’d love for you to give it a go and
-
-      send me any feedback you have. If you’re more interested in the
-
-      technical notes, carry on reading.</p>
-
-    <h2 id="notes-about-the-development">Notes about the development</h2>
-
-    <h3 id="game-design">Game design</h3>
-
-    <p>In my head, the game has always been essentially a blend of modern 3D
-
-      Sonic platformers, Mario Kart, and Fall Guys. (The ‘World Tour’ aspect
-
-      takes particular inspiration from Sonic Unleashed.) This means I didn’t
-
-      have to worry too much about core gameplay design, and so spent more
-
-      time on art &amp; level generation than core gameplay. This means that
-
-      broad aspects of the design (character controller, UI, etc) are fairly
-
-      unoriginal, but as a whole feels somewhat novel.</p>
-
-    <p>Since the jam version, I’ve actually ‘un-implemented’ some of the
-
-      stacking upgrades that could be purchased in the Lobby. The new
-
-      procedural levels can be difficult to navigate, so I’ve tuned the
-
-      character controller’s parameters to suit the levels - which the
-
-      upgrades would interfere with. I’d like to either re-implement them with
-
-      less over-powered multipliers, or add some other way of spending money
-
-      that doesn’t impact the character controller, which also isn’t solely
-
-      Cosmetics-based.</p>
-
-    <h3 id="graphics">Graphics</h3>
-
-    <p>The game’s models &amp; textures are low-poly &amp; low-resolution,
-
-      so I can worry less about being a bad artist 😛. It also means the game
-
-      can run well on cheaper hardware (i.e. my laptop). To lean into the
-
-      retro aesthetic further, I removed shadows &amp; render the game at 0.5x
-
-      resolution. I don’t think I’ll go any further on retro effects, in case
-
-      it risks impacting the gameplay.</p>
-
-    <p>Interestingly, I experimented with ‘immersive’ weather effects like
-
-      rain, snow &amp; confetti, but they introduced too much visual noise to
-
-      be able to ‘read’ the upcoming terrain. Perhaps I can re-introduce them
-
-      with smarter screen placement?</p>
-
-    <h3 id="music">Music</h3>
-
-    <p>The soundtrack is mostly drum-n-bass, because I enjoy DnB! And also
-
-      because I can’t play any rock instruments well enough.</p>
-
-    <p>Four in-race tracks &amp; two lobby tracks were made during the Jam,
-
-      in about 30mins per track. After switching laptops, I lost most of the
-
-      effects, so I had to remake them in order to re-export. The game now has
-
-      12 tracks, and I’m sticking to roughly 1-4 hours per track - it’s a very
-
-      refreshing way to start &amp; finish new tracks!</p>
-
-    <h3 id="getting-it-done">‘Getting it done’</h3>
-
-    <p>I started regularly working on the post-jam version in October 2025.
-
-      At the height of development, I was putting in 1-2 hours of ‘work’ into
-
-      the game most days, often after doing my normal job (also in front of
-
-      screens… eek). I think by having a clear image of what you want the game
-
-      to look like, and a decomposition of the required elements into small,
-
-      1-hour-ish tasks, I was able to make measurable progress every day.
-
-      Having a mix of ‘artsy’ tasks (such as making a 3D model or a piece of
-
-      music) and ‘technical’ tasks (adding a new C# script or Unity prefab)
-
-      was also a nice way to stay enthusiastic about the work.</p>
-
-    <p>Regular builds/exports also helps. It’s nice enough to play your game
-
-      from the Editor, but getting it into a distributable state lets you
-
-      share it with other people and feel like</p>
-
-    <h3 id="ai-assistance">AI assistance</h3>
-
-    <p>During development of the Jam Version in 2024, I had GitHub Copilot’s
-
-      code completion enabled in my IDE. I have not been using any Copilot
-
-      features since resuming the project in late 2025.</p>
-
-    <p>Why? With the Jam’s time pressure removed, I felt like AI assistance
-
-      was sapping the fun out of making a game, and wasn’t giving much in
-
-      return (especially when it tried to do vector math). Given I already
-
-      know most of the core Unity APIs that I need to use, and the official
-
-      docs are pretty good for the ones I don’t remember, it just didn’t seem
-
-      beneficial.</p>
-
-    <p>If I entered another game jam, it’s a toss-up for whether I’d use AI
-
-      to help with the code. Sloppy code design isn’t a huge concern on such
-
-      short-lived projects. I’m capable of making playable Jam games without
-
-      Copilot, but I’m not sure I want to spent the time hurriedly writing
-
-      lots of (mostly boilerplate) game code in a weekend. It might be that a
-
-      comprehensive toolkit of pre-made game scripts would be more
-
-      beneficial/enjoyable.</p>
-
-    <p>I don’t use any GenAI tools for art or music, for similar
-
-      reasons.</p>
-
-    <h3 id="asset-packs-ftw">Asset packs FTW!</h3>
-
-    <p>Human-made asset packs are very helpful and encouraged for hobby
-
-      projects &amp; jam games, particularly when you don’t feel like
-
-      re-designing boilerplate assets that every game has in some capacity.
-
-      BWTR uses a small handful of assets from <a href="https://kenney.nl/assets">Kenney</a> - mainly Interface Sounds,
-
-      Input Prompt icons and panels from the UI Pack.</p>
-
-    <h2 id="what-id-like-to-add-to-the-game-next">What I’d like to add to
-
-      the game next</h2>
-
-    <ul>
-
-      <li>Procedural terrain? The Jam version had wide, open fields to watch
-
-        go by, which I haven’t been able to recreate with my racetrack-style
-
-        level generator. I’d like to revisit terrain generation, and ideally
-
-        have a blend of wide terrains and narrow platforms, a bit like what
-
-        you’d find in Sonic Unleashed.</li>
-
-      <li>More biomes. 4 feels like enough for an early release, but not for a
-
-        ‘complete’ game. I have a few themes in mind, but I’d like them to be
-
-        fairly original, not just copies of Sonic levels.</li>
-
-      <li>More bird species, allowing for more common/rare species.
-
-        Modelling/texturing these is just a bit time consuming, and not very fun
-
-        for me.</li>
-
-      <li>Dynamic music, e.g. adding/removing instruments as you start,
-
-        finish, and progress through a level. I could export my tracks per-layer
-
-        quite easily, but combining and transitioning between nice segments
-
-        in-game would be a much bigger step. I’d probably need to look into FMOD
-
-        for this.</li>
-
-    </ul>
-
-    <hr />
-
-    <p>As always, I thoroughly recommend that you try making a game of your
-
-      own, whether in Unity, Godot, or any engine of your choice. Game jams
-
-      are a good way of getting something started &amp; finished in a short
-
-      amount of time. I’ve enjoyed participating in <a href="https://ldjam.com/about">Ludum Dare</a>, particularly
-      because of
-
-      how it encourages giving &amp; receiving feedback.</p>
-
-    <p>If you try out the game and have feedback, or want to know more about
-
-      anything in this article, let me know!</p>
-
-    <p>Sam</p>
-
+    <h1>Birb World Tour: Royale is now available online!</h1>
+    <h2>Some notes on a post-jam game project 🐦</h2>
+    <div class="date_label"></div>
+    <p>Remember <a href="https://samboyer.uk/blog/gamedev/ld55.html">that
+game with birds</a>? This is him now. Feel old yet?</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3dqVm04dsBM?si=SO-zkEZmG3cGUGn-" title="YouTube video player" frameborder="0" allow="picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+</iframe>
+<p>Similar to the 2024 Jam version, you race against 99 other birds
+along a long racecourse, with powerups to collect. Unlike the Jam
+version, levels are now procedurally generated, and there’s many
+real-world bird skins to unlock. I’ve also added a tutorial level, and a
+practise room level without a timer or opponents.</p>
+<p>If this is your type of thing, I’d love for you to give it a go and
+send me any feedback you have. If you’re more interested in the
+technical notes, carry on reading.</p>
+<h2 id="notes-about-the-development">Notes about the development</h2>
+<h3 id="game-design">Game design</h3>
+<p>In my head, the game has always been essentially a blend of modern 3D
+Sonic platformers, Mario Kart, and Fall Guys. (The ‘World Tour’ aspect
+takes particular inspiration from Sonic Unleashed.) This means I didn’t
+have to worry too much about core gameplay design, and so spent more
+time on art &amp; level generation than core gameplay. This means that
+broad aspects of the design (character controller, UI, etc) are fairly
+unoriginal, but as a whole feels somewhat novel.</p>
+<p>Since the jam version, I’ve actually ‘un-implemented’ some of the
+stacking upgrades that could be purchased in the Lobby. The new
+procedural levels can be difficult to navigate, so I’ve tuned the
+character controller’s parameters to suit the levels - which the
+upgrades would interfere with. I’d like to either re-implement them with
+less over-powered multipliers, or add some other way of spending money
+that doesn’t impact the character controller, which also isn’t solely
+Cosmetics-based.</p>
+<h3 id="graphics">Graphics</h3>
+<p>The game’s models &amp; textures are low-poly &amp; low-resolution,
+so I can worry less about being a bad artist 😛. It also means the game
+can run well on cheaper hardware (i.e. my laptop). To lean into the
+retro aesthetic further, I removed shadows &amp; render the game at 0.5x
+resolution. I don’t think I’ll go any further on retro effects, in case
+it risks impacting the gameplay.</p>
+<p>Interestingly, I experimented with ‘immersive’ weather effects like
+rain, snow &amp; confetti, but they introduced too much visual noise to
+be able to ‘read’ the upcoming terrain. Perhaps I can re-introduce them
+with smarter screen placement?</p>
+<h3 id="music">Music</h3>
+<p>The soundtrack is mostly drum-n-bass, because I enjoy DnB! And also
+because I can’t play any rock instruments well enough.</p>
+<p>Four in-race tracks &amp; two lobby tracks were made during the Jam,
+in about 30mins per track. After switching laptops, I lost most of the
+effects, so I had to remake them in order to re-export. The game now has
+12 tracks, and I’m sticking to roughly 1-4 hours per track - it’s a very
+refreshing way to start &amp; finish new tracks!</p>
+<h3 id="getting-it-done">‘Getting it done’</h3>
+<p>I started regularly working on the post-jam version in October 2025.
+At the height of development, I was putting in 1-2 hours of ‘work’ into
+the game most days, often after doing my normal job (also in front of
+screens… eek). I think by having a clear image of what you want the game
+to look like, and a decomposition of the required elements into small,
+1-hour-ish tasks, I was able to make measurable progress every day.
+Having a mix of ‘artsy’ tasks (such as making a 3D model or a piece of
+music) and ‘technical’ tasks (adding a new C# script or Unity prefab)
+was also a nice way to stay enthusiastic about the work.</p>
+<p>Regular builds/exports also helps. It’s nice enough to play your game
+from the Editor, but getting it into a distributable state lets you
+share it with other people and feel like</p>
+<h3 id="ai-assistance">AI assistance</h3>
+<p>During development of the Jam Version in 2024, I had GitHub Copilot’s
+code completion enabled in my IDE. I have not been using any Copilot
+features since resuming the project in late 2025.</p>
+<p>Why? With the Jam’s time pressure removed, I felt like AI assistance
+was sapping the fun out of making a game, and wasn’t giving much in
+return (especially when it tried to do vector math). Given I already
+know most of the core Unity APIs that I need to use, and the official
+docs are pretty good for the ones I don’t remember, it just didn’t seem
+beneficial.</p>
+<p>If I entered another game jam, it’s a toss-up for whether I’d use AI
+to help with the code. Sloppy code design isn’t a huge concern on such
+short-lived projects. I’m capable of making playable Jam games without
+Copilot, but I’m not sure I want to spent the time hurriedly writing
+lots of (mostly boilerplate) game code in a weekend. It might be that a
+comprehensive toolkit of pre-made game scripts would be more
+beneficial/enjoyable.</p>
+<p>I don’t use any GenAI tools for art or music, for similar
+reasons.</p>
+<h3 id="asset-packs-ftw">Asset packs FTW!</h3>
+<p>Human-made asset packs are very helpful and encouraged for hobby
+projects &amp; jam games, particularly when you don’t feel like
+re-designing boilerplate assets that every game has in some capacity.
+BWTR uses a small handful of assets from <a
+href="https://kenney.nl/assets">Kenney</a> - mainly Interface Sounds,
+Input Prompt icons and panels from the UI Pack.</p>
+<h2 id="what-id-like-to-add-to-the-game-next">What I’d like to add to
+the game next</h2>
+<ul>
+<li>Procedural terrain? The Jam version had wide, open fields to watch
+go by, which I haven’t been able to recreate with my racetrack-style
+level generator. I’d like to revisit terrain generation, and ideally
+have a blend of wide terrains and narrow platforms, a bit like what
+you’d find in Sonic Unleashed.</li>
+<li>More biomes. 4 feels like enough for an early release, but not for a
+‘complete’ game. I have a few themes in mind, but I’d like them to be
+fairly original, not just copies of Sonic levels.</li>
+<li>More bird species, allowing for more common/rare species.
+Modelling/texturing these is just a bit time consuming, and not very fun
+for me.</li>
+<li>Dynamic music, e.g. adding/removing instruments as you start,
+finish, and progress through a level. I could export my tracks per-layer
+quite easily, but combining and transitioning between nice segments
+in-game would be a much bigger step. I’d probably need to look into FMOD
+for this.</li>
+</ul>
+<hr />
+<p>As always, I thoroughly recommend that you try making a game of your
+own, whether in Unity, Godot, or any engine of your choice. Game jams
+are a good way of getting something started &amp; finished in a short
+amount of time. I’ve enjoyed participating in <a
+href="https://ldjam.com/about">Ludum Dare</a>, particularly because of
+how it encourages giving &amp; receiving feedback.</p>
+<p>If you try out the game and have feedback, or want to know more about
+anything in this article, let me know!</p>
+<p>Sam</p>
 
     <hr>
     <a href='.'><i>Return to index.</i></a>
   </div>
   <div class="table_of_contents">
     <ul>
-      <li><a href="#birb-world-tour-royale-is-now-available-online">Birb World
-          Tour: Royale is now available online!</a>
-        <ul>
-          <li><a href="#some-notes-on-a-post-jam-game-project">Some notes on a
-              post-jam game project 🐦</a></li>
-          <li><a href="#notes-about-the-development">Notes about the
-              development</a>
-            <ul>
-              <li><a href="#game-design">Game design</a></li>
-              <li><a href="#graphics">Graphics</a></li>
-              <li><a href="#music">Music</a></li>
-              <li><a href="#getting-it-done">‘Getting it done’</a></li>
-              <li><a href="#ai-assistance">AI assistance</a></li>
-              <li><a href="#asset-packs-ftw">Asset packs FTW!</a></li>
-            </ul>
-          </li>
-          <li><a href="#what-id-like-to-add-to-the-game-next">What I’d like to add
-              to the game next</a></li>
-        </ul>
-      </li>
-    </ul>
+<li><a href="#notes-about-the-development">Notes about the
+development</a>
+<ul>
+<li><a href="#game-design">Game design</a></li>
+<li><a href="#graphics">Graphics</a></li>
+<li><a href="#music">Music</a></li>
+<li><a href="#getting-it-done">‘Getting it done’</a></li>
+<li><a href="#ai-assistance">AI assistance</a></li>
+<li><a href="#asset-packs-ftw">Asset packs FTW!</a></li>
+</ul></li>
+<li><a href="#what-id-like-to-add-to-the-game-next">What I’d like to add
+to the game next</a></li>
+</ul>
 
   </div>
 </body>

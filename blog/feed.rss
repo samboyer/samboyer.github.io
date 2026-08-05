@@ -10,7 +10,7 @@
 <link>https://samboyer.uk/blog/fun-stuff.html</link>
 <guid>https://samboyer.uk/blog/fun-stuff.html</guid>
 <pubDate>Wed, 28 Feb 2024 18:32:55 -0000</pubDate>
-<description>A subtitle! Sam doesn't know what to put in the subtitle yet!</description>
+<description></description>
 </item>
 
 <item>
@@ -18,7 +18,7 @@
 <link>https://samboyer.uk/blog/intro.html</link>
 <guid>https://samboyer.uk/blog/intro.html</guid>
 <pubDate>Sun, 25 Feb 2024 15:21:12 -0000</pubDate>
-<description>A subtitle! Sam doesn't know what to put in the subtitle yet!</description>
+<description></description>
 </item>
 
 <item>
@@ -26,7 +26,7 @@
 <link>https://samboyer.uk/blog/recommendations.html</link>
 <guid>https://samboyer.uk/blog/recommendations.html</guid>
 <pubDate>Wed, 28 Feb 2024 18:32:55 -0000</pubDate>
-<description>A subtitle! Sam doesn't know what to put in the subtitle yet!</description>
+<description></description>
 </item>
 
 <item>
@@ -34,7 +34,7 @@
 <link>https://samboyer.uk/blog/gamedev/bwtr-mar-2026.html</link>
 <guid>https://samboyer.uk/blog/gamedev/bwtr-mar-2026.html</guid>
 <pubDate>Wed, 04 Mar 2026 22:02:02 -0000</pubDate>
-<description>A subtitle! Sam doesn't know what to put in the subtitle yet!</description>
+<description>Some notes on a post-jam game project 🐦</description>
 </item>
 
 <item>
@@ -42,7 +42,7 @@
 <link>https://samboyer.uk/blog/gamedev/ld42.html</link>
 <guid>https://samboyer.uk/blog/gamedev/ld42.html</guid>
 <pubDate>Tue, 23 Apr 2024 17:15:00 -0000</pubDate>
-<description>A subtitle! Sam doesn't know what to put in the subtitle yet!</description>
+<description>will I ever make a game more polished than this? 😔</description>
 </item>
 
 <item>
@@ -50,7 +50,23 @@
 <link>https://samboyer.uk/blog/gamedev/ld55.html</link>
 <guid>https://samboyer.uk/blog/gamedev/ld55.html</guid>
 <pubDate>Tue, 23 Apr 2024 17:15:00 -0000</pubDate>
-<description>A subtitle! Sam doesn't know what to put in the subtitle yet!</description>
+<description>You can't make a gravity-defying running game without breaking a few physics engines</description>
+</item>
+
+<item>
+<title></title>
+<link>https://samboyer.uk/blog/old/carbon-footprints.html</link>
+<guid>https://samboyer.uk/blog/old/carbon-footprints.html</guid>
+<pubDate>Tue, 23 Jul 2024 22:27:55 -0000</pubDate>
+<description></description>
+</item>
+
+<item>
+<title></title>
+<link>https://samboyer.uk/blog/old/imagining-futures.html</link>
+<guid>https://samboyer.uk/blog/old/imagining-futures.html</guid>
+<pubDate>Tue, 23 Jul 2024 22:27:55 -0000</pubDate>
+<description></description>
 </item>
 
 <item>
@@ -58,7 +74,7 @@
 <link>https://samboyer.uk/blog/tech/small-webpages.html</link>
 <guid>https://samboyer.uk/blog/tech/small-webpages.html</guid>
 <pubDate>Sat, 11 Nov 2023 14:46:15 -0000</pubDate>
-<description>A subtitle! Sam doesn't know what to put in the subtitle yet!</description>
+<description>It won't save the world, but it's kinda cool</description>
 </item>
 
 <item>
@@ -66,7 +82,7 @@
 <link>https://samboyer.uk/blog/tech/spotify-recs-widget.html</link>
 <guid>https://samboyer.uk/blog/tech/spotify-recs-widget.html</guid>
 <pubDate>Sun, 25 Feb 2024 14:46:46 -0000</pubDate>
-<description>A subtitle! Sam doesn't know what to put in the subtitle yet!</description>
+<description>Hey, the 90s Internet called, they want their music discovery back</description>
 </item>
 
 </channel>

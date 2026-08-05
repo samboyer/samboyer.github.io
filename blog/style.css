@@ -1,138 +1,173 @@
-html{
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    color:#444;
-    font-size:20px;
+@font-face {
+    font-family: SpaceGrotesk;
+    src: url(/fonts/SpaceGrotesk-Regular.ttf);
+}
+
+@font-face {
+    font-family: SpaceGrotesk;
+    src: url(/fonts/SpaceGrotesk-Medium.ttf);
+    font-weight: 500;
+}
+
+html {
+    font-family: SpaceGrotesk, Georgia, 'Times New Roman', Times, serif;
+    color: #444;
+    font-size: 1.1rem;
     line-height: 1.7;
     background-color: #fff;
 }
 
-h1, h2, h3{
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-weight: 300;
-    font-style: italic;
+h1,
+h2,
+h3 {
+    font-family: SpaceGrotesk, Georgia, 'Times New Roman', Times, serif;
+    font-weight: 500;
     line-height: 1.25;
 }
-h1:first-of-type{
-    font-size:3rem;
+
+h1:first-of-type {
+    font-size: 3rem;
+    margin: 0;
+}
+
+h1+h2:first-of-type {
     margin: 0;
     margin-bottom: 50px;
+    font-style: italic;
+
 }
-h1 + h2:first-of-type{
-    margin:0;
-    margin-bottom: 50px;    
+
+h1 {
+    font-size: 1.5rem;
 }
-h1{
-    font-size:1.5rem;
+
+h2 {
+    font-size: 1.5rem;
+    color: #aaa;
 }
-h2{
-    font-size:1.5rem;
-    color:#aaa;
+
+h3 {
+    font-size: 1.3rem;
+    color: #aaa;
 }
-h3{
-    font-size:1.3rem;
-    color:#aaa;
-}
-.content>p{
+
+.content>p {
     margin: 40px 0;
 }
-a, a:visited{
+
+a,
+a:visited {
     text-decoration: none;
-    color:#444;
-    /* transition:color 100ms ease; */
+    color: rgb(0, 102, 204);
 }
-a:hover{
-    /* color:rgb(113, 174, 236); */
+
+a:hover {
     text-decoration: underline;
 }
 
-blockquote{
+.table_of_contents a,
+.table_of_contents a:visited {
+    color: #444;
+}
+
+blockquote {
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;
     font-style: italic;
     color: #777;
     margin: 20px 20px;
 }
-a.footnote-ref{
+
+a.footnote-ref {
     text-decoration: none;
 }
-a.footnote-back{
+
+a.footnote-back {
     text-decoration: none;
     margin-left: 10px;
 }
-li>p{
-    margin:0;
+
+li>p {
+    margin: 0;
 }
-.page_header{
+
+.page_header {
     padding: 0 10px;
     position: fixed;
 }
-.header_top_left{
+
+.header_top_left {
     display: flex;
     align-items: center;
 }
-.header_top_left a{
+
+.header_top_left a {
     display: inherit;
-    color:#444;
+    color: #444;
     /* font-style: italic;
     font-size: 1.1em; */
 }
-.header_top_left .vbar{
+
+.header_top_left .vbar {
     border-left: 1px solid #444;
     height: 16px;
     margin: 10px;
 }
 
-.content{
+.content {
     max-width: 700px;
     margin: 0 auto;
     padding-top: 70px;
     padding-bottom: 50px;
 }
-.content img{
+
+.content img {
     max-width: 100%;
     margin: 0 auto;
-    display:block;
+    display: block;
 }
 
-.content figcaption{
+.content figcaption {
     text-align: center;
     font-style: italic;
-    color:#777;
-    font-size:16px;
+    color: #777;
+    font-size: 16px;
 }
 
-.content video, .conent img{
+.content video,
+.conent img {
     max-width: 800px;
 }
 
-.table_of_contents{
-    display:inline-block;
-    width:calc(50vw - 420px);
-    position:fixed;
-    top:100px;
-    left:0;
-    font-size:0.8em;
-    padding-left:20px;
+.table_of_contents {
+    display: inline-block;
+    width: calc(50vw - 420px);
+    position: fixed;
+    top: 100px;
+    left: 0;
+    font-size: 0.8em;
+    padding-left: 20px;
 }
-.table_of_contents ul{
+
+.table_of_contents ul {
     padding-left: 20px;
 }
 
 /*mobile rules*/
-@media screen and (max-width:1200px){
-    .table_of_contents{
-      position:unset;
-      width: unset;
-      max-width: 800px;
-      margin: 0 auto;
-      display: block;
+@media screen and (max-width:1200px) {
+    .table_of_contents {
+        position: unset;
+        width: unset;
+        max-width: 800px;
+        margin: 0 auto;
+        display: block;
     }
-  }
+}
 
 
 /* === CODE STYLING === */
 
-pre{
+pre {
     border: 1px solid #777;
     padding: 10px;
     border-radius: 10px;
@@ -144,23 +179,23 @@ pre{
 
 /* inline code (e.g. `foo`) could appear under any element, so just add style
 to all code tags and undo that for multiline code*/
-code{
+code {
     font-size: 16px;
     border: 1px solid #eee;
     padding: 2px 4px;
     border-radius: 4px;
 }
 
-pre code{
-    border:none;
-    padding:0;
+pre code {
+    border: none;
+    padding: 0;
 }
 
-hr{
+hr {
     margin: 50px 0px;
 }
 
-pre.sourceCode::before{
+pre.sourceCode::before {
     content: "Python code";
     display: block;
     font-style: italic;
@@ -171,77 +206,228 @@ pre.sourceCode::before{
     font-family: initial;
 }
 
-pre.sourceCode.python::before{content: "Python";}
-pre.sourceCode.php::before{content: "PHP";}
-pre.sourceCode.html::before{content: "HTML";}
-pre.sourceCode.css::before{content: "CSS";}
-pre.sourceCode.js::before{content: "Javascript";}
-pre.sourceCode.md::before{content: "Markdown";}
+pre.sourceCode.python::before {
+    content: "Python";
+}
+
+pre.sourceCode.php::before {
+    content: "PHP";
+}
+
+pre.sourceCode.html::before {
+    content: "HTML";
+}
+
+pre.sourceCode.css::before {
+    content: "CSS";
+}
+
+pre.sourceCode.js::before {
+    content: "Javascript";
+}
+
+pre.sourceCode.md::before {
+    content: "Markdown";
+}
 
 /* SYNTAX HIGHLIGHTING FROM PANDOC */
 /* (breezedark theme) */
 /* generate using `pandoc -s -t html foo.md --highlight=breezedark` */
-pre
-      { color: #cfcfc2; background-color: #232629; }
+pre {
+    color: #cfcfc2;
+    background-color: #232629;
+}
 
-code span { color: #cfcfc2; } /* Normal */
+code span {
+    color: #cfcfc2;
+}
 
-code span.al { color: #95da4c; background-color: #4d1f24; font-weight: bold; } /* Alert */
+/* Normal */
 
-code span.an { color: #3f8058; } /* Annotation */
+code span.al {
+    color: #95da4c;
+    background-color: #4d1f24;
+    font-weight: bold;
+}
 
-code span.at { color: #2980b9; } /* Attribute */
+/* Alert */
 
-code span.bn { color: #f67400; } /* BaseN */
+code span.an {
+    color: #3f8058;
+}
 
-code span.bu { color: #7f8c8d; } /* BuiltIn */
+/* Annotation */
 
-code span.cf { color: #fdbc4b; font-weight: bold; } /* ControlFlow */
+code span.at {
+    color: #2980b9;
+}
 
-code span.ch { color: #3daee9; } /* Char */
+/* Attribute */
 
-code span.cn { color: #27aeae; font-weight: bold; } /* Constant */
+code span.bn {
+    color: #f67400;
+}
 
-code span.co { color: #7a7c7d; } /* Comment */
+/* BaseN */
 
-code span.cv { color: #7f8c8d; } /* CommentVar */
+code span.bu {
+    color: #7f8c8d;
+}
 
-code span.do { color: #a43340; } /* Documentation */
+/* BuiltIn */
 
-code span.dt { color: #2980b9; } /* DataType */
+code span.cf {
+    color: #fdbc4b;
+    font-weight: bold;
+}
 
-code span.dv { color: #f67400; } /* DecVal */
+/* ControlFlow */
 
-code span.er { color: #da4453; text-decoration: underline; } /* Error */
+code span.ch {
+    color: #3daee9;
+}
 
-code span.ex { color: #0099ff; font-weight: bold; } /* Extension */
+/* Char */
 
-code span.fl { color: #f67400; } /* Float */
+code span.cn {
+    color: #27aeae;
+    font-weight: bold;
+}
 
-code span.fu { color: #8e44ad; } /* Function */
+/* Constant */
 
-code span.im { color: #27ae60; } /* Import */
+code span.co {
+    color: #7a7c7d;
+}
 
-code span.in { color: #c45b00; } /* Information */
+/* Comment */
 
-code span.kw { color: #cfcfc2; font-weight: bold; } /* Keyword */
+code span.cv {
+    color: #7f8c8d;
+}
 
-code span.op { color: #cfcfc2; } /* Operator */
+/* CommentVar */
 
-code span.ot { color: #27ae60; } /* Other */
+code span.do {
+    color: #a43340;
+}
 
-code span.pp { color: #27ae60; } /* Preprocessor */
+/* Documentation */
 
-code span.re { color: #2980b9; background-color: #153042; } /* RegionMarker */
+code span.dt {
+    color: #2980b9;
+}
 
-code span.sc { color: #3daee9; } /* SpecialChar */
+/* DataType */
 
-code span.ss { color: #da4453; } /* SpecialString */
+code span.dv {
+    color: #f67400;
+}
 
-code span.st { color: #f44f4f; } /* String */
+/* DecVal */
 
-code span.va { color: #27aeae; } /* Variable */
+code span.er {
+    color: #da4453;
+    text-decoration: underline;
+}
 
-code span.vs { color: #da4453; } /* VerbatimString */
+/* Error */
 
-code span.wa { color: #da4453; } /* Warning */
+code span.ex {
+    color: #0099ff;
+    font-weight: bold;
+}
+
+/* Extension */
+
+code span.fl {
+    color: #f67400;
+}
+
+/* Float */
+
+code span.fu {
+    color: #8e44ad;
+}
+
+/* Function */
+
+code span.im {
+    color: #27ae60;
+}
+
+/* Import */
+
+code span.in {
+    color: #c45b00;
+}
+
+/* Information */
+
+code span.kw {
+    color: #cfcfc2;
+    font-weight: bold;
+}
+
+/* Keyword */
+
+code span.op {
+    color: #cfcfc2;
+}
+
+/* Operator */
+
+code span.ot {
+    color: #27ae60;
+}
+
+/* Other */
+
+code span.pp {
+    color: #27ae60;
+}
+
+/* Preprocessor */
+
+code span.re {
+    color: #2980b9;
+    background-color: #153042;
+}
+
+/* RegionMarker */
+
+code span.sc {
+    color: #3daee9;
+}
+
+/* SpecialChar */
+
+code span.ss {
+    color: #da4453;
+}
+
+/* SpecialString */
+
+code span.st {
+    color: #f44f4f;
+}
+
+/* String */
+
+code span.va {
+    color: #27aeae;
+}
+
+/* Variable */
+
+code span.vs {
+    color: #da4453;
+}
+
+/* VerbatimString */
+
+code span.wa {
+    color: #da4453;
+}
+
+/* Warning */
