@@ -6,11 +6,11 @@
 <description>Sam's blog. He'll write something one day.</description>
 
 <item>
-<title>Fun stuff that Sam enjoys and is listing here because he's too serious all the time</title>
+<title>Fun things (Music, Games, Books) that I recommend!</title>
 <link>https://samboyer.uk/blog/fun-stuff.html</link>
 <guid>https://samboyer.uk/blog/fun-stuff.html</guid>
 <pubDate>Wed, 28 Feb 2024 18:32:55 -0000</pubDate>
-<description></description>
+<description>(Compiled 2023-2024, not up-to-date)</description>
 </item>
 
 <item>
@@ -26,7 +26,7 @@
 <link>https://samboyer.uk/blog/recommendations.html</link>
 <guid>https://samboyer.uk/blog/recommendations.html</guid>
 <pubDate>Wed, 28 Feb 2024 18:32:55 -0000</pubDate>
-<description></description>
+<description>(Compiled 2023-2024, not up-to-date)</description>
 </item>
 
 <item>
@@ -54,22 +54,6 @@
 </item>
 
 <item>
-<title></title>
-<link>https://samboyer.uk/blog/old/carbon-footprints.html</link>
-<guid>https://samboyer.uk/blog/old/carbon-footprints.html</guid>
-<pubDate>Tue, 23 Jul 2024 22:27:55 -0000</pubDate>
-<description></description>
-</item>
-
-<item>
-<title></title>
-<link>https://samboyer.uk/blog/old/imagining-futures.html</link>
-<guid>https://samboyer.uk/blog/old/imagining-futures.html</guid>
-<pubDate>Tue, 23 Jul 2024 22:27:55 -0000</pubDate>
-<description></description>
-</item>
-
-<item>
 <title>How to make small(er) web pages</title>
 <link>https://samboyer.uk/blog/tech/small-webpages.html</link>
 <guid>https://samboyer.uk/blog/tech/small-webpages.html</guid>
@@ -83,6 +67,14 @@
 <guid>https://samboyer.uk/blog/tech/spotify-recs-widget.html</guid>
 <pubDate>Sun, 25 Feb 2024 14:46:46 -0000</pubDate>
 <description>Hey, the 90s Internet called, they want their music discovery back</description>
+</item>
+
+<item>
+<title>Switching to Linux on my home laptop</title>
+<link>https://samboyer.uk/blog/tech/linux-laptop.html</link>
+<guid>https://samboyer.uk/blog/tech/linux-laptop.html</guid>
+<pubDate>Wed, 16 Sep 2026 16:11:25 -0000</pubDate>
+<description>2026 is the year of Linux Desktop! But really this time</description>
 </item>
 
 </channel>
