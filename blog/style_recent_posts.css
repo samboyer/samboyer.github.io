@@ -1,0 +1,46 @@
+@font-face {
+    font-family: SpaceGrotesk;
+    src: url(/fonts/SpaceGrotesk-Regular.ttf);
+}
+
+@font-face {
+    font-family: SpaceGrotesk;
+    src: url(/fonts/SpaceGrotesk-Medium.ttf);
+    font-weight: 500;
+}
+
+html {
+    background:none;
+    color:#666;
+    font-family:SpaceGrotesk;
+}
+
+.container{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+.post{
+    padding:5px;
+    align-self:end;
+}
+h1{
+    line-height:1.0;
+    margin:0;
+    font-size:1.5rem;
+}
+.subtitle{
+    grid-row:2;
+    padding:5px;
+}
+p{
+    margin:0;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+a h1:hover{
+    text-decoration: underline
+}
