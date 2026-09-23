@@ -1,0 +1,153 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Building a bird camera trap with a Raspberry Pi & FOSS tools - Sam Boyer</title>
+  <link rel="stylesheet" href="/blog/style.css">
+  <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="feed.rss" />
+</head>
+
+<body>
+  <div class="page_header">
+    <div class="header_top_left">
+      <a href="/" style="display: inherit;"><img src="/img/logo_dark.svg" title="Back to main site" height="24px"></a>
+      <div class="vbar"></div>
+      <a href="/blog" title="Back to blog index" class="blog_link">blog</a>
+    </div>
+  </div>
+  <div class="content">
+    <h1>Building a bird camera trap with a Raspberry Pi & FOSS tools</h1>
+    <h2>MicoSD Cards Hate Him! Fill up all available space with bird clips with this one simple trick</h2>
+    <div class="date_label"></div>
+    <p>Earlier this year I set up a bird feeder outdside my flat. After some
+days of wondering if I’d chosen the wrong food or location, the pink
+suet pellets gradually began to disappear. Unfortunately, I was rarely
+there to see it - the small windows at the rear of my flat don’t make
+for an ideal nature-gazing spot.</p>
+<p>Incidentally, I had a Raspberry Pi 3 tucked away in a cupboard that
+hadn’t been booted up since <a
+href="https://github.com/librespot-org/librespot/issues/1308">Spotify
+took away one of its login APIs</a> and <a
+href="https://dtcooper.github.io/raspotify/">raspotify</a> stopped
+working for me. (It appears to be fixed now!) I’m not sure what train of
+thought connected the two facts, but once it was raised, I knew it was
+my highest-priority project: <strong>bird webcam</strong>.</p>
+<p>Weirdly, I can’t find the blog post that I was using as a guide, but
+it described a pipeline that started with <a
+href="https://motion-project.github.io/">Motion</a>, an open-source
+motion-detection program, and ended with uploading clips to Dropbox and
+sending phone notificiations. I didn’t need any of that cloud stuff, so
+just stuck to the first half of the guide, which boiled down to
+installing and configuring Motion.</p>
+<p>There are plenty of guides online for installing/configuring Motion
+on a Raspberry Pi, so I won’t be writing a comprehensive tutorial - I’ll
+just describe my setup process and cusomizations.</p>
+<h1 id="setting-it-up">Setting it up</h1>
+<p>Installing Motion on the Pi is surprisingly simple
+(<code>sudo apt install motion</code>). The difficulty I faced was in
+installing the right packages/drivers for the webcam. I was able to get
+a cheap, unbranded USB plug &amp; play webcam working with just the
+preinstalled <code>v4l2</code> drivers, but was not able to get my
+slightly higher quality (720p 😅) Logitcech webcam working. <a
+href="https://www.raspberrypi.com/documentation/computers/camera_software.html#install-dependencies"><code>fswebcam</code></a>
+is a useful CLI utility that can help you confirm whether your webcam is
+setup correctly, but you can also navigate to
+<code>http://192.168.1.{your raspberry pi ip}:8080</code> to check your
+webcams in real-time from another device. (The web interface can be
+disabled if you don’t trust your housemates ;))</p>
+<p>Configuring motion isn’t too complicated - you just open
+<code>/etc/motion/motion.conf</code>, and tweak anything from the
+defaults. I was mostly interested in increasing the resolution and
+framerate of the output videos. (I also changed the
+<code>movie_filename</code> to <code>%Y-%m-%dT%H-%M-%S</code> so they
+would be ordered properly in my file viewer.)</p>
+<p>Once you’re happy, run <code>sudo systemctl start motion</code> to
+start it up in the background, and wait for a bird to appear… at last, a
+bird clip!</p>
+<figure>
+<video src="img/bird-2026-04-11.mkv" controls=""><a
+href="img/bird-2026-04-11.mkv">My first clip of a bird. It’s a bit
+over-exposed…</a></video>
+<figcaption aria-hidden="true">My first clip of a bird. It’s a bit
+over-exposed…</figcaption>
+</figure>
+<p>Unfortunately, most of my clips were being triggered by the leaves
+moving:</p>
+<figure>
+<video src="img/bird-webcam-leaves.mkv" controls=""><a
+href="img/bird-webcam-leaves.mkv">no bird :(</a></video>
+<figcaption aria-hidden="true">no bird :(</figcaption>
+</figure>
+<p>But this was somewhat-easily fixed by tweaking the
+<code>motion</code> config and defining an image mask to ignore any
+movement in the area of the image where the leaves were.</p>
+<figure>
+<img src="img/bird-webcam-mask.png"
+alt="Greyscale mask to tell motion which pixels should be tracked and which should be ignored." />
+<figcaption aria-hidden="true">Greyscale mask to tell
+<code>motion</code> which pixels should be tracked and which should be
+ignored.</figcaption>
+</figure>
+<h1 id="suffering-from-success-i.e.-lots-of-clips">Suffering From
+Success (i.e. lots of clips)</h1>
+<p>Initially, I checked the clips by logging into my Pi via WinSCP,
+copying all the files, and deleting ones that didn’t contain birds. I
+then started using <code>python3 -m http.server</code> to load the
+videos faster, but still used FTP for deletion, which was a bit slow.
+Once I had a few hundred files, and a few dozen added every day, I
+finally caved and built a dashboard for faster viewing &amp; deletion of
+clips.</p>
+<figure>
+<img src="img/bird-webcam-dashboard.webp"
+alt="Screenshot of bird webcam dashboard" />
+<figcaption aria-hidden="true">Screenshot of bird webcam
+dashboard</figcaption>
+</figure>
+<p>It’s a very simple plain HTML page with a tiny amount of JS to drive
+an iframe pointing at the video. You use the up/down arrow keys to move
+between files, and (D) to delete one (after showing a confirmation
+dialog). An equally simple Flask backend has endpoints to list the files
+&amp; delete a file. The dashboard allowed me to look through the day’s
+clips much more quickly!</p>
+<figure>
+<video src="img/bird-2026-05-09.mkv" controls=""><a
+href="img/bird-2026-05-09.mkv">One of my favourite clips - the bird does
+a cool hanging trick, takes some food, then flies back to the tree. When
+the second bird appears, you can still see the first bird up in the
+tree!</a></video>
+<figcaption aria-hidden="true">One of my favourite clips - the bird does
+a cool hanging trick, takes some food, then flies back to the tree. When
+the second bird appears, you can still see the first bird up in the
+tree!</figcaption>
+</figure>
+<hr />
+<p>Eventually, the rate of file creation outpaced my ability to filter
+and enjoy all the bird clips, and the directory containing the files was
+growing at a fast rate for my measily 16GB MicroSD card, so I switched
+off the motion service after about a month. Regardless, I would consider
+the project to be a big success!</p>
+<p>The Raspberry Pi now hosts a Navidrome server, but there’s probably
+enough spare CPU cycles to run motion at the same time. I might also try
+out <a href="https://birdnet.cornell.edu/">BirdNET</a>, a sound
+classifier model developed by Cornell, but judging by the clips from
+April it’ll be 99% blue tits.</p>
+<p><em>Speaking of Cornell bird tech, have you tried the <a
+href="https://www.merlinbirds.org/">Merlin Bird ID</a> app?? You won’t
+regret it - it’s basically Pokémon Go in real life (although you don’t
+get to keep the birds)</em></p>
+
+    <hr>
+    <a href='.'><i>Return to index.</i></a>
+  </div>
+  <div class="table_of_contents">
+    <ul>
+<li><a href="#setting-it-up">Setting it up</a></li>
+<li><a href="#suffering-from-success-i.e.-lots-of-clips">Suffering From
+Success (i.e. lots of clips)</a></li>
+</ul>
+
+  </div>
+</body>
+
+</html>
